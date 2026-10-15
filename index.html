@@ -5,78 +5,80 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ElTabakha Glass</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="الطباخه">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
 <style>
-:root{--bg:#f3f6f5;--card:#fbfdfc;--ink:#2b3d3b;--mute:#7a8f8c;--line:#dbe6e3;--acc:#cfe8e3;--accInk:#1f4a45;--accB:#a8d3cb;--tot:#e8f2ef;--danger:#b5584d;--drB:#f7e3df;--drI:#8a2e22;--crB:#dff0e3;--crI:#2d6a3e;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121b1a;--card:#1a2625;--ink:#dcebe8;--mute:#8aa5a1;--line:#2b3d3b;--acc:#2e5550;--accInk:#d6f1ec;--accB:#3f6f68;--tot:#203130;--danger:#e48b82;--drB:#3b2623;--drI:#f0a79e;--crB:#1f3a28;--crI:#9bd8ae}}
-:root[data-theme="dark"]{--bg:#121b1a;--card:#1a2625;--ink:#dcebe8;--mute:#8aa5a1;--line:#2b3d3b;--acc:#2e5550;--accInk:#d6f1ec;--accB:#3f6f68;--tot:#203130;--danger:#e48b82;--drB:#3b2623;--drI:#f0a79e;--crB:#1f3a28;--crI:#9bd8ae}
+:root{--bg:#fff;--card:#fff;--ink:#111827;--mute:#4b5563;--line:#b8c0cc;--acc:#0f766e;--accInk:#fff;--accB:#0f766e;--tot:#eef3f2;--danger:#b91c1c;--drB:#fee2e2;--drI:#991b1b;--crB:#dcfce7;--crI:#166534;color-scheme:light}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;padding:10px;max-width:640px;margin-inline:auto;font-size:15px}
-.card,.rec,.row{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 10px;margin-bottom:8px}
-label{font-size:11px;color:var(--mute);display:block}
-input{width:100%;font:inherit;font-size:15px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-width:0}
-input:focus,button:focus-visible{outline:2px solid var(--accB);outline-offset:1px}
+html,body{background:#fff}
+body{margin:0;color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;padding:10px;padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));max-width:640px;margin-inline:auto;font-size:16px}
+.card,.rec,.row{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px}
+label{font-size:12px;color:var(--mute);display:block;margin-bottom:2px}
+input,textarea{width:100%;font:inherit;font-size:16px;padding:9px 8px;border:1px solid #98a2b3;border-radius:8px;background:#fff;color:var(--ink);min-width:0}
+input:focus,textarea:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+input[type=checkbox]{width:auto}
+textarea{font-size:12px;direction:ltr;text-align:left}
 .tabs,.seg{display:flex;gap:4px;margin-bottom:8px}
-.tabs button,.seg button{flex:1;padding:8px 4px;border:1px solid var(--line);background:var(--card);color:var(--mute);border-radius:8px;font:inherit;cursor:pointer;white-space:nowrap}
-.tabs button.on,.seg button.on{background:var(--acc);color:var(--accInk);border-color:var(--accB);font-weight:600}
-.seg.s button{padding:5px 4px;font-size:14px}
-button.main{background:var(--acc);color:var(--accInk);border:1px solid var(--accB);border-radius:8px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer}
-button.alt{background:none;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font:inherit;cursor:pointer}
-button.sm{padding:6px 12px;font-size:14px}
-.lnk{background:none;border:0;color:var(--accInk);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer;padding:6px 2px}
-.del{background:none;border:0;color:var(--danger);font-size:20px;cursor:pointer;padding:0 6px;line-height:1}
+.tabs button,.seg button{flex:1;padding:9px 4px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;font:inherit;font-size:15px;cursor:pointer;white-space:nowrap}
+.tabs button.on,.seg button.on{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:600}
+.seg.s button{padding:6px 4px;font-size:14px}
+button.main,a.main{background:var(--acc);color:#fff;border:1px solid var(--acc);border-radius:8px;padding:11px 14px;font:inherit;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;display:inline-block}
+button.alt{background:#fff;color:var(--ink);border:1px solid #98a2b3;border-radius:8px;padding:11px 14px;font:inherit;cursor:pointer}
+.ab{display:inline-block;text-decoration:none;color:var(--ink);border:1px solid #98a2b3;border-radius:8px;padding:7px 12px;font-size:14px;cursor:pointer;font-family:inherit;background:#fff}
+.lnk{background:none;border:0;color:var(--acc);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer;padding:6px 2px}
+.del{background:none;border:0;color:var(--danger);font-size:22px;cursor:pointer;padding:0 6px;line-height:1}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
-.rg{display:grid;gap:6px;margin:6px 0 4px}.rg.a{grid-template-columns:repeat(4,1fr)}.rg.r{grid-template-columns:1fr 1fr}.rg input{text-align:center;padding:7px 2px}
+.rg{display:grid;gap:6px;margin:6px 0 4px}.rg.a{grid-template-columns:repeat(4,1fr)}.rg.r{grid-template-columns:1fr 1fr}.rg input{text-align:center;padding:8px 2px}
 .r1{display:flex;gap:4px;align-items:center}
-.ro,.sum div{display:flex;justify-content:space-between;align-items:center}
+.ro,.sum div{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .ro{font-size:13px;color:var(--mute)}.ro b{color:var(--ink)}
-.sum div{padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}.sum div:last-child{border:0}
-.sum div.big{background:var(--tot);padding:7px 9px;border-radius:8px;font-weight:700;font-size:16px;margin:4px 0;border:0}
-.sum input{width:110px;text-align:center;padding:5px}
-.num{font-variant-numeric:tabular-nums}.mute{color:var(--mute);font-size:12px}
+.rowc{display:flex;gap:6px;margin-bottom:8px}
+.sum div{padding:6px 0;border-bottom:1px solid #e5e7eb;font-size:15px}.sum div:last-child{border:0}
+.sum div.big{background:var(--tot);padding:8px 10px;border-radius:8px;font-weight:700;font-size:17px;margin:4px 0;border:0}
+.sum input{width:120px;text-align:center;padding:6px}
+.num{font-variant-numeric:tabular-nums}.mute{color:var(--mute);font-size:13px}
 .info{font-size:13px;margin-top:6px;color:var(--mute)}
-.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.btns .main{flex:1}
-.cn{font-weight:600}.cb{font-size:12px;padding:2px 9px;border-radius:99px;background:var(--tot);white-space:nowrap}.cb.dr{background:var(--drB);color:var(--drI)}.cb.cr{background:var(--crB);color:var(--crI)}
+.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.btns .main,.btns .alt{flex:1}
+.cn{font-weight:600}.cb{font-size:13px;padding:3px 10px;border-radius:99px;background:var(--tot);white-space:nowrap;color:var(--ink)}.cb.dr{background:var(--drB);color:var(--drI)}.cb.cr{background:var(--crB);color:var(--crI)}
 .cr2{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:8px}
-.it{display:grid;gap:4px;margin-bottom:4px;align-items:center}.it input{padding:5px 4px;font-size:14px;text-align:center}.it input:first-child{text-align:right}
-.it button{padding:0;width:34px;height:32px;font-size:18px}
+.it{display:grid;gap:4px;margin-bottom:4px;align-items:center}.it input{padding:6px 4px;font-size:15px;text-align:center}.it input:first-child{text-align:right}
+.it button{padding:0;width:34px;height:34px;font-size:18px}
 table.st{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0}
-.st th{color:var(--mute);font-weight:500;padding:4px 2px;border-bottom:1px solid var(--line)}.st td{padding:6px 2px;text-align:center;border-bottom:1px solid var(--line)}.st tr[data-rec]{cursor:pointer}.st tr[data-rec]:hover{background:var(--tot)}
-#dd{position:fixed;z-index:50;background:var(--card);border:1px solid var(--line);border-radius:8px;max-height:220px;overflow:auto;display:none;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-#dd div{padding:9px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:14px}#dd div:hover{background:var(--tot)}#dd small{color:var(--mute)}
+.st th{color:var(--mute);font-weight:500;padding:4px 2px;border-bottom:1px solid var(--line)}.st td{padding:7px 2px;text-align:center;border-bottom:1px solid #e5e7eb}.st tr[data-rec]{cursor:pointer}
+#dd{position:fixed;z-index:50;background:#fff;border:1px solid #98a2b3;border-radius:8px;max-height:220px;overflow:auto;display:none;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#dd div{padding:10px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid #eee}#dd small{color:var(--mute)}
 #resimg{width:100%;border-radius:6px;border:1px solid var(--line);background:#fff;margin-top:6px}
-input[readonly]{opacity:.75}
-.ab{display:inline-block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:14px;cursor:pointer;font-family:inherit}
-textarea{width:100%;font:inherit;font-size:12px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);direction:ltr;text-align:left}
-.hide{display:none}
+.hide{display:none!important}
 </style>
 </head>
 <body>
-<div class="tabs" id="tabs"><button data-t="new" class="on">فاتورة</button><button data-t="cu">العملاء</button><button data-t="it">الأصناف</button><button data-t="hs">السجل</button></div>
+<div class="tabs" id="tabs"><button data-t="new" class="on">فاتورة</button><button data-t="cu">العملاء</button><button data-t="it">الأصناف</button><button data-t="st">الإعدادات</button></div>
 
 <div id="res" class="card hide">
   <div class="ro" style="color:var(--ink)"><b id="resm"></b><button class="del" id="resx" aria-label="إغلاق">×</button></div>
   <img id="resimg" alt="الصورة">
-  <div class="btns"><button class="main sm" id="resdl">حفظ الصورة</button><a class="ab" id="reswa" target="_blank" rel="noopener" href="#">فتح محادثة العميل</a><button class="alt sm" id="ressh">مشاركة الصورة</button><a class="ab hide" id="restx" target="_blank" rel="noopener" href="#">إرسال كنص</a><button class="alt sm hide" id="resdel" style="color:var(--danger)">حذف</button></div>
-  <div class="mute" id="reshint" style="margin-top:6px">لو زر مفتحش حاجة: اضغط مطولاً على الصورة واختر مشاركة أو حفظ، أو اضغط (حفظ الصورة) وأرسلها من واتساب.</div>
+  <div class="btns"><button class="main" id="ressh">إرسال للعميل</button><a class="main" id="reswa" target="_blank" rel="noopener" href="#">إرسال للعميل</a><button class="alt" id="resdl">حفظ الصورة</button></div>
+  <div class="btns" style="margin-top:2px"><a class="lnk hide" id="restx" target="_blank" rel="noopener" href="#">نص فقط</a><button class="lnk hide" id="resdel" style="color:var(--danger)">حذف</button></div>
+  <div class="mute" id="reshint"></div>
 </div>
 
 <section id="t-new">
   <div class="card">
-    <div class="g2" style="margin:0"><div><label>العميل</label><input id="cust" list="cl" autocomplete="off" placeholder="اكتب الاسم"><datalist id="cl"></datalist></div><div><label>واتساب (اختياري)</label><input id="phone" type="tel" inputmode="tel"></div></div>
-    <div class="info"><span class="num" id="now" style="float:left"></span><span id="cinfo"></span></div>
+    <label>العميل</label>
+    <input id="cust" list="cl" autocomplete="off" placeholder="اكتب اسم العميل"><datalist id="cl"></datalist>
+    <div id="phoneBox" class="hide" style="margin-top:6px"><label>واتساب (اختياري)</label><input id="phone" type="tel" inputmode="tel"></div>
+    <div class="info" id="cinfo"></div>
   </div>
   <div id="rows"></div>
-  <div class="mute" id="rhint" style="margin-bottom:6px">اضغط (+ جاهز) أو (+ مقطع) لإضافة بند:</div>
-  <div class="btns" style="margin:0 0 8px"><button class="alt sm" data-add="rd">+ جاهز</button><button class="alt sm" data-add="mq">+ مقطع</button></div>
+  <div class="mute" id="rhint" style="margin-bottom:6px">اضغط لإضافة بند:</div>
+  <div class="btns" style="margin:0 0 8px"><button class="alt" data-add="rd">+ جاهز</button><button class="alt" data-add="mq">+ مقطع</button></div>
   <div class="card sum">
-    <div><span>إجمالي الإذن<span class="num" id="tqw"></span></span><b class="num" id="sub">0.00</b></div>
+    <div id="r_sub" class="hide"><span>إجمالي الإذن<span class="num" id="tqw"></span></span><b class="num" id="sub">0.00</b></div>
     <div id="r_nylon" class="hide"><span>نولون</span><input id="nylon" type="number" inputmode="decimal" placeholder="0"></div>
     <div id="r_disc" class="hide"><span>خصم</span><input id="disc" type="number" inputmode="decimal" placeholder="0"></div>
     <div id="r_prev" class="hide"><span>رصيد سابق</span><input id="prev" type="number" inputmode="decimal" placeholder="0"></div>
@@ -84,23 +86,24 @@ textarea{width:100%;font:inherit;font-size:12px;padding:7px 8px;border:1px solid
     <div><span>المدفوع الآن</span><input id="paid" type="number" inputmode="decimal" placeholder="0"></div>
     <div class="big"><span>المتبقي</span><span class="num" id="rest">0.00</span></div>
   </div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="lnk" data-x="r_nylon">+ نولون</button><button class="lnk" data-x="r_disc">+ خصم</button><button class="lnk" data-x="r_prev">+ رصيد سابق</button><button class="lnk" id="noteBtn">+ ملاحظة</button></div>
+  <button class="lnk" id="moreBtn">+ إضافات (نولون، خصم، ملاحظة)</button>
   <input id="note" class="hide" placeholder="ملاحظة تظهر في الفاتورة">
-  <div class="btns"><button class="main" id="save">حفظ الفاتورة</button><button class="main" id="saveImg">حفظ كصورة</button><button class="alt" id="clear">مسح</button></div>
+  <div class="btns"><button class="main" id="save">حفظ الفاتورة</button><button class="alt" id="saveImg">حفظ كصورة</button></div>
   <div class="info" id="msg" style="color:var(--danger)"></div>
+  <button class="lnk" id="clear" style="color:var(--mute)">مسح الفاتورة</button>
 </section>
 
 <section id="t-cu" class="hide">
   <div id="cuMain">
-    <div class="seg s" id="cuMode"><button data-m="all" class="on">كل العملاء</button><button data-m="debt">المديونين</button><button data-m="add">+ عميل جديد</button></div>
+    <div class="rowc"><input id="cq" placeholder="ابحث باسم العميل"><button class="main" data-m="add">+ عميل</button></div>
     <div id="cuAdd" class="card hide">
       <input id="nc_name" placeholder="اسم العميل (مطلوب)">
       <div class="g2" style="margin-top:6px"><input id="nc_phone" type="tel" inputmode="tel" placeholder="واتساب (اختياري)"><input id="nc_bal" type="number" inputmode="decimal" placeholder="حساب قديم عليه"></div>
       <div class="g2"><input id="nc_addr" placeholder="العنوان (اختياري)"><input id="nc_note" placeholder="ملاحظات (اختياري)"></div>
-      <div class="btns" style="margin:0"><button class="main sm" id="addCu">حفظ العميل</button></div><div class="info" id="cuMsg" style="color:var(--danger)"></div>
+      <div class="btns" style="margin:0"><button class="main" id="addCu">حفظ العميل</button></div><div class="info" id="cuMsg" style="color:var(--danger)"></div>
     </div>
-    <input id="cq" placeholder="ابحث عن عميل" style="margin-bottom:8px">
-    <div class="mute" id="cuTot" style="margin-bottom:6px;font-size:13px;color:var(--ink)"></div>
+    <div class="seg" id="cuMode"><button data-m="all" class="on">العملاء</button><button data-m="debt">المديونين</button><button data-m="hist">الفواتير</button></div>
+    <div id="cuTot" style="margin-bottom:6px;font-size:14px;font-weight:600"></div>
     <div id="cuList"></div>
   </div>
   <div id="cuDet" class="hide"></div>
@@ -112,18 +115,19 @@ textarea{width:100%;font:inherit;font-size:12px;padding:7px 8px;border:1px solid
   <div id="ihead" class="mute"></div><div id="items" style="margin-top:4px"></div>
 </section>
 
-<section id="t-hs" class="hide">
-  <input id="hf" placeholder="بحث باسم العميل" style="margin-bottom:8px">
-  <div id="hist"></div>
+<section id="t-st" class="hide">
+  <div class="card"><b>حالة الحفظ</b><div id="stor" style="margin-top:4px;font-size:14px"></div></div>
+  <div class="card"><b>الإرسال</b>
+    <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink);margin-top:6px"><input type="checkbox" id="autoWa"> بعد حفظ الفاتورة افتح الإرسال للعميل تلقائياً</label></div>
+  <div class="card"><b>النسخة الاحتياطية</b><div class="mute" id="bkInfo" style="margin-top:4px"></div>
+    <div class="btns"><button class="main" id="bkSave">حفظ نسخة</button><button class="alt" id="bkLoad">استرجاع نسخة</button><input type="file" id="bkFile" accept=".json,application/json" class="hide"></div><div class="info" id="bkMsg"></div></div>
+  <div class="card"><b>المزامنة السحابية</b><div id="fbStat" style="margin:4px 0 8px;font-size:14px">غير مربوطة.</div>
+    <div class="btns" style="margin:0"><button class="main" id="fbGoogle">دخول بحساب Google</button><button class="alt" id="fbOff">فصل</button></div>
+    <a href="#" id="fbMore" style="display:inline-block;margin-top:10px;font-size:14px">دخول بالإيميل بدلاً من Google</a>
+    <div id="fbMail" class="hide"><div class="g2" style="margin-top:6px"><input id="fbEmail" type="email" placeholder="الإيميل" style="direction:ltr"><input id="fbPass" type="password" placeholder="كلمة السر" style="direction:ltr"></div>
+    <div class="btns" style="margin-top:6px"><button class="alt" id="fbConnect">دخول بالإيميل</button></div></div></div>
 </section>
 
-<div class="mute" id="stor" style="margin-top:8px"></div>
-<div class="card" style="margin-top:10px"><b>النسخة الاحتياطية</b><div class="mute" id="bkInfo"></div>
-<div class="btns"><button class="main sm" id="bkSave">حفظ نسخة احتياطية</button><button class="alt sm" id="bkLoad">استرجاع نسخة</button><input type="file" id="bkFile" accept=".json,application/json" class="hide"></div><div class="info" id="bkMsg"></div></div>
-<div class="card"><b>المزامنة السحابية التلقائية (Firebase)</b><div class="mute" id="fbStat" style="margin:4px 0;color:var(--ink);font-size:13px">غير مربوطة.</div>
-<textarea id="fbCfgIn" rows="4" placeholder="الصق هنا إعدادات Firebase (firebaseConfig) مرة واحدة"></textarea>
-<div class="g2" style="margin-top:6px"><input id="fbEmail" type="email" placeholder="الإيميل" style="direction:ltr"><input id="fbPass" type="password" placeholder="كلمة السر" style="direction:ltr"></div>
-<div class="btns" style="margin:0"><button class="main sm" id="fbConnect">ربط السحابة</button><button class="alt sm" id="fbOff">فصل</button></div></div>
 <div id="dd"></div>
 
 <script>
@@ -185,9 +189,8 @@ function touch(k,o){dirty.set(k+o.id,[k,o]);clearTimeout(tm);tm=setTimeout(()=>{
 /* ---------- التبويبات ---------- */
 $('tabs').onclick=e=>{const t=e.target.dataset.t;if(!t)return;
   document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b===e.target));
-  ['new','cu','it','hs'].forEach(k=>$('t-'+k).classList.toggle('hide',k!==t));
-  if(t==='hs')drawHist();if(t==='cu')drawCusts();if(t==='new'&&lastC){$('prev').value=balOf(lastC)||'';calc()}};
-setInterval(()=>$('now').textContent=stamp(Date.now()),1000);$('now').textContent=stamp(Date.now());
+  ['new','cu','it','st'].forEach(k=>$('t-'+k).classList.toggle('hide',k!==t));
+  if(t==='cu')drawCusts();if(t==='new'&&lastC){$('prev').value=balOf(lastC)||'';calc()}};
 
 /* ---------- رسم الصورة (بدون مكتبات) ---------- */
 function sheet(o){
@@ -236,19 +239,20 @@ async function showImg(cv,name,msg,auto,phone,rec){
   curBlob=await new Promise(x=>cv.toBlob(x,'image/png'));curName=name;curPhone=phone||'';baseMsg=msg||'';curRec=rec||null;delArm=false;
   $('resdel').classList.toggle('hide',!rec);$('restx').classList.toggle('hide',!rec);if(rec)$('restx').href=txtLink(rec);
   let canS=false;try{canS=!!(navigator.canShare&&navigator.canShare({files:[new File([curBlob],name,{type:'image/png'})]}))}catch(e){}
-  $('ressh').classList.toggle('hide',!canS);$('reswa').textContent=canS?'فتح محادثة العميل':'إرسال لواتساب العميل';
-  $('reshint').textContent=canS?'اضغط مشاركة الصورة واختر واتساب والعميل.':'مشاركة الصور مش متاحة هنا. دوس (إرسال لواتساب العميل): بينسخ الصورة ويفتح محادثته، وانت اضغط مطولاً في خانة الرسالة واختر لصق وأرسل. أو دوس (حفظ الصورة) وأرفقها من المعرض.';$('resdel').textContent='حذف';
+  $('ressh').classList.toggle('hide',!canS);$('reswa').classList.toggle('hide',canS);
+  $('reshint').textContent=canS?'':'الصورة بتتنسخ ويتفتح شات العميل. الصقها (اضغط مطولاً ثم لصق) وأرسل.';
   $('resimg').src=cv.toDataURL('image/png');$('resm').textContent=baseMsg;$('res').classList.remove('hide');
   try{$('res').scrollIntoView({block:'start'})}catch(e){}
   if(auto)await downloadCur()}
 $('resdl').onclick=downloadCur;$('resx').onclick=()=>$('res').classList.add('hide');
 $('resdel').onclick=()=>{if(!curRec)return;if(!delArm){delArm=true;$('resdel').textContent='اضغط تأكيد الحذف';return}
-  del('invoices',curRec.id);curRec=null;$('res').classList.add('hide');drawCusts();drawHist();if(lastC){$('prev').value=balOf(lastC)||'';calc()}};
+  del('invoices',curRec.id);curRec=null;$('res').classList.add('hide');drawCusts();if(lastC){$('prev').value=balOf(lastC)||'';calc()}};
 $('ressh').onclick=async()=>{if(!curBlob)return;const file=new File([curBlob],curName,{type:'image/png'});
-  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:curName});return}catch(e){if(e&&e.name==='AbortError')return}}
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:curName,text:curRec?txtOf(curRec):''});return}catch(e){if(e&&e.name==='AbortError')return}}
   $('resm').textContent=baseMsg+' · مشاركة الصور غير متاحة في هذا المتصفح، جاري حفظ الصورة...';
   const r=await dl(curBlob,curName);
   $('resm').textContent=baseMsg+({ok:' · تم حفظ الصورة: افتح واتساب وأرفقها من المعرض أو الملفات',anchor:' · تم تنزيل الصورة: أرفقها في واتساب',declined:' · تم الإلغاء',fail:' · اضغط مطولاً على الصورة وشاركها'}[r]||'')};
+function txtOf(r){return r.type==='pay'?`ElTabakha Glass\nالعميل / ${r.cname}\nإيصال دفعة: ${f(r.amount)}\nالحساب بعد الدفعة: ${f(r.rest)}`:`ElTabakha Glass\nالعميل / ${r.cname}\nإذن صرف رقم ${r.no} - ${dshort(r.ts)}\nالإجمالي: ${f(r.total)}\nالمدفوع: ${f(r.paid)}\nالمتبقي: ${f(r.rest)}`}
 function txtLink(r){const t=r.type==='pay'?`ElTabakha Glass\nالعميل / ${r.cname}\nإيصال دفعة: ${f(r.amount)}\nالحساب بعد الدفعة: ${f(r.rest)}`
    :`ElTabakha Glass\nالعميل / ${r.cname}\nإذن صرف رقم ${r.no} - ${dshort(r.ts)}\nالإجمالي: ${f(r.total)}\nالمدفوع: ${f(r.paid)}\nالمتبقي: ${f(r.rest)}`;
   return 'https://wa.me/'+waNum(r.phone)+'?text='+encodeURIComponent(t)}
@@ -271,26 +275,26 @@ function rowsOf(c){let run=c.open||0;const asc=ledger(c).sort((a,b)=>a.ts-b.ts).
 function drawCusts(){dl2();
   if(selC&&getC(selC)){$('cuMain').classList.add('hide');$('cuDet').classList.remove('hide');drawDet();return}
   selC=null;$('cuDet').classList.add('hide');$('cuMain').classList.remove('hide');
+  if(cuMode==='hist'){drawHist();return}
   const q=$('cq').value.trim();let l=S.customers.filter(c=>!q||c.name.includes(q));
   if(cuMode==='debt'){l=l.filter(c=>balOf(c)>0).sort((a,b)=>balOf(b)-balOf(a));
     $('cuTot').textContent='إجمالي المديونيات: '+f(l.reduce((s,c)=>s+balOf(c),0))+' ('+l.length+' عميل)'}
   else{l.sort((a,b)=>a.name.localeCompare(b.name,'ar'));$('cuTot').textContent=''}
   $('cuList').innerHTML=l.map(c=>`<div class="rec cr2" data-open="${c.id}"><span class="cn">${esc(c.name)}</span>${cuMode==='debt'?`<a class="ab" data-lnk="1" target="_blank" rel="noopener" href="${remLink(c)}">ذكّره</a>`:''}<span class="cb ${bcls(c)} num">${bal(c)}</span></div>`).join('')||`<p class="mute">${cuMode==='debt'?'لا يوجد مديونين.':'لا يوجد عملاء بعد. اضغط (+ عميل جديد) أو احفظ فاتورة باسم جديد.'}</p>`}
 function drawDet(){const c=getC(selC),l=rowsOf(c);
-  $('cuDet').innerHTML=`<button class="lnk" data-back="1">← رجوع للعملاء</button>
-  <div class="card"><div class="ro" style="color:var(--ink);margin-bottom:8px"><b style="font-size:17px">${esc(c.name)}</b>${balOf(c)>0?`<a class="ab" data-lnk="1" target="_blank" rel="noopener" href="${remLink(c)}">ذكّره</a>`:''}<span class="cb ${bcls(c)} num">${bal(c)}</span></div>
-   <div class="g2"><div><label>الاسم</label><input data-f="name" value="${esc(c.name)}"></div><div><label>واتساب</label><input data-f="phone" value="${esc(c.phone||'')}"></div></div>
+  $('cuDet').innerHTML=`<button class="lnk" data-back="1">← رجوع</button>
+  <div class="card"><div class="ro" style="margin-bottom:8px"><input data-f="name" value="${esc(c.name)}" style="font-weight:700;font-size:17px;flex:1"><span class="cb ${bcls(c)} num">${bal(c)}</span></div>
+   ${balOf(c)>0?`<a class="ab" data-lnk="1" target="_blank" rel="noopener" href="${remLink(c)}" style="display:block;text-align:center;margin-bottom:8px">تذكير بالواتساب</a>`:''}
+   <div class="g2"><div><label>واتساب</label><input data-f="phone" value="${esc(c.phone||'')}"></div><div><label>حساب قديم</label><input data-f="open" type="number" inputmode="decimal" value="${c.open||''}" placeholder="0"></div></div>
    <div class="g2"><div><label>العنوان</label><input data-f="addr" value="${esc(c.addr||'')}"></div><div><label>ملاحظات</label><input data-f="note" value="${esc(c.note||'')}"></div></div>
-   <div class="g2"><div><label>حساب قديم (قبل أول فاتورة)</label><input data-f="open" type="number" inputmode="decimal" value="${c.open||''}" placeholder="0"></div><div></div></div>
-   <div class="g2" style="margin:0"><input id="pay_in" type="number" inputmode="decimal" placeholder="مبلغ دفعه العميل"><button class="main sm" data-pay="1">تسجيل دفعة</button></div>
+   <div class="g2" style="margin:0"><input id="pay_in" type="number" inputmode="decimal" placeholder="مبلغ دفعه العميل"><button class="main" data-pay="1">تسجيل دفعة</button></div>
    <div class="info" id="cdMsg" style="color:var(--danger)"></div></div>
-  <div class="card"><b>كشف الحساب</b><div class="mute">الفاتورة القادمة رقم ${nextNo(c)}</div>
-   <div class="seg s" style="margin-top:6px">${Object.keys(PL).map(k=>`<button data-per="${k}" class="${per===k?'on':''}">${PL[k]}</button>`).join('')}</div>
+  <div class="card"><div class="seg s">${Object.keys(PL).map(k=>`<button data-per="${k}" class="${per===k?'on':''}">${PL[k]}</button>`).join('')}</div>
    ${per==='c'?`<div class="g2"><div><label>من</label><input type="date" id="pf" value="${pF}"></div><div><label>إلى</label><input type="date" id="pt" value="${pT}"></div></div>`:''}
    ${l.length?`<table class="st"><thead><tr><th>التاريخ</th><th>الرقم</th><th>القيمة</th><th>المدفوع</th><th>الحساب</th></tr></thead><tbody>${l.map(({r,run})=>`<tr data-rec="${r.id}"><td class="num">${dshort(r.ts)}</td><td>${r.type==='pay'?'دفعة':'#'+r.no}</td><td class="num">${r.type==='pay'?'-':f(val(r))}</td><td class="num">${f(pd(r))}</td><td class="num">${f(run)}</td></tr>`).join('')}</tbody></table>
-   <div class="ro" style="color:var(--ink)"><span>مجموع الفواتير: <b class="num">${f(l.reduce((s,x)=>s+val(x.r),0))}</b></span><span>مجموع المدفوع: <b class="num">${f(l.reduce((s,x)=>s+pd(x.r),0))}</b></span></div>
-   <div class="mute" style="margin-top:4px">اضغط على أي صف لعرض صورة الفاتورة (ومنها تقدر تحذفها).</div><div class="btns"><button class="main sm" data-stimg="1">حفظ الكشف كصورة</button></div>`:'<p class="mute">لا توجد فواتير في هذه الفترة.</p>'}</div>
-  <div class="btns"><button class="alt sm" data-delc="1" style="color:var(--danger)">حذف العميل</button></div><div class="info" id="dcMsg" style="color:var(--danger)"></div>`}
+   <div class="ro" style="color:var(--ink)"><span>الفواتير: <b class="num">${f(l.reduce((s,x)=>s+val(x.r),0))}</b></span><span>المدفوع: <b class="num">${f(l.reduce((s,x)=>s+pd(x.r),0))}</b></span></div>
+   <div class="mute" style="margin-top:4px">اضغط أي صف لعرض الفاتورة.</div><div class="btns"><button class="main" data-stimg="1">حفظ الكشف كصورة</button></div>`:'<p class="mute">لا توجد فواتير في هذه الفترة.</p>'}</div>
+  <button class="lnk" data-delc="1" style="color:var(--danger)">حذف العميل</button><div class="info" id="dcMsg" style="color:var(--danger)"></div>`}
 function stmtImg(){const c=getC(selC),l=rowsOf(c);const lab=per==='c'?(pF||'...')+' إلى '+(pT||'...'):PL[per];
   const cv=sheet({name:c.name,sub:'كشف حساب',date:dshort(Date.now()),meta:['الفترة: '+lab],
     tables:[{th:['التاريخ','الرقم','القيمة','المدفوع','الحساب'],w:[.24,.14,.22,.2,.2],rows:l.map(({r,run})=>[dshort(r.ts),r.type==='pay'?'دفعة':'#'+r.no,r.type==='pay'?'-':f(val(r)),f(pd(r)),f(run)])}],
@@ -299,6 +303,7 @@ function stmtImg(){const c=getC(selC),l=rowsOf(c);const lab=per==='c'?(pF||'...'
 let delCArm=false;
 $('t-cu').addEventListener('click',e=>{const t=e.target,d=t.dataset;
   if(t.closest('a[data-lnk]'))return;
+  const hh=t.closest('[data-h]');if(hh){const r=S.invoices.find(x=>x.id===hh.dataset.h);if(r)showRec(r,false,'');return}
   if(d.m){if(d.m==='add'){$('cuAdd').classList.toggle('hide');return}cuMode=d.m;document.querySelectorAll('#cuMode button').forEach(b=>b.classList.toggle('on',b.dataset.m===d.m));drawCusts();return}
   const op=t.closest('[data-open]');if(op){selC=op.dataset.open;per='all';delCArm=false;drawCusts();window.scrollTo(0,0);return}
   if(d.back){selC=null;drawCusts();return}
@@ -362,19 +367,19 @@ function calc(){let sub=0,tq=0;const rows=[];
     if(c>0){rows.push({t:d.dataset.t,n:g('.n').value,w,h,c,q,p,v});sub+=v;tq+=q}});
   const prev=nv($('prev').value),total=sub+nv($('nylon').value)-nv($('disc').value)+prev,paid=nv($('paid').value);
   $('tqw').textContent=tq>0?' ('+f(tq)+' م²)':'';$('sub').textContent=f(sub);$('grand').textContent=f(total);$('rest').textContent=f(total-paid);
-  $('rhint').style.display=$('rows').children.length?'none':'';
+  $('rhint').style.display=$('rows').children.length?'none':'';$('r_sub').classList.toggle('hide',['r_nylon','r_disc','r_prev'].every(i=>$(i).classList.contains('hide')));
   TOT={rows,sub,tq:rd2(tq),prev,total,paid,rest:total-paid}}
 ['nylon','disc','prev','paid'].forEach(i=>$(i).oninput=calc);
 $('t-new').addEventListener('click',e=>{const x=e.target.dataset.x;if(x){const r=$(x);r.classList.remove('hide');const i=r.querySelector('input');if(i&&!i.readOnly)i.focus();return}const t=e.target.dataset.add;if(t){addRow(t).querySelector('.n').focus();calc()}});
-$('noteBtn').onclick=()=>{$('note').classList.toggle('hide');if(!$('note').classList.contains('hide'))$('note').focus()};
+$('moreBtn').onclick=()=>{['r_nylon','r_disc'].forEach(i=>$(i).classList.remove('hide'));if(!lastC)$('r_prev').classList.remove('hide');$('note').classList.remove('hide');$('moreBtn').classList.add('hide');calc()};
 let lastC=null;
 function custInput(){const name=$('cust').value.trim(),c=S.customers.find(x=>x.name===name)||null;
   if(c&&(!lastC||lastC.id!==c.id)){$('prev').value=balOf(c)||'';$('phone').value=c.phone||''}
   else if(!c&&lastC){$('prev').value='';$('phone').value=''}
-  lastC=c;$('prev').readOnly=!!c;if(c&&balOf(c)!==0)$('r_prev').classList.remove('hide');else if(!nv($('prev').value))$('r_prev').classList.add('hide');
+  lastC=c;$('phoneBox').classList.toggle('hide',!!c||!name);$('prev').readOnly=!!c;if(c&&balOf(c)!==0)$('r_prev').classList.remove('hide');else if(!nv($('prev').value))$('r_prev').classList.add('hide');
   $('cinfo').textContent=c?`فاتورة رقم ${nextNo(c)} · الحساب: ${bal(c)}`:name?'عميل جديد: اكتب رصيده القديم لو عليه حساب':'';calc()}
 $('cust').addEventListener('input',custInput);
-function clearInv(){$('rows').innerHTML='';['nylon','disc','prev','paid','note','cust','phone'].forEach(i=>$(i).value='');$('note').classList.add('hide');$('prev').readOnly=false;['r_nylon','r_disc','r_prev'].forEach(i=>$(i).classList.add('hide'));lastC=null;$('cinfo').textContent='';calc()}
+function clearInv(){$('rows').innerHTML='';['nylon','disc','prev','paid','note','cust','phone'].forEach(i=>$(i).value='');$('note').classList.add('hide');$('prev').readOnly=false;['r_nylon','r_disc','r_prev'].forEach(i=>$(i).classList.add('hide'));lastC=null;$('cinfo').textContent='';$('phoneBox').classList.add('hide');$('moreBtn').classList.remove('hide');calc()}
 $('clear').onclick=()=>{clearInv();$('msg').textContent=''};
 async function doSave(img){const m=$('msg');m.textContent='';
   try{calc();const name=$('cust').value.trim();
@@ -388,16 +393,13 @@ async function doSave(img){const m=$('msg');m.textContent='';
       r={id:uid(),type:'inv',cid:c.id,cname:name,phone:c.phone,no:nextNo(c),ts:Date.now(),rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nv($('nylon').value),disc:nv($('disc').value),prev,total,paid:TOT.paid,rest:rd2(total-TOT.paid),note}}
     else r={id:uid(),type:'pay',cid:c.id,cname:name,phone:c.phone,ts:Date.now(),amount:TOT.paid,prev,rest:rd2(prev-TOT.paid),note};
     S.invoices.push(r);put('invoices',r);clearInv();drawCusts();
-    await showRec(r,img,hasRows?'تم حفظ الفاتورة ✓':'تم تسجيل الدفعة ✓')}
+    await showRec(r,img,hasRows?'تم حفظ الفاتورة ✓':'تم تسجيل الدفعة ✓');if(!img&&$('autoWa').checked){let can=false;try{can=!!(navigator.canShare&&navigator.canShare({files:[new File([curBlob],curName,{type:'image/png'})]}))}catch(e){}if(can)$('ressh').click();else if(waNum(r.phone))$('reswa').click()}}
   catch(e){m.textContent='حصل خطأ: '+(e&&e.message||e)}}
 $('save').onclick=()=>doSave(false);$('saveImg').onclick=()=>doSave(true);
 
 /* ---------- السجل ---------- */
-function drawHist(){const q=$('hf').value.trim();
-  $('hist').innerHTML=S.invoices.filter(r=>!q||r.cname.includes(q)).sort((a,b)=>b.ts-a.ts).map(r=>`<div class="rec" data-h="${r.id}" style="cursor:pointer"><div class="ro" style="color:var(--ink)"><b>${esc(r.cname)}</b><span class="mute">${r.type==='pay'?'دفعة':'فاتورة رقم '+r.no}</span></div><div class="mute num">${stamp(r.ts)}</div>
-  <div class="num" style="font-size:14px;margin-top:3px">${r.type==='pay'?'المبلغ '+f(r.amount):'الإجمالي '+f(r.total)+' · مدفوع '+f(r.paid)+' · متبقي '+f(r.rest)}</div></div>`).join('')||'<p class="mute">لا توجد فواتير بعد.</p>'}
-$('hf').oninput=drawHist;
-$('hist').addEventListener('click',e=>{const h=e.target.closest('[data-h]');if(!h)return;const r=S.invoices.find(x=>x.id===h.dataset.h);if(r)showRec(r,false,'')});
+function drawHist(){const q=$('cq').value.trim();$('cuTot').textContent='';
+  $('cuList').innerHTML=S.invoices.filter(r=>!q||r.cname.includes(q)).sort((a,b)=>b.ts-a.ts).slice(0,100).map(r=>`<div class="rec" data-h="${r.id}" style="cursor:pointer"><div class="ro" style="color:var(--ink)"><b>${esc(r.cname)}</b><span>${r.type==='pay'?'دفعة':'فاتورة رقم '+r.no}</span></div><div class="mute num">${stamp(r.ts)}</div><div class="num" style="font-size:14px;margin-top:3px">${r.type==='pay'?'المبلغ '+f(r.amount):'الإجمالي '+f(r.total)+' · مدفوع '+f(r.paid)+' · متبقي '+f(r.rest)}</div></div>`).join('')||'<p class="mute">لا توجد فواتير بعد.</p>'}
 
 /* ---------- تذكير المديونين ---------- */
 const waNum=p=>{let d=(p||'').replace(/\D/g,'');if(d.startsWith('00'))d=d.slice(2);else if(d.startsWith('0'))d='20'+d.slice(1);return d};
@@ -415,47 +417,52 @@ $('bkFile').onchange=async e=>{const fl=e.target.files[0];e.target.value='';if(!
   try{const d=JSON.parse(await fl.text());if(!d||!Array.isArray(d.customers)||!Array.isArray(d.invoices))throw 0;
     const up=[];[['items',Array.isArray(d.items)?d.items:[]],['customers',d.customers],['invoices',d.invoices]].forEach(([k,r])=>mergeK(k,r).forEach(o=>up.push([k,o])));
     migrate();if(db)up.forEach(([k,o])=>sf(()=>db.collection(k).doc(o.id).set(o)));
-    drawCusts();drawItems();drawHist();custInput();
+    drawCusts();drawItems();custInput();
     $('bkMsg').textContent='تم الاسترجاع ✓ ('+d.customers.length+' عميل، '+d.invoices.length+' فاتورة/دفعة)'}
   catch(err){$('bkMsg').textContent='الملف غير صالح.'}};
 
 /* ---------- المزامنة السحابية (Firebase) ---------- */
+const FBCFG={apiKey:'AIzaSyCMwvziFU9hSuGMW8ygY1i-uTQoE12Q_J0',authDomain:'ezat-101.firebaseapp.com',projectId:'ezat-101',messagingSenderId:'338826432523',appId:'1:338826432523:web:d0d60e899c6ea0018b370e'};
 let FBDB=null,lastSync=0;
 async function getDb(){if(window.claude){try{return await tmo(claude.use('db'),8000)}catch(e){return null}}return FBDB}
 const loadScript=src=>new Promise((res,rej)=>{const e=document.createElement('script');e.src=src;e.onload=res;e.onerror=()=>rej(new Error('load'));document.head.appendChild(e)});
-async function fbStart(cfg,email,pass){
+async function fbStart(cfg,email,pass,google){
   if(!window.firebase){const b='https://www.gstatic.com/firebasejs/10.12.2/';await loadScript(b+'firebase-app-compat.js');await loadScript(b+'firebase-auth-compat.js');await loadScript(b+'firebase-firestore-compat.js')}
   if(!firebase.apps.length)firebase.initializeApp(cfg);
   const auth=firebase.auth();let user;
-  if(email&&pass)user=(await auth.signInWithEmailAndPassword(email,pass)).user;
+  if(google){try{user=(await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())).user}catch(e){if(e&&e.code==='auth/popup-blocked'){await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());return false}throw e}}
+  else if(email&&pass)user=(await auth.signInWithEmailAndPassword(email,pass)).user;
   else user=await new Promise(r=>{const u=auth.onAuthStateChanged(x=>{u();r(x)})});
   if(!user)throw new Error('no-user');
   const base=firebase.firestore().collection('users').doc(user.uid);
   FBDB={collection:k=>({get:async()=>{const sn=await base.collection(k).get();return{docs:sn.docs.map(d=>({data:()=>d.data()}))}},doc:id=>({set:o=>base.collection(k).doc(id).set(o),delete:()=>base.collection(k).doc(id).delete()})}),doc:()=>({get:async()=>({exists:false}),delete:async()=>{}})};
   return true}
-const fbCfg=()=>{try{return JSON.parse(localStorage.getItem('fbCfg'))}catch(e){return null}};
+const fbCfg=()=>{try{return(localStorage.getItem('fbOn')==='1'||localStorage.getItem('fbCfg'))?FBCFG:null}catch(e){return null}};
 const fbStat=t=>{$('fbStat').textContent=t};
-const fbErr=e=>{const c=(e&&e.code)||'';if(/invalid-credential|wrong-password|user-not-found|invalid-email/.test(c))return'الإيميل أو كلمة السر غلط (لازم تكون أضفت المستخدم في Firebase).';if(/network/.test(c))return'مفيش إنترنت.';if(/operation-not-allowed/.test(c))return'فعّل Email/Password في Authentication.';if(e&&e.message==='no-user')return'سجّل الدخول من جديد.';if(e&&e.message==='load')return'تعذر تحميل مكتبة Firebase: تأكد من الإنترنت.';return'تعذر الربط: '+(c||(e&&e.message)||'')};
-async function syncNow(){const ok=await loadCloud();lastSync=Date.now();if(ok){drawCusts();drawItems();drawHist();custInput()}return ok}
+const fbErr=e=>{const c=(e&&e.code)||'';if(/popup-closed|cancelled-popup/.test(c))return'اتلغى تسجيل الدخول. جرّب تاني.';if(/unauthorized-domain/.test(c))return'ضيف ezat101.github.io في Authentication ← Settings ← Authorized domains.';if(/operation-not-allowed/.test(c))return'فعّل Google (أو Email/Password) في Authentication ← Sign-in method.';if(/invalid-credential|wrong-password|user-not-found|invalid-email/.test(c))return'الإيميل أو كلمة السر غلط (لازم تكون أضفت المستخدم في Firebase).';if(/network/.test(c))return'مفيش إنترنت.';if(/operation-not-allowed/.test(c))return'فعّل Email/Password في Authentication.';if(e&&e.message==='no-user')return'سجّل الدخول من جديد.';if(e&&e.message==='load')return'تعذر تحميل مكتبة Firebase: تأكد من الإنترنت.';return'تعذر الربط: '+(c||(e&&e.message)||'')};
+async function syncNow(){const ok=await loadCloud();lastSync=Date.now();if(ok){drawCusts();drawItems();custInput()}return ok}
 async function fbBoot(){const cfg=fbCfg();if(!cfg){await syncNow();return}
   fbStat('جاري الاتصال بالسحابة...');
   try{await fbStart(cfg);const ok=await syncNow();fbStat(ok?'متصل ✓ المزامنة والنسخ الاحتياطي تلقائيين.':'متصل بالحساب لكن القراءة فشلت: راجع قواعد Firestore.')}
   catch(e){fbStat(e&&e.message==='no-user'?'سجّل الدخول من جديد.':'مفيش اتصال حالياً: بياناتك على الجهاز وهتتزامن لما النت يرجع.')}}
 function parseCfg(t){const o={};String(t).replace(/([A-Za-z]\w*)\s*:\s*["']([^"']*)["']/g,(m,k,v)=>{o[k]=v;return m});return o}
-$('fbConnect').onclick=async()=>{const c=parseCfg($('fbCfgIn').value||''),use=c.apiKey?c:fbCfg();
-  if(!use||!use.apiKey||!use.projectId){fbStat('الصق إعدادات Firebase كاملة (فيها apiKey و projectId).');return}
-  const em=$('fbEmail').value.trim(),pw=$('fbPass').value;if(!em||!pw){fbStat('اكتب الإيميل وكلمة السر.');return}
-  fbStat('جاري الربط...');
-  try{await fbStart(use,em,pw);try{localStorage.setItem('fbCfg',JSON.stringify(use))}catch(e){}$('fbPass').value='';$('fbCfgIn').value='';
+async function fbLogin(email,pass,google){fbStat('جاري الربط...');
+  try{const r=await fbStart(FBCFG,email,pass,google);if(r===false)return;try{localStorage.setItem('fbOn','1');localStorage.removeItem('fbCfg')}catch(e){}$('fbPass').value='';
     const ok=await syncNow();fbStat(ok?'متصل ✓ المزامنة والنسخ الاحتياطي تلقائيين.':'تم تسجيل الدخول لكن القراءة فشلت: راجع قواعد Firestore.')}
-  catch(e){fbStat(fbErr(e))}};
-$('fbOff').onclick=async()=>{try{if(window.firebase&&firebase.auth)await firebase.auth().signOut()}catch(e){}try{localStorage.removeItem('fbCfg')}catch(e){}FBDB=null;db=null;fbStat('تم الفصل. بياناتك باقية على الجهاز.');$('stor').textContent='الحفظ: على هذا الجهاز فقط.'};
+  catch(e){fbStat(fbErr(e))}}
+$('fbGoogle').onclick=()=>fbLogin(null,null,true);
+$('fbConnect').onclick=()=>{const em=$('fbEmail').value.trim(),pw=$('fbPass').value;if(!em||!pw){fbStat('اكتب الإيميل وكلمة السر.');return}fbLogin(em,pw,false)};
+$('fbMore').onclick=e=>{e.preventDefault();$('fbMail').classList.toggle('hide')};
+$('fbOff').onclick=async()=>{try{if(window.firebase&&firebase.auth)await firebase.auth().signOut()}catch(e){}try{localStorage.removeItem('fbCfg');localStorage.removeItem('fbOn')}catch(e){}FBDB=null;db=null;fbStat('تم الفصل. بياناتك باقية على الجهاز.');$('stor').textContent='الحفظ: على هذا الجهاز فقط.'};
 addEventListener('online',()=>{if(fbCfg())fbBoot()});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Date.now()-lastSync>30000)syncNow()});
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js').catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+
+try{$('autoWa').checked=localStorage.getItem('autoWa')==='1'}catch(e){}
+$('autoWa').onchange=()=>{try{localStorage.setItem('autoWa',$('autoWa').checked?'1':'0')}catch(e){}};
 
 /* ---------- بداية ---------- */
 loadLocal();drawCusts();drawItems();calc();bkInfo();
