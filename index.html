@@ -116,7 +116,7 @@ table.st{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0}
 </section>
 
 <section id="t-st" class="hide">
-  <div class="card"><b>حالة الحفظ</b><div id="stor" style="margin-top:4px;font-size:14px"></div><div class="mute" style="margin-top:4px">نسخة التطبيق: 4</div></div>
+  <div class="card"><b>حالة الحفظ</b><div id="stor" style="margin-top:4px;font-size:14px"></div><div class="mute" style="margin-top:4px">نسخة التطبيق: 5</div></div>
   <div class="card"><b>الإرسال</b>
     <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink);margin-top:6px"><input type="checkbox" id="autoWa"> بعد حفظ الفاتورة افتح الإرسال للعميل تلقائياً</label></div>
   <div class="card"><b>النسخة الاحتياطية</b><div class="mute" id="bkInfo" style="margin-top:4px"></div>
@@ -375,9 +375,10 @@ $('items').addEventListener('click',e=>{const k=e.target.dataset.d;if(!k)return;
 
 /* ---------- بحث الأصناف ---------- */
 const dd=$('dd');let ddInp=null,ddRow=null;
-function showDD(inp,tr){const q=inp.value.trim(),t=tr.dataset.t;const l=S.items.filter(it=>it.type===t&&(!q||it.name.includes(q)));
+const szOf=it=>it.type==='rd'?(it.h&&it.w?it.h+'×'+it.w:''):(it.w&&it.h?it.w+'×'+it.h:'');
+function showDD(inp,tr){const q=inp.value.trim(),qs=q.replace(/[xX*]/g,'×'),t=tr.dataset.t;const l=S.items.filter(it=>it.type===t&&(!q||it.name.includes(q)||szOf(it).includes(qs)));
   if(!l.length){dd.style.display='none';return}ddInp=inp;ddRow=tr;
-  dd.innerHTML=l.map(it=>`<div data-k="${it.id}"><span>${esc(it.name)}</span><small>${it.p||''}</small></div>`).join('');
+  dd.innerHTML=l.map(it=>`<div data-k="${it.id}"><span>${esc(it.name)}${szOf(it)?' <small class="num">'+szOf(it)+'</small>':''}</span><small>${it.p||''}</small></div>`).join('');
   const r=inp.getBoundingClientRect();dd.style.top=(r.bottom+2)+'px';dd.style.right=Math.max(4,innerWidth-r.right)+'px';dd.style.width=Math.max(230,r.width)+'px';dd.style.display='block'}
 dd.addEventListener('mousedown',e=>{e.preventDefault();const d=e.target.closest('div[data-k]');if(!d)return;const it=S.items.find(x=>x.id===d.dataset.k),rd=it.type==='rd';
   ddInp.value=rd&&it.h&&it.w?`${it.name} ${it.h}×${it.w}`:it.name;
