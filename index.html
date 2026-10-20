@@ -100,7 +100,7 @@ table.st{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}
 section:not(.hide){animation:fadeIn .25s ease-out}
-.rec{transition:transform .15s,box-shadow .15s}.rec:active{transform:scale(.98)}
+.rec{transition:transform .15s,box-shadow .15s}.rec:active{transform:scale(.98)}.cr2:active{transform:none;opacity:.7}
 
 
 /* ===== v2: مقاسات أصغر، ألوان أزرار، ترتيب ===== */
@@ -193,6 +193,14 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
 .grp>summary{font-weight:700;font-size:15px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px;cursor:pointer;list-style:none;margin-bottom:6px}
 .grp>summary small{display:block;font-weight:400;font-size:12px;color:var(--mute);margin-top:2px}
 .sx{display:none!important}
+#t-st .grp{scroll-margin-top:56px}
+#t-st label.opt{display:flex;flex-direction:row-reverse;justify-content:space-between;align-items:center;gap:12px;margin-top:0;padding:10px 0;border-top:1px solid var(--line);font-size:14px;color:var(--ink)}
+#t-st label.opt .ot{flex:1;min-width:0}
+#t-st label.opt .ot small{display:block;font-size:12px;color:var(--mute);margin-top:2px;font-weight:400}
+#t-st label.opt input[type=checkbox]{-webkit-appearance:none;appearance:none;flex:none;width:44px;height:26px;padding:0;border:0;border-radius:99px;background:var(--line);position:relative;cursor:pointer;margin:0;transition:background .2s}
+#t-st label.opt input[type=checkbox]::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}
+#t-st label.opt input[type=checkbox]:checked{background:var(--acc)}
+#t-st label.opt input[type=checkbox]:checked::after{left:21px}
 .grp>summary::-webkit-details-marker{display:none}
 .grp>summary::after{content:'▾';float:left;color:var(--mute)}.grp[open]>summary::after{content:'▴'}
 .row{touch-action:pan-y;transition:transform .15s,opacity .15s}
@@ -328,12 +336,13 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
     <div class="g2"><div><label>الكلمة قبل اسم العميل (فاضي = بدون)</label><input id="custW"></div></div>
 </div>
 <div class="card"><b>ملاحظات الفاتورة</b><div class="mute" style="margin:4px 0 6px">اللي تكتبه هنا يظهر تحت الإجمالي في كل الفواتير الجديدة.</div><textarea id="gnote" rows="3" placeholder="اكتب الملاحظات هنا" style="direction:rtl;text-align:right;font-size:14px"></textarea></div>
-<div class="card"><b>🖨 الطباعة والـ PDF واللوجو</b>
-    <label class="opt" style="margin-top:6px"><input type="checkbox" id="pdfOn"> إظهار زرار PDF والطباعة تحت الفاتورة</label>
+<div class="card"><b>🖨 الطباعة والـ PDF</b>
+    <label class="opt" style="margin-top:6px"><input type="checkbox" id="pdfOn"><span class="ot">إظهار زرار PDF والطباعة<small>تحت الفاتورة بعد الحفظ</small></span></label>
     <div id="paperBox"><label style="margin-top:6px">مقاس الورق</label>
     <select id="paperSel"><option value="a4">A4 عادي</option><option value="t80">ورق حراري 80 مم</option><option value="t58">ورق حراري 58 مم</option></select></div>
-    <label style="margin-top:8px">لوجو المحل (بيظهر أعلى الفاتورة)</label><input type="file" id="logoFile" accept="image/*">
-    <div id="logoBox" class="hide" style="margin-top:6px"><img id="logoPrev" alt="اللوجو" style="max-height:60px;max-width:60%;display:block;margin-bottom:6px;background:#fff;border-radius:6px;padding:4px"><label class="opt"><input type="checkbox" id="logoOn"> إظهار اللوجو على الفاتورة</label><button class="alt b-red" id="logoDel" style="margin-top:6px">حذف اللوجو</button></div>
+    </div>
+<div class="card"><b>🖼 لوجو المحل</b><div class="mute" style="margin:4px 0 6px">بيظهر أعلى الفاتورة.</div><input type="file" id="logoFile" accept="image/*">
+    <div id="logoBox" class="hide" style="margin-top:6px"><img id="logoPrev" alt="اللوجو" style="max-height:60px;max-width:60%;display:block;margin-bottom:6px;background:#fff;border-radius:6px;padding:4px"><label class="opt"><input type="checkbox" id="logoOn"><span class="ot">إظهار اللوجو على الفاتورة</span></label><button class="alt b-red" id="logoDel" style="margin-top:6px">حذف اللوجو</button></div>
     <div class="info" id="logoMsg"></div></div>
 </details>
 <details class="grp"><summary>📨 الواتساب<small>نص رسالة الفاتورة والدفعة وتذكير الدين، والإرسال التلقائي</small></summary>
@@ -344,39 +353,33 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
     <label style="margin-top:6px">رسالة تذكير الدين</label><textarea id="tplRem" rows="4"></textarea><div class="mute">{المحل} {اللقب} {العميل} {الحساب}</div>
     <div class="btns"><button class="alt b-red" id="tplReset">رجوع للصيغ الأصلية</button></div></details>
 <div class="card"><b>الإرسال</b>
-    <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink);margin-top:6px"><input type="checkbox" id="autoWa"> بعد حفظ الفاتورة افتح الإرسال للعميل تلقائياً</label></div>
+    <label class="opt"><input type="checkbox" id="autoWa"><span class="ot">فتح الإرسال للعميل تلقائياً<small>بعد حفظ الفاتورة مباشرة</small></span></label></div>
+</details>
+<details class="grp"><summary>⚙️ مزايا اختيارية<small>تعديل الفاتورة، تكرار، إقفال اليوم، تقرير الشهر، السلة</small></summary>
+<div class="card"><b>✏️ الفواتير</b><div class="mute" style="margin:4px 0 0">فعّل اللي تحتاجه بس.</div>
+    <label class="opt"><input type="checkbox" id="editInv"><span class="ot">تعديل الفاتورة بعد حفظها</span></label>
+    <label class="opt"><input type="checkbox" id="dupInv"><span class="ot">تكرار فاتورة قديمة لنفس العميل</span></label>
+    <label class="opt"><input type="checkbox" id="trashOn"><span class="ot">سلة المحذوفات<small>الفاتورة المحذوفة تتحفظ 30 يوم</small></span></label></div>
+<div class="card"><b>📊 التقارير والتذكير</b>
+    <label class="opt"><input type="checkbox" id="dayCl"><span class="ot">إقفال اليوم<small>زرار + إقفال أمس يظهر لوحده</small></span></label>
+    <label class="opt"><input type="checkbox" id="monCl"><span class="ot">تقرير الشهر<small>زرار + تقرير الشهر اللي فات يظهر لوحده</small></span></label>
+    <label class="opt"><input type="checkbox" id="bulkRemChk"><span class="ot">تذكير كل المديونين مرة واحدة</span></label></div>
+<div class="card"><b>🏷 أسباب خصم المدفوع</b><div class="mute" style="margin:4px 0 6px">تظهر كأزرار جاهزة عند تسجيل دفعة. سطر لكل سبب بالشكل: الاسم=النسبة</div><textarea id="pfPreT" rows="3" style="direction:rtl;text-align:right;font-size:14px"></textarea></div>
 </details>
 <details class="grp"><summary>🎨 الشكل<small>الوضع الليلي، حجم الخط، الآلة الحاسبة</small></summary>
 <div class="card"><b>شكل التطبيق</b>
-    <label class="opt"><input type="checkbox" id="calcOn"> إظهار الآلة الحاسبة</label>
-    <label class="opt"><input type="checkbox" id="themeChk"> الوضع الليلي</label>
+    <label class="opt"><input type="checkbox" id="calcOn"><span class="ot">إظهار الآلة الحاسبة</span></label>
+    <label class="opt"><input type="checkbox" id="themeChk"><span class="ot">الوضع الليلي</span></label>
+    <label class="opt"><input type="checkbox" id="invTabOn"><span class="ot">زرار الفاتورة تاب جنب العملاء<small>بدل الزرار العايم الصغير</small></span></label>
     <label style="margin-top:8px">حجم الخط</label><select id="fzSel"><option value="s">صغير</option><option value="m">وسط</option><option value="l">كبير</option></select></div>
-</details>
-<details class="grp"><summary>⚙️ مزايا اختيارية<small>تعديل الفاتورة، تكرار، إقفال اليوم، تقرير الشهر، السلة</small></summary>
-<div class="card"><b>ميزات إضافية</b><div class="mute" style="margin:4px 0 0">فعّلي اللي تحبيه وقفلي اللي مش محتاجاه</div>
-    <label class="opt"><input type="checkbox" id="editInv"> تعديل الفاتورة بعد حفظها</label>
-    <label class="opt"><input type="checkbox" id="dupInv"> تكرار فاتورة قديمة لنفس العميل</label>
-    <label class="opt"><input type="checkbox" id="dayCl"> إقفال اليوم (زرار + إقفال أمس يظهر لوحده)</label>
-    <label class="opt"><input type="checkbox" id="monCl"> تقرير الشهر (زرار + تقرير الشهر اللي فات يظهر لوحده)</label>
-    <label class="opt"><input type="checkbox" id="bulkRemChk"> تذكير كل المديونين مرة واحدة</label>
-    <label class="opt"><input type="checkbox" id="trashOn"> سلة المحذوفات (الفاتورة المحذوفة تتحفظ 30 يوم)</label>
-    <label style="margin-top:8px">أسباب خصم المدفوع الجاهزة (سطر لكل سبب: الاسم=النسبة)</label><textarea id="pfPreT" rows="3" style="direction:rtl;text-align:right;font-size:14px"></textarea></div>
-</details>
-<details class="grp"><summary>🔒 الأمان<small>قفل التطبيق بالرقم السري والبصمة</small></summary>
-<div class="card"><b>🔒 قفل التطبيق</b>
-    <label class="opt"><input type="checkbox" id="lkChk"> قفل التطبيق برقم سري</label>
-    <div id="lkSet" class="hide"><div class="g2" style="margin-top:6px"><input id="lkP1" type="password" inputmode="numeric" maxlength="6" placeholder="رقم سري (4 إلى 6 أرقام)"><input id="lkP2" type="password" inputmode="numeric" maxlength="6" placeholder="أعيدي كتابته"></div>
-      <div class="btns"><button class="main" id="lkSave">تفعيل القفل</button></div></div>
-    <label class="opt hide" id="lkBioBox"><input type="checkbox" id="lkBio"> الفتح بالبصمة</label>
-    <div class="info" id="lkMsg"></div></div>
 </details>
 <details class="grp"><summary>💾 النسخ والحساب<small>النسخ الاحتياطية، المزامنة، دخول Google، سلة المحذوفات</small></summary>
 <div class="card"><b>حالة الحفظ</b><div id="stor" style="margin-top:4px;font-size:14px"></div></div>
 <div class="card"><b>النسخة الاحتياطية</b><div class="mute" id="bkInfo" style="margin-top:4px"></div>
-    <label class="opt"><input type="checkbox" id="bkAl"> تنبيه النسخة الاحتياطية (لو عدّى أسبوع)</label>
+    <label class="opt"><input type="checkbox" id="bkAl"><span class="ot">تنبيه النسخة الاحتياطية<small>لو عدّى أسبوع من غير نسخة</small></span></label>
     <div class="btns"><button class="main" id="bkSave">حفظ نسخة</button><button class="alt" id="bkLoad">استرجاع نسخة</button><input type="file" id="bkFile" accept=".json,application/json" class="hide"></div><div class="info" id="bkMsg"></div></div>
 <div class="card"><b>☁️ نسخة احتياطية تلقائية يومية</b>
-    <label class="opt"><input type="checkbox" id="autoBk"> احفظ نسخة على Firebase كل يوم لوحدها</label>
+    <label class="opt"><input type="checkbox" id="autoBk"><span class="ot">نسخة احتياطية يومية على Firebase<small>تتحفظ لوحدها كل يوم</small></span></label>
     <div class="mute" id="cbStat" style="margin-top:4px"></div>
     <div class="btns"><button class="main" id="cbNow">احفظ نسخة سحابية دلوقتي</button><button class="alt" id="cbList">النسخ السحابية</button></div>
     <div id="cbRows"></div><div class="info" id="cbMsg"></div></div>
@@ -388,6 +391,14 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
 <details class="card" id="trD"><summary>🗑 سلة المحذوفات <span id="trCnt"></span></summary>
     <div class="mute" style="margin:6px 0">الفواتير المحذوفة بتتحفظ 30 يوم على الجهاز ده. اضغطي استرجاع ترجّعيها.</div>
     <div id="trList"></div><div class="info" id="trMsg"></div></details>
+</details>
+<details class="grp"><summary>🔒 الأمان<small>قفل التطبيق بالرقم السري والبصمة</small></summary>
+<div class="card"><b>🔒 قفل التطبيق</b>
+    <label class="opt"><input type="checkbox" id="lkChk"><span class="ot">قفل التطبيق برقم سري</span></label>
+    <div id="lkSet" class="hide"><div class="g2" style="margin-top:6px"><input id="lkP1" type="password" inputmode="numeric" maxlength="6" placeholder="رقم سري (4 إلى 6 أرقام)"><input id="lkP2" type="password" inputmode="numeric" maxlength="6" placeholder="أعيدي كتابته"></div>
+      <div class="btns"><button class="main" id="lkSave">تفعيل القفل</button></div></div>
+    <label class="opt hide" id="lkBioBox"><input type="checkbox" id="lkBio"><span class="ot">الفتح بالبصمة</span></label>
+    <div class="info" id="lkMsg"></div></div>
 </details>
 </section>
 
@@ -511,7 +522,7 @@ $('fabNew').onclick=()=>document.querySelector('#bnav button[data-t="new"]').cli
 $('bnav').onclick=e=>{const b=e.target.closest('button[data-t]');if(!b)return;const t=b.dataset.t;
   const hl=(t==='it'||t==='st')?'more':t;document.querySelectorAll('#bnav button').forEach(x=>x.classList.toggle('on',x.dataset.t===hl));
   ['dash','new','cu','it','more','st'].forEach(k=>$('t-'+k).classList.toggle('hide',k!==t));
-  $('fabNew').classList.toggle('hide',t==='new');document.body.classList.toggle('onNew',t==='new');saveVis();fixBar();
+  $('fabNew').classList.toggle('hide',t==='new'||pget('invTab',false));document.body.classList.toggle('onNew',t==='new');saveVis();fixBar();
   if(t==='dash')drawDash();if(t==='more')drawMore();if(t==='cu')drawCusts();if(t==='new'&&lastC&&!editId){$('prev').value=balOf(lastC)||'';calc()}};
 
 /* ---------- رسم الصورة (بدون مكتبات) ---------- */
@@ -640,7 +651,7 @@ const fname=r=>'فاتورة-'+r.cname+(r.no?'-'+r.no:'')+(r.code?'-'+r.code:'')
 const showRec=(r,auto,msg)=>showImg(sheet(invSheet(r)),fname(r),msg||'',auto,r.phone,r);
 
 /* ---------- العملاء ---------- */
-let cuMode='all',selC=null,per='all',pF='',pT='',editOpen=false;
+let cuMode='all',selC=null,per='all',pF='',pT='',editOpen=false,cdEdit=false,cuScroll=0;
 const PL={w:'أسبوع',m:'شهر',all:'الكل',c:'فترة'};
 function perRange(){const n=Date.now(),D=864e5;let a=0,b=Infinity;
   if(per==='w')a=n-7*D;else if(per==='m')a=n-30*D;
@@ -668,14 +679,12 @@ function drawCusts(){
   else{l.sort((a,b)=>a.name.localeCompare(b.name,'ar'));$('cuTot').textContent='عدد العملاء: '+l.length+' · إجمالي المديونيات: '+f(S.customers.reduce((s,c)=>s+Math.max(0,balOf(c)),0))}
   $('bulkRem').classList.toggle('hide',!(cuMode==='debt'&&pget('bulkRem',true)&&l.length));
   $('cuList').innerHTML=l.map(c=>`<div class="rec cr2" data-open="${c.id}"${agStyle(c)}><div style="flex:1;min-width:0"><div class="cn">${esc(c.name)}</div><div class="mute">${esc(cSub(c))}</div></div><span class="cb ${bcls(c)} num">${bal(c)}</span></div>`).join('')||`<p class="mute">${cuMode==='debt'?'لا يوجد مديونين.':'لا يوجد عملاء بعد. اضغط (+ عميل جديد) أو احفظ فاتورة باسم جديد.'}</p>`}
+const actsHtml=c=>{const w=waNum(c.phone);return `${w?`<a class="ab" href="tel:+${w}">📞 اتصال</a><a class="ab" target="_blank" rel="noopener" href="https://wa.me/${w}">💬 واتساب</a>`:''}${balOf(c)>0?`<button class="ab b-out" data-rem="1">📨 تذكير بالدين</button>`:''}`};
 function drawDet(){const c=getC(selC),l=rowsOf(c);
   $('cuDet').innerHTML=`<button class="lnk" data-back="1">← رجوع</button>
-  <div class="card"><div class="ro" style="margin-bottom:8px"><input data-f="name" value="${esc(c.name)}" style="font-weight:700;font-size:17px;flex:1"><span class="cb ${bcls(c)} num">${bal(c)}</span></div>
-   ${balOf(c)>0?`<button class="ab b-out" data-rem="1" style="display:block;width:100%;margin-bottom:8px">📨 تذكير بالواتساب</button>`:''}
-   <div class="g2"><div><label>واتساب</label><div class="ro" style="gap:4px"><input data-f="phone" value="${esc(c.phone||'')}" style="flex:1">${waNum(c.phone)?`<a class="ab" href="tel:+${waNum(c.phone)}" aria-label="اتصال">📞</a><a class="ab" target="_blank" rel="noopener" href="https://wa.me/${waNum(c.phone)}" aria-label="واتساب">💬</a>`:''}</div></div><div><label>رصيد افتتاحي</label>${editOpen?`<input data-f="open" type="number" inputmode="decimal" value="${c.open||''}" placeholder="0">`:`<div class="ro" style="color:var(--ink);height:34px;border:1px dashed var(--line);border-radius:7px;padding:0 8px"><b class="num">${f(c.open||0)}</b><button class="lnk" data-eo="1">تعديل</button></div>`}</div></div>
-   <div class="g2"><div><label>العنوان</label><input data-f="addr" value="${esc(c.addr||'')}"></div><div><label>ملاحظات</label><input data-f="note" value="${esc(c.note||'')}"></div></div>
-   <div class="g2"><div><label>وعد بالدفع (ميعاد)</label><input data-f="prom" type="date" value="${c.prom||''}"></div><div><label>مبلغ الوعد</label><input data-f="promAmt" type="number" inputmode="decimal" value="${c.promAmt||''}"></div></div>
-   <div style="margin-bottom:6px"><label>حد أقصى للدين (فاضي = بدون حد)</label><input data-f="cap" type="number" inputmode="decimal" value="${c.cap||''}"></div>
+  <div class="card"><div class="ro" style="margin-bottom:6px"><b id="cdName" style="font-size:17px;color:var(--ink)">${esc(c.name)}</b><span class="cb ${bcls(c)} num">${bal(c)}</span></div>
+   <div class="addbar" id="cdActs" style="flex-wrap:wrap;margin:0">${actsHtml(c)}</div></div>
+  <div class="card"><b>💵 تسجيل دفعة</b>
    <div class="ro" style="gap:6px;margin:0"><input id="pay_in" type="number" inputmode="decimal" placeholder="مبلغ دفعة العميل" style="flex:1"><input id="pay_pf" type="number" inputmode="decimal" placeholder="خصم %" style="width:72px;flex:none"><button class="main b-green" data-pay="1" style="flex:none">تسجيل دفعة</button></div>
    <div class="addbar" style="flex-wrap:wrap;margin:4px 0 0">${preHtml()}<select id="pay_m" style="width:auto;height:30px;font-size:13px"><option value="cash">نقدي</option><option value="wallet">محفظة</option><option value="insta">انستا</option><option value="bank">بنك</option></select><button class="alt b-amber" data-cn="1">↩ مرتجع / خصم</button></div>
    <div class="info" id="cdMsg" style="color:var(--danger)"></div></div>
@@ -685,7 +694,13 @@ function drawDet(){const c=getC(selC),l=rowsOf(c);
    ${l.length?`<table class="st"><thead><tr><th>التاريخ</th><th>الرقم</th><th>القيمة</th><th>المدفوع</th><th>الحساب</th></tr></thead><tbody>${l.map(({r,run})=>`<tr data-rec="${r.id}"><td class="num">${dshort(r.ts)}</td><td>${plab(r,'#'+r.no)}${r.code?'<div class="mute" style="font-size:11px">'+r.code+'</div>':''}</td><td class="num">${r.type==='pay'?'-':f(val(r))}</td><td class="num">${f(pd(r))}</td><td class="num">${f(run)}</td></tr>`).join('')}</tbody></table>
    
    <div class="mute" style="margin-top:4px">اضغط أي صف لعرض الفاتورة.</div><div class="btns"><button class="main" data-stimg="1">حفظ الملخص كصورة</button></div>`:'<p class="mute">لا توجد فواتير في هذه الفترة.</p>'}</div>
-  <button class="lnk" data-delc="1" style="color:var(--danger)">حذف العميل</button><div class="info" id="dcMsg" style="color:var(--danger)"></div>`}
+  <details class="card" id="cdData"${cdEdit?' open':''}><summary style="font-weight:700;cursor:pointer">✏️ بيانات العميل</summary>
+   <div style="margin-top:8px"><label>الاسم</label><input data-f="name" value="${esc(c.name)}"></div>
+   <div class="g2" style="margin-top:6px"><div><label>واتساب</label><input data-f="phone" value="${esc(c.phone||'')}"></div><div><label>رصيد افتتاحي</label>${editOpen?`<input data-f="open" type="number" inputmode="decimal" value="${c.open||''}" placeholder="0">`:`<div class="ro" style="color:var(--ink);height:34px;border:1px dashed var(--line);border-radius:7px;padding:0 8px"><b class="num">${f(c.open||0)}</b><button class="lnk" data-eo="1">تعديل</button></div>`}</div></div>
+   <div class="g2"><div><label>العنوان</label><input data-f="addr" value="${esc(c.addr||'')}"></div><div><label>ملاحظات</label><input data-f="note" value="${esc(c.note||'')}"></div></div>
+   <div class="g2"><div><label>وعد بالدفع (ميعاد)</label><input data-f="prom" type="date" value="${c.prom||''}"></div><div><label>مبلغ الوعد</label><input data-f="promAmt" type="number" inputmode="decimal" value="${c.promAmt||''}"></div></div>
+   <div style="margin-bottom:6px"><label>حد أقصى للدين (فاضي = بدون حد)</label><input data-f="cap" type="number" inputmode="decimal" value="${c.cap||''}"></div>
+   <button class="lnk" data-delc="1" style="color:var(--danger)">حذف العميل</button><div class="info" id="dcMsg" style="color:var(--danger)"></div></details>`}
 function stmtImg(){const c=getC(selC),l=rowsOf(c),ss=sumOf(c);const lab=per==='c'?(pF||'...')+' إلى '+(pT||'...'):PL[per];
   const cv=sheet({name:c.name,sub:'كشف حساب',date:dshort(Date.now()),meta:['الفترة: '+lab],
     tables:[{th:['التاريخ','الرقم','القيمة','المدفوع','الحساب'],w:[.24,.14,.22,.2,.2],rows:l.map(({r,run})=>[dshort(r.ts),plab(r,'#'+r.no),r.type==='pay'?'-':f(val(r)),f(pd(r)),f(run)])}],
@@ -695,9 +710,9 @@ let delCArm=false,payWhy='';
 $('t-cu').addEventListener('click',e=>{const t=e.target,d=t.dataset;
   const hh=t.closest('[data-h]');if(hh){const r=S.invoices.find(x=>x.id===hh.dataset.h);if(r)showRec(r,false,'');return}
   if(d.m){if(d.m==='add'){$('cuAdd').classList.toggle('hide');return}cuMode=d.m;document.querySelectorAll('#cuMode button').forEach(b=>b.classList.toggle('on',b.dataset.m===d.m));drawCusts();return}
-  const op=t.closest('[data-open]');if(op){selC=op.dataset.open;per='all';editOpen=false;delCArm=false;drawCusts();window.scrollTo(0,0);return}
+  const op=t.closest('[data-open]');if(op){cuScroll=window.scrollY;selC=op.dataset.open;per='all';editOpen=false;cdEdit=false;delCArm=false;drawCusts();window.scrollTo(0,0);return}
   if(d.eo){editOpen=true;drawDet();return}
-  if(d.back){selC=null;drawCusts();return}
+  if(d.back){selC=null;drawCusts();window.scrollTo(0,cuScroll);return}
   if(d.per){per=d.per;drawDet();return}
   const rc=t.closest('[data-rec]');if(rc){const r=S.invoices.find(x=>x.id===rc.dataset.rec);if(r)showRec(r,false,'');return}
   if(d.rem){openRem(getC(selC));return}
@@ -712,8 +727,9 @@ $('t-cu').addEventListener('click',e=>{const t=e.target,d=t.dataset;
     const pfv=rd2(raw*pfp/100),amt=rd2(raw-pfv),prev=balOf(c),r={id:uid(),type:'pay',cid:c.id,cname:c.name,phone:c.phone,ts:Date.now(),amount:amt,amtRaw:raw,pf:pfp,pfv,pfWhy:payWhy,method:$('pay_m').value,prev,rest:rd2(prev-amt)};payWhy='';
     S.invoices.push(r);put('invoices',r);drawDet();showRec(r,false,'تم تسجيل الدفعة ✓')}});
 $('t-cu').addEventListener('change',e=>{if(e.target.id==='pf'){pF=e.target.value;drawDet()}else if(e.target.id==='pt'){pT=e.target.value;drawDet()}});
-$('cuDet').addEventListener('input',e=>{const t=e.target,c=getC(selC);if(!c||!t.dataset.f)return;const k=t.dataset.f;DV++;c[k]=(k==='open'||k==='promAmt'||k==='cap')?nv(t.value):t.value.trim();touch('customers',c)});
-$('cuDet').addEventListener('change',e=>{if(e.target.dataset.f==='open'){editOpen=false;drawDet()}});
+$('cuDet').addEventListener('input',e=>{const t=e.target,c=getC(selC);if(!c||!t.dataset.f)return;const k=t.dataset.f;DV++;c[k]=(k==='open'||k==='promAmt'||k==='cap')?nv(t.value):t.value.trim();touch('customers',c);if(k==='name'){const h=$('cdName');if(h)h.textContent=c.name}});
+$('cuDet').addEventListener('toggle',e=>{if(e.target.id==='cdData')cdEdit=e.target.open},true);
+$('cuDet').addEventListener('change',e=>{if(e.target.dataset.f==='open'){editOpen=false;drawDet()}else if(e.target.dataset.f==='phone'){const c=getC(selC),b=$('cdActs');if(c&&b)b.innerHTML=actsHtml(c)}});
 $('cq').oninput=drawCusts;
 $('addCu').onclick=()=>{const name=$('nc_name').value.trim(),m=$('cuMsg');m.textContent='';
   if(!name){m.textContent='اكتب اسم العميل';return}if(S.customers.some(c=>c.name===name)){m.textContent='الاسم موجود بالفعل';return}
@@ -1352,8 +1368,18 @@ $('stQ').oninput=()=>{const q=nm($('stQ').value.trim());let any=false;
     g.classList.toggle('sx',!hit);g.open=!!q&&hit;if(hit)any=true});
   $('stNone').classList.toggle('hide',any||!q)};
 
+/* قسم واحد مفتوح بس في الإعدادات */
+$('t-st').addEventListener('toggle',e=>{const g=e.target;if(!g.matches||!g.matches('details.grp')||!g.open||$('stQ').value.trim())return;
+  document.querySelectorAll('#t-st>details.grp').forEach(x=>{if(x!==g)x.open=false});
+  setTimeout(()=>g.scrollIntoView({block:'start',behavior:'smooth'}),60)},true);
+
 /* ---------- زرار الرجوع بتاع الموبايل ---------- */
 const curTab=()=>['dash','new','cu','it','more','st'].find(k=>!$('t-'+k).classList.contains('hide'))||'new';
+function applyInvTab(){const on=pget('invTab',false),t=curTab();
+  document.querySelector('#bnav button[data-t="new"]').classList.toggle('nx',!on);
+  $('fabNew').classList.toggle('hide',on||t==='new');
+  const hl=(t==='it'||t==='st')?'more':t;document.querySelectorAll('#bnav button').forEach(x=>x.classList.toggle('on',x.dataset.t===hl));fixBar()}
+$('invTabOn').checked=pget('invTab',false);$('invTabOn').onchange=()=>{pset('invTab',$('invTabOn').checked);applyInvTab()};
 const OVL=[['res','resx'],['rem','remX'],['bulk','bulkX'],['calcModal','calcClose']];
 function navLevel(){let n=0;const t=curTab();
   if(t!=='new')n++;if(t==='it'||t==='st')n++;
@@ -1376,6 +1402,7 @@ window.addEventListener('popstate',()=>{if(hIgn>0){hIgn=0;return}
 document.addEventListener('click',()=>setTimeout(hSync,40),true);
 setInterval(hSync,400);
 
+applyInvTab();
 loadLocal();drawDash();drawCusts();drawItems();calc();bkInfo();applyFeatures();lockInit();drawTrash();loadMsgUI();loadLogo();paperLabels();drawRecent();fixBar();document.body.classList.add('onNew');
 fbBoot();
 </script>
