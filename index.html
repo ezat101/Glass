@@ -70,6 +70,7 @@ table.st{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0}
 .bottom-nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 6px;border:none;background:none;color:var(--mute);font-family:inherit;font-size:11px;cursor:pointer;transition:color .2s;position:relative}
 .bottom-nav button .nav-icon{font-size:20px;line-height:1}
 .bottom-nav button .nav-label{font-size:10px;font-weight:500}
+.bottom-nav button.nx{display:none}
 .bottom-nav button.on{color:var(--acc);font-weight:600}
 .bottom-nav button.on::after{content:'';position:absolute;top:0;left:25%;right:25%;height:3px;background:var(--acc);border-radius:0 0 3px 3px}
 
@@ -181,16 +182,17 @@ details.card textarea{direction:rtl;text-align:right;font-size:14px;width:100%;m
 select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 8px}
 
 /* ===== v3: شريط حفظ ثابت، زرار + فاتورة، مجموعات الإعدادات، حجم الخط ===== */
-#t-new{padding-bottom:64px}
-.savebar{position:fixed;left:0;right:0;z-index:38;display:flex;flex-wrap:wrap;gap:6px;padding:6px 8px;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -2px 8px rgba(0,0,0,.06)}
-.savebar button{flex:1}.savebar #save{flex:2}
-.savebar #msg{flex:0 0 100%;margin:0 0 2px;text-align:center}.savebar #msg:empty{display:none}
-.onNew .calc-fab{bottom:132px}
+#t-new{padding-bottom:96px}
+.savebar{position:fixed;right:14px;bottom:calc(var(--nh,56px) + 12px);z-index:38;display:flex;flex-direction:column;align-items:flex-end;gap:6px;max-width:calc(100% - 28px)}
+.savebar #save{flex:none;border-radius:99px;padding:10px 18px;font-size:14px;font-weight:700;box-shadow:var(--shadowMd)}
+.savebar #msg{margin:0;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px;box-shadow:var(--shadowMd)}.savebar #msg:empty{display:none}
 .fab-new{position:fixed;right:14px;bottom:calc(var(--nh,56px) + 12px);z-index:36;border-radius:99px;padding:10px 16px;border:none;background:var(--acc);color:#fff;font-size:14px;font-weight:700;box-shadow:var(--shadowMd);cursor:pointer}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:140px;z-index:60;background:#111;color:#fff;padding:8px 14px;border-radius:99px;font-size:13px;display:flex;gap:12px;align-items:center;white-space:nowrap}
 .toast button{background:none;border:none;color:#7dd3fc;font-weight:700;font-size:13px;cursor:pointer;padding:0}
 .grp{margin-bottom:8px}
 .grp>summary{font-weight:700;font-size:15px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px;cursor:pointer;list-style:none;margin-bottom:6px}
+.grp>summary small{display:block;font-weight:400;font-size:12px;color:var(--mute);margin-top:2px}
+.sx{display:none!important}
 .grp>summary::-webkit-details-marker{display:none}
 .grp>summary::after{content:'▾';float:left;color:var(--mute)}.grp[open]>summary::after{content:'▴'}
 .row{touch-action:pan-y;transition:transform .15s,opacity .15s}
@@ -240,7 +242,7 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
   <details class="card" id="chartD"><summary style="font-weight:700;cursor:pointer">📈 رسم المبيعات</summary>
     <div class="seg s" id="chSeg" style="margin:6px 0"><button data-ch="7" class="on">7 أيام</button><button data-ch="30">30 يوم</button><button data-ch="m">6 شهور</button></div><div id="chBox"></div></details>
   <div class="card">
-    <input id="hq" placeholder="ابحث باسم العميل">
+    <input id="hq" placeholder="ابحث باسم العميل أو كود الفاتورة">
     <div class="seg s" id="hPer" style="margin:6px 0 4px"><button data-p="all" class="on">الكل</button><button data-p="d">اليوم</button><button data-p="w">أسبوع</button><button data-p="m">شهر</button></div>
     <div class="ro"><span class="mute" id="hTot"></span><span style="display:flex;gap:6px"><button class="ab hide" id="dayClose">🧾 إقفال اليوم</button><button class="ab hide" id="monRep">📊 تقرير الشهر</button></span></div>
   </div>
@@ -308,6 +310,8 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
 
 <section id="t-more" class="hide">
   <div id="mMenu" class="mgrid">
+    <button class="mbtn" data-go="it"><span>📦</span>الأصناف</button>
+    <button class="mbtn" data-go="st"><span>⚙️</span>الإعدادات</button>
     <button class="mbtn" data-mv="cut"><span>✂️</span>تقسيم القطع</button>
     <button class="mbtn" data-mv="ord"><span>📋</span>أوردرات وعروض أسعار</button>
     <button class="mbtn" data-mv="exp"><span>💸</span>المصاريف والخزنة</button>
@@ -317,20 +321,13 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
   <div id="mView" class="hide"><button class="lnk" id="mBack">← رجوع</button><div id="mBody"></div></div>
 </section>
 <section id="t-st" class="hide">
-<details class="grp" open><summary>🧾 الفاتورة والرسائل</summary>
-<div class="card"><b>ملاحظات الفاتورة</b><div class="mute" style="margin:4px 0 6px">اللي تكتبه هنا يظهر تحت الإجمالي في كل الفواتير الجديدة.</div><textarea id="gnote" rows="3" placeholder="اكتب الملاحظات هنا" style="direction:rtl;text-align:right;font-size:14px"></textarea></div>
-<details class="card" id="msgD"><summary>📨 رسائل الواتساب والفاتورة</summary>
-    <div class="mute" style="margin:6px 0">غيّري أو امسحي أي كلمة. الكلمات اللي بين {} بتتبدّل لوحدها.</div>
+<input id="stQ" placeholder="🔍 ابحث في الإعدادات (مثلاً: ليلي، لوجو، رسالة)" style="margin-bottom:8px" autocomplete="off"><div id="stNone" class="mute hide" style="margin:6px 2px">مفيش إعداد بالاسم ده.</div>
+<details class="grp"><summary>🧾 الفاتورة<small>اسم المحل، الملاحظات، اللوجو، الطباعة، مقاس الورق</small></summary>
+<div class="card"><b>بيانات الفاتورة</b><div class="mute" style="margin:4px 0 6px">الأسماء اللي بتظهر على الفاتورة. فاضي = تختفي.</div>
     <div class="g2"><div><label>اسم المحل (فاضي = يختفي)</label><input id="shopN"></div><div><label>كلمة الفاتورة (فاضي = تختفي)</label><input id="docW"></div></div>
     <div class="g2"><div><label>الكلمة قبل اسم العميل (فاضي = بدون)</label><input id="custW"></div></div>
-    <label style="margin-top:6px">رسالة الفاتورة</label><textarea id="tplInv" rows="6"></textarea><div class="mute">{المحل} {اللقب} {العميل} {الفاتورة} {التاريخ} {الإجمالي} {المدفوع} {المتبقي} {الخصم}</div>
-    <label style="margin-top:6px">رسالة الدفعة</label><textarea id="tplPay" rows="4"></textarea><div class="mute">{المحل} {اللقب} {العميل} {المبلغ} {الحساب} {التاريخ} {الخصم}</div>
-    <label style="margin-top:6px">رسالة تذكير الدين</label><textarea id="tplRem" rows="4"></textarea><div class="mute">{المحل} {اللقب} {العميل} {الحساب}</div>
-    <div class="btns"><button class="alt b-red" id="tplReset">رجوع للصيغ الأصلية</button></div></details>
-<div class="card"><b>خيارات</b>
-    <label class="opt"><input type="checkbox" id="calcOn"> إظهار الآلة الحاسبة</label>
-    <label class="opt"><input type="checkbox" id="themeChk"> الوضع الليلي</label>
-    <label style="margin-top:8px">حجم الخط</label><select id="fzSel"><option value="s">صغير</option><option value="m">وسط</option><option value="l">كبير</option></select></div>
+</div>
+<div class="card"><b>ملاحظات الفاتورة</b><div class="mute" style="margin:4px 0 6px">اللي تكتبه هنا يظهر تحت الإجمالي في كل الفواتير الجديدة.</div><textarea id="gnote" rows="3" placeholder="اكتب الملاحظات هنا" style="direction:rtl;text-align:right;font-size:14px"></textarea></div>
 <div class="card"><b>🖨 الطباعة والـ PDF واللوجو</b>
     <label class="opt" style="margin-top:6px"><input type="checkbox" id="pdfOn"> إظهار زرار PDF والطباعة تحت الفاتورة</label>
     <div id="paperBox"><label style="margin-top:6px">مقاس الورق</label>
@@ -338,10 +335,24 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
     <label style="margin-top:8px">لوجو المحل (بيظهر أعلى الفاتورة)</label><input type="file" id="logoFile" accept="image/*">
     <div id="logoBox" class="hide" style="margin-top:6px"><img id="logoPrev" alt="اللوجو" style="max-height:60px;max-width:60%;display:block;margin-bottom:6px;background:#fff;border-radius:6px;padding:4px"><label class="opt"><input type="checkbox" id="logoOn"> إظهار اللوجو على الفاتورة</label><button class="alt b-red" id="logoDel" style="margin-top:6px">حذف اللوجو</button></div>
     <div class="info" id="logoMsg"></div></div>
+</details>
+<details class="grp"><summary>📨 الواتساب<small>نص رسالة الفاتورة والدفعة وتذكير الدين، والإرسال التلقائي</small></summary>
+<details class="card" id="msgD"><summary>📨 رسائل الواتساب والفاتورة</summary>
+    <div class="mute" style="margin:6px 0">غيّري أو امسحي أي كلمة. الكلمات اللي بين {} بتتبدّل لوحدها.</div>
+    <label style="margin-top:6px">رسالة الفاتورة</label><textarea id="tplInv" rows="6"></textarea><div class="mute">{المحل} {اللقب} {العميل} {الفاتورة} {التاريخ} {الإجمالي} {المدفوع} {المتبقي} {الخصم}</div>
+    <label style="margin-top:6px">رسالة الدفعة</label><textarea id="tplPay" rows="4"></textarea><div class="mute">{المحل} {اللقب} {العميل} {المبلغ} {الحساب} {التاريخ} {الخصم}</div>
+    <label style="margin-top:6px">رسالة تذكير الدين</label><textarea id="tplRem" rows="4"></textarea><div class="mute">{المحل} {اللقب} {العميل} {الحساب}</div>
+    <div class="btns"><button class="alt b-red" id="tplReset">رجوع للصيغ الأصلية</button></div></details>
 <div class="card"><b>الإرسال</b>
     <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink);margin-top:6px"><input type="checkbox" id="autoWa"> بعد حفظ الفاتورة افتح الإرسال للعميل تلقائياً</label></div>
 </details>
-<details class="grp"><summary>⚙️ الميزات والأمان</summary>
+<details class="grp"><summary>🎨 الشكل<small>الوضع الليلي، حجم الخط، الآلة الحاسبة</small></summary>
+<div class="card"><b>شكل التطبيق</b>
+    <label class="opt"><input type="checkbox" id="calcOn"> إظهار الآلة الحاسبة</label>
+    <label class="opt"><input type="checkbox" id="themeChk"> الوضع الليلي</label>
+    <label style="margin-top:8px">حجم الخط</label><select id="fzSel"><option value="s">صغير</option><option value="m">وسط</option><option value="l">كبير</option></select></div>
+</details>
+<details class="grp"><summary>⚙️ مزايا اختيارية<small>تعديل الفاتورة، تكرار، إقفال اليوم، تقرير الشهر، السلة</small></summary>
 <div class="card"><b>ميزات إضافية</b><div class="mute" style="margin:4px 0 0">فعّلي اللي تحبيه وقفلي اللي مش محتاجاه</div>
     <label class="opt"><input type="checkbox" id="editInv"> تعديل الفاتورة بعد حفظها</label>
     <label class="opt"><input type="checkbox" id="dupInv"> تكرار فاتورة قديمة لنفس العميل</label>
@@ -349,8 +360,9 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
     <label class="opt"><input type="checkbox" id="monCl"> تقرير الشهر (زرار + تقرير الشهر اللي فات يظهر لوحده)</label>
     <label class="opt"><input type="checkbox" id="bulkRemChk"> تذكير كل المديونين مرة واحدة</label>
     <label class="opt"><input type="checkbox" id="trashOn"> سلة المحذوفات (الفاتورة المحذوفة تتحفظ 30 يوم)</label>
-    <label class="opt"><input type="checkbox" id="bkAl"> تنبيه النسخة الاحتياطية (لو عدّى أسبوع)</label>
     <label style="margin-top:8px">أسباب خصم المدفوع الجاهزة (سطر لكل سبب: الاسم=النسبة)</label><textarea id="pfPreT" rows="3" style="direction:rtl;text-align:right;font-size:14px"></textarea></div>
+</details>
+<details class="grp"><summary>🔒 الأمان<small>قفل التطبيق بالرقم السري والبصمة</small></summary>
 <div class="card"><b>🔒 قفل التطبيق</b>
     <label class="opt"><input type="checkbox" id="lkChk"> قفل التطبيق برقم سري</label>
     <div id="lkSet" class="hide"><div class="g2" style="margin-top:6px"><input id="lkP1" type="password" inputmode="numeric" maxlength="6" placeholder="رقم سري (4 إلى 6 أرقام)"><input id="lkP2" type="password" inputmode="numeric" maxlength="6" placeholder="أعيدي كتابته"></div>
@@ -358,9 +370,10 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
     <label class="opt hide" id="lkBioBox"><input type="checkbox" id="lkBio"> الفتح بالبصمة</label>
     <div class="info" id="lkMsg"></div></div>
 </details>
-<details class="grp"><summary>💾 البيانات والنسخ</summary>
+<details class="grp"><summary>💾 النسخ والحساب<small>النسخ الاحتياطية، المزامنة، دخول Google، سلة المحذوفات</small></summary>
 <div class="card"><b>حالة الحفظ</b><div id="stor" style="margin-top:4px;font-size:14px"></div></div>
 <div class="card"><b>النسخة الاحتياطية</b><div class="mute" id="bkInfo" style="margin-top:4px"></div>
+    <label class="opt"><input type="checkbox" id="bkAl"> تنبيه النسخة الاحتياطية (لو عدّى أسبوع)</label>
     <div class="btns"><button class="main" id="bkSave">حفظ نسخة</button><button class="alt" id="bkLoad">استرجاع نسخة</button><input type="file" id="bkFile" accept=".json,application/json" class="hide"></div><div class="info" id="bkMsg"></div></div>
 <div class="card"><b>☁️ نسخة احتياطية تلقائية يومية</b>
     <label class="opt"><input type="checkbox" id="autoBk"> احفظ نسخة على Firebase كل يوم لوحدها</label>
@@ -402,16 +415,16 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
 </div>
 <button class="calc-fab" id="calcFab" aria-label="حاسبة">🧮</button>
 
-<div id="saveBar" class="savebar"><div class="info" id="msg" style="color:var(--danger)"></div><button class="main" id="save">حفظ الفاتورة</button><button class="alt b-out" id="saveImg">حفظ كصورة</button></div>
+<div id="saveBar" class="savebar hide"><div class="info" id="msg" style="color:var(--danger)"></div><button class="main" id="save">حفظ</button><button class="alt b-out hide" id="saveImg">حفظ كصورة</button></div>
 <button id="fabNew" class="fab-new hide">+ فاتورة</button>
 <div id="toast" class="toast hide"></div>
 <nav class="bottom-nav" id="bnav">
-  <button data-t="new" class="on"><span class="nav-icon">🧾</span><span class="nav-label">فاتورة</span></button>
+  <button data-t="new" class="nx on"><span class="nav-icon">🧾</span><span class="nav-label">فاتورة</span></button>
   <button data-t="cu"><span class="nav-icon">👥</span><span class="nav-label">العملاء</span></button>
-  <button data-t="it"><span class="nav-icon">📦</span><span class="nav-label">الأصناف</span></button>
+  <button data-t="it" class="nx"><span class="nav-icon">📦</span><span class="nav-label">الأصناف</span></button>
   <button data-t="dash"><span class="nav-icon">📒</span><span class="nav-label">سجل</span></button>
   <button data-t="more"><span class="nav-icon">🧰</span><span class="nav-label">المزيد</span></button>
-  <button data-t="st"><span class="nav-icon">⚙️</span><span class="nav-label">إعدادات</span></button>
+  <button data-t="st" class="nx"><span class="nav-icon">⚙️</span><span class="nav-label">إعدادات</span></button>
 </nav>
 
 <div id="dd"></div>
@@ -451,10 +464,14 @@ const getC=id=>S.customers.find(c=>c.id===id);
 
 /* ---------- التخزين ---------- */
 const hs=t=>{let h=0;for(const ch of t)h=(h*31+ch.charCodeAt(0))|0;return Math.abs(h).toString(36)};
+let codeFix=[];
+const nextCode=()=>Math.max(1000,...S.invoices.map(r=>+r.code||0),...lget('trash').map(r=>+r.code||0))+1;
 function migrate(){
   S.items=S.items.map(i=>{const v=i.v||{};return{id:i.id||'i'+hs((i.type||'')+i.name),u:i.u||0,type:i.type==='rd'?'rd':'mq',name:i.name,p:v.p!==undefined?v.p:(i.price||i.p||0),w:v.w!==undefined?v.w:(i.w||0),h:v.h!==undefined?v.h:(i.h||0)}});
   let ch=false;S.customers.forEach(c=>{if(c.open===undefined){const rs=ledger(c).sort((a,b)=>a.ts-b.ts);c.open=rs.length?(rs[0].prev||0):(c.balance||0);ch=true}});
-  if(ch){DV++;lset('customers',S.customers)}}
+  if(ch){DV++;lset('customers',S.customers)}
+  const nc=S.invoices.filter(r=>r.type==='inv'&&!r.code).sort((a,b)=>a.ts-b.ts);
+  if(nc.length){let n=nextCode();nc.forEach(r=>{r.code=n++;r.u=Date.now();codeFix.push(r)});DV++;lset('invoices',S.invoices)}}
 function loadLocal(){DV++;S.items=lget('items');S.customers=lget('customers');S.invoices=lget('invoices');EXTRA.forEach(k=>S[k]=lget(k));migrate()}
 const tmo=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);
 function mergeK(k,remote){const m=new Map(S[k].map(x=>[x.id,x])),up=[],rid=new Set(remote.map(r=>r.id));
@@ -471,6 +488,7 @@ async function loadCloud(){let d=null;
     [['items',[...ri,...li]],['customers',[...rc,...lc]],['invoices',rv]].forEach(([k,r])=>mergeK(k,r).forEach(o=>up.push([k,o])));
     for(const k of EXTRA){try{mergeK(k,fl(k,await rdc(k))).forEach(o=>up.push([k,o]))}catch(e){}}
     migrate();db=d;
+    codeFix.splice(0).forEach(o=>sf(()=>d.collection('invoices').doc(o.id).set(o)));
     try{await tmo(Promise.all(up.map(([k,o])=>d.collection(k).doc(o.id).set(o))),20000)}catch(e){sfail()}
     if(la.exists)sf(()=>d.doc('app/items').delete());if(lb.exists)sf(()=>d.doc('app/customers').delete());
     $('stor').textContent='الحفظ: تخزين سحابي.';return true}catch(e){}}
@@ -487,13 +505,13 @@ let tm;const dirty=new Map();
 function touch(k,o){dirty.set(k+o.id,[k,o]);clearTimeout(tm);tm=setTimeout(()=>{dirty.forEach(([k,o])=>put(k,o));dirty.clear()},500)}
 
 /* ---------- التبويبات (Bottom Nav) ---------- */
-const fixBar=()=>{const h=$('bnav').offsetHeight||56;document.documentElement.style.setProperty('--nh',h+'px');$('saveBar').style.bottom=h+'px'};
+const fixBar=()=>{const h=$('bnav').offsetHeight||56;document.documentElement.style.setProperty('--nh',h+'px');$('saveBar').style.bottom=(h+12)+'px'};
 window.addEventListener('resize',fixBar);
 $('fabNew').onclick=()=>document.querySelector('#bnav button[data-t="new"]').click();
 $('bnav').onclick=e=>{const b=e.target.closest('button[data-t]');if(!b)return;const t=b.dataset.t;
-  document.querySelectorAll('#bnav button').forEach(x=>x.classList.toggle('on',x===b));
+  const hl=(t==='it'||t==='st')?'more':t;document.querySelectorAll('#bnav button').forEach(x=>x.classList.toggle('on',x.dataset.t===hl));
   ['dash','new','cu','it','more','st'].forEach(k=>$('t-'+k).classList.toggle('hide',k!==t));
-  $('saveBar').classList.toggle('hide',t!=='new');$('fabNew').classList.toggle('hide',t==='new'||t==='st');document.body.classList.toggle('onNew',t==='new');fixBar();
+  $('fabNew').classList.toggle('hide',t==='new');document.body.classList.toggle('onNew',t==='new');saveVis();fixBar();
   if(t==='dash')drawDash();if(t==='more')drawMore();if(t==='cu')drawCusts();if(t==='new'&&lastC&&!editId){$('prev').value=balOf(lastC)||'';calc()}};
 
 /* ---------- رسم الصورة (بدون مكتبات) ---------- */
@@ -542,7 +560,7 @@ function invSheet(r,paper){const TH=paper==='t80'||paper==='t58',lbl=x=>x.n+(x.q
   if(r.dk==='quote')sum.push(['الإجمالي',f(r.total),1]);
   else if(r.dk==='order')sum.push(['الإجمالي',f(r.total),1],['العربون',f(r.paid)],['المتبقي',f(r.rest),1]);
   else{sum.push(['رصيد سابق',f(r.prev)],['الإجمالي',f(r.total),1]);if(r.pfv)sum.push(['المبلغ المدفوع',f(r.paidRaw)],['خصم '+(r.pfWhy?r.pfWhy+' ':'')+fq(r.pf)+'% من المدفوع',f(r.pfv)],['صافي المدفوع',f(r.paid)]);else sum.push(['المدفوع',f(r.paid)]);sum.push(['المتبقي',f(r.rest),1]);}
-  return{...base,sub:r.dk?(r.dk==='quote'?'عرض سعر':'أوردر')+' رقم '+r.no:((lsv('docw','إذن صرف')?lsv('docw','إذن صرف')+' ':'')+'رقم '+r.no),meta:r.dk==='order'&&r.due?['ميعاد التسليم: '+r.due]:undefined,tables,sum,gnote:r.gnote||''}}
+  return{...base,sub:r.dk?(r.dk==='quote'?'عرض سعر':'أوردر')+' رقم '+r.no:((lsv('docw','إذن صرف')?lsv('docw','إذن صرف')+' ':'')+'رقم '+r.no+(r.code?' · كود '+r.code:'')),meta:r.dk==='order'&&r.due?['ميعاد التسليم: '+r.due]:undefined,tables,sum,gnote:r.gnote||''}}
 
 /* ---------- عرض/حفظ/مشاركة الصورة ---------- */
 let curBlob=null,curName='',curPhone='',baseMsg='',curRec=null,delArm=false;
@@ -609,7 +627,7 @@ const tplOf=k=>{const v=lsv('tpl_'+k,'');return v.trim()?v:TPLD[k]},shopN=()=>ls
 function fillTpl(k,m){m['اللقب']=custW();return tplOf(k).split('\n').map(l=>{const had=/\{[^}]+\}/.test(l),o=l.replace(/\{([^}]+)\}/g,(x,key)=>key in m?m[key]:x).replace(/ {2,}/g,' ').replace(/^\s*\/\s*/,'');return{o,skip:had&&!o.trim()}}).filter(x=>x.skip===false).map(x=>x.o).join('\n')}
 function txtOf(r){const m={'المحل':shopN(),'العميل':r.cname,'التاريخ':dshort(r.ts),'الخصم':r.pfv?f(r.pfv):'','سبب_الخصم':r.pfWhy||''};
   if(r.type==='pay'){m['المبلغ']=f(r.amount);m['الحساب']=f(r.rest);return fillTpl('pay',m)}
-  m['الفاتورة']=(docW()?docW()+' ':'')+'رقم '+r.no;m['الإجمالي']=f(r.total);m['المدفوع']=f(r.paid);m['المتبقي']=f(r.rest);return fillTpl('inv',m)}
+  m['الفاتورة']=(docW()?docW()+' ':'')+'رقم '+r.no+(r.code?' · كود '+r.code:'');m['الإجمالي']=f(r.total);m['المدفوع']=f(r.paid);m['المتبقي']=f(r.rest);return fillTpl('inv',m)}
 const remText=c=>fillTpl('rem',{'العميل':c.name,'المحل':shopN(),'الحساب':f(balOf(c))});
 const curText=()=>$('resTxtBox').classList.contains('hide')?'':$('resTxt').value;
 const syncTx=()=>{$('restx').href='https://wa.me/'+waNum(curPhone)+'?text='+encodeURIComponent($('resTxt').value)};
@@ -618,7 +636,7 @@ $('resTxt').oninput=syncTx;$('resTpl').onclick=goTpl;
 $('reswa').onclick=e=>{const n=waNum(curPhone);if(!curBlob||!n){e.preventDefault();$('resm').textContent=baseMsg+' · اكتب رقم واتساب العميل في بياناته أولاً';return}
   $('reswa').href='https://wa.me/'+n+(curText()?'?text='+encodeURIComponent(curText()):'');
   try{navigator.clipboard.write([new ClipboardItem({'image/png':curBlob})]).then(()=>{$('resm').textContent=baseMsg+' · تم نسخ الصورة: الصقها في المحادثة'}).catch(()=>{})}catch(err){}};
-const fname=r=>'فاتورة-'+r.cname+(r.no?'-'+r.no:'')+'.png';
+const fname=r=>'فاتورة-'+r.cname+(r.no?'-'+r.no:'')+(r.code?'-'+r.code:'')+'.png';
 const showRec=(r,auto,msg)=>showImg(sheet(invSheet(r)),fname(r),msg||'',auto,r.phone,r);
 
 /* ---------- العملاء ---------- */
@@ -664,7 +682,7 @@ function drawDet(){const c=getC(selC),l=rowsOf(c);
   <div class="card"><div class="seg s">${Object.keys(PL).map(k=>`<button data-per="${k}" class="${per===k?'on':''}">${PL[k]}</button>`).join('')}</div>
    ${per==='c'?`<div class="g2"><div><label>من</label><input type="date" id="pf" value="${pF}"></div><div><label>إلى</label><input type="date" id="pt" value="${pT}"></div></div>`:''}
    ${(()=>{const q=sumOf(c);return`<div class="sumg"><div><label>الحساب أول الفترة</label><b class="num">${bsg(q.open)}</b></div><div><label>فواتير الفترة (${q.n})</label><b class="num">${f(q.inv)}</b></div><div><label>المدفوع في الفترة</label><b class="num">${f(q.pay)}</b>${q.cn?` <span class="mute">+ مرتجع ${f(q.cn)}</span>`:''}</div><div><label>الحساب آخر الفترة</label><b class="num">${bsg(q.end)}</b></div></div>`})()}
-   ${l.length?`<table class="st"><thead><tr><th>التاريخ</th><th>الرقم</th><th>القيمة</th><th>المدفوع</th><th>الحساب</th></tr></thead><tbody>${l.map(({r,run})=>`<tr data-rec="${r.id}"><td class="num">${dshort(r.ts)}</td><td>${plab(r,'#'+r.no)}</td><td class="num">${r.type==='pay'?'-':f(val(r))}</td><td class="num">${f(pd(r))}</td><td class="num">${f(run)}</td></tr>`).join('')}</tbody></table>
+   ${l.length?`<table class="st"><thead><tr><th>التاريخ</th><th>الرقم</th><th>القيمة</th><th>المدفوع</th><th>الحساب</th></tr></thead><tbody>${l.map(({r,run})=>`<tr data-rec="${r.id}"><td class="num">${dshort(r.ts)}</td><td>${plab(r,'#'+r.no)}${r.code?'<div class="mute" style="font-size:11px">'+r.code+'</div>':''}</td><td class="num">${r.type==='pay'?'-':f(val(r))}</td><td class="num">${f(pd(r))}</td><td class="num">${f(run)}</td></tr>`).join('')}</tbody></table>
    
    <div class="mute" style="margin-top:4px">اضغط أي صف لعرض الفاتورة.</div><div class="btns"><button class="main" data-stimg="1">حفظ الملخص كصورة</button></div>`:'<p class="mute">لا توجد فواتير في هذه الفترة.</p>'}</div>
   <button class="lnk" data-delc="1" style="color:var(--danger)">حذف العميل</button><div class="info" id="dcMsg" style="color:var(--danger)"></div>`}
@@ -788,7 +806,8 @@ function addRow(t){const rd=t==='rd',one=rd,d=document.createElement('div');d.cl
   d.innerHTML=one?`<div class="r1 one"><input class="n" placeholder="اسم الصنف" autocomplete="off"><input class="c" type="number" inputmode="decimal" placeholder="العدد"><input class="p" type="number" inputmode="decimal" placeholder="السعر"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button class="del" aria-label="حذف">×</button><span class="qq hide"></span><b class="val hide"></b></div>`:`<div class="r1"><input class="n" placeholder="ابحث" autocomplete="off"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button class="del" aria-label="حذف">×</button></div><div class="rg ${rd?'r':'a'}">${rd?'':num('w','العرض')+num('h','الطول')}${num('c','العدد')}${num('p','السعر')}</div><div class="ro"><span class="qq"></span><span>القيمة: <b class="val num">0</b></span></div>`;
   d.querySelector('.del').onclick=()=>delRow(d);d.querySelector('.cp').onclick=()=>{const d2=addRow(t);setVals(d2,getVals(d));d.after(d2);calc()};swipeDel(d);d.querySelectorAll('input').forEach(i=>i.oninput=calc);
   const n=d.querySelector('.n');n.onfocus=()=>showDD(n,d);n.addEventListener('click',()=>showDD(n,d));n.addEventListener('input',()=>showDD(n,d));$('rows').appendChild(d);return d}
-let TOT={},editId=null,docKind='inv',fromDoc=null,capOK=null;
+let TOT={},editId=null,docKind='inv',fromDoc=null,capOK=null,saveHas=false;
+function saveVis(){$('saveBar').classList.toggle('hide',!(document.body.classList.contains('onNew')&&saveHas))}
 function calc(){let sub=0,tq=0;const rows=[];
   document.querySelectorAll('#rows .row').forEach(d=>{const g=c=>d.querySelector(c),gv=c=>nv(g(c)&&g(c).value),rd=d.dataset.t==='rd';
     const w=gv('.w'),h=gv('.h'),c=gv('.c'),p=gv('.p'),area=!rd&&w>0&&h>0;
@@ -799,7 +818,7 @@ function calc(){let sub=0,tq=0;const rows=[];
   $('tqw').textContent=tq>0?' ('+fq(tq)+' م²)':'';$('sub').textContent=f(sub);$('grand').textContent=f(total);$('rest').textContent=f(total-paid);
   $('r_sub').classList.toggle('hide',['r_nylon','r_disc','r_dp','r_prev'].every(i=>$(i).classList.contains('hide')));
   $('dpAmt').textContent=pfv?' = '+f(pfv):'';TOT={rows,sub,tq:rd2(tq),prev,pf,pfv,pfWhy:$('pfWhy').value.trim(),method:$('payM').value,paidRaw,total,paid,rest:total-paid};
-  const pay=!rows.length&&paid>0;$('save').textContent=(editId?'حفظ التعديل':docKind==='quote'?'حفظ عرض السعر':docKind==='order'?'حفظ الأوردر':pay?'تسجيل دفعة':'حفظ الفاتورة')+(rows.length?' · '+f(total):pay?' · '+f(paid):'');$('saveImg').textContent=docKind==='inv'&&pay?'دفعة كصورة':'حفظ كصورة'}
+  const pay=!rows.length&&paid>0;$('save').textContent=(editId?'حفظ التعديل':docKind==='quote'?'حفظ العرض':docKind==='order'?'حفظ الأوردر':pay?'تسجيل دفعة':'حفظ')+(rows.length?' · '+f(total):pay?' · '+f(paid):'');$('saveImg').textContent=docKind==='inv'&&pay?'دفعة كصورة':'حفظ كصورة';saveHas=rows.length>0||paid>0||!!editId;saveVis()}
 ['nylon','disc','dp','prev','paid'].forEach(i=>$(i).oninput=calc);
 $('t-new').addEventListener('click',e=>{const x=e.target.dataset.x;if(x){const r=$(x);r.classList.remove('hide');const i=r.querySelector('input');if(i&&!i.readOnly)i.focus();return}const t=e.target.dataset.add;if(t){addRow(t).querySelector('.n').focus();calc()}});
 $('moreBtn').onclick=()=>{['r_nylon','r_disc','r_dp','r_m'].forEach(i=>$(i).classList.remove('hide'));if(!lastC)$('r_prev').classList.remove('hide');$('note').classList.remove('hide');$('moreBtn').classList.add('hide');calc()};
@@ -848,7 +867,7 @@ async function doSave(img){const m=$('msg');m.textContent='';
     const prev=balOf(c);let r;
     if(hasRows&&c.cap>0){const nb=rd2(prev+rd2(TOT.sub+nyl-dsc)-TOT.paid);if(nb>c.cap&&capOK!==c.id){capOK=c.id;m.textContent='العميل هيعدّي حد الدين ('+f(c.cap)+'): الحساب هيبقى '+f(nb)+'. اضغطي حفظ تاني للتأكيد.';return}}capOK=null;
     if(hasRows){const total=rd2(TOT.sub+nyl-dsc+prev);
-      r={id:uid(),type:'inv',cid:c.id,cname:name,phone:c.phone,no:nextNo(c),ts:Date.now(),rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nyl,disc:dsc,paidRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,method:TOT.method,prev,total,paid:TOT.paid,rest:rd2(total-TOT.paid),note,gnote:getGN()}}
+      r={id:uid(),type:'inv',cid:c.id,cname:name,phone:c.phone,no:nextNo(c),code:nextCode(),ts:Date.now(),rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nyl,disc:dsc,paidRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,method:TOT.method,prev,total,paid:TOT.paid,rest:rd2(total-TOT.paid),note,gnote:getGN()}}
     else r={id:uid(),type:'pay',cid:c.id,cname:name,phone:c.phone,ts:Date.now(),amount:TOT.paid,amtRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,method:TOT.method,prev,rest:rd2(prev-TOT.paid),note};
     S.invoices.push(r);put('invoices',r);if(fromDoc){const od=S.orders.find(x=>x.id===fromDoc);if(od){od.status='done';od.invNo=r.no;put('orders',od)}}clearInv();drawCusts();drawDash();
     await showRec(r,img,hasRows?'تم حفظ الفاتورة ✓':'تم تسجيل الدفعة ✓');if(!img&&$('autoWa').checked){let can=false;try{can=!!(navigator.canShare&&navigator.canShare({files:[new File([curBlob],curName,{type:'image/png'})]}))}catch(e){}if(can)$('ressh').click();else if(waNum(r.phone))$('reswa').click()}}
@@ -983,6 +1002,7 @@ $('autoWa').onchange=()=>{try{localStorage.setItem('autoWa',$('autoWa').checked?
 const ACT={};let mv='';
 const MV={cut:()=>vCut(),ord:()=>vOrd(),exp:()=>vExp(),sup:()=>vSup(),rep:()=>vRep()};
 function drawMore(){$('mMenu').classList.toggle('hide',!!mv);$('mView').classList.toggle('hide',!mv);if(mv)MV[mv]()}
+$('mMenu').addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){document.querySelector('#bnav button[data-t="'+g.dataset.go+'"]').click();window.scrollTo(0,0)}});
 $('t-more').addEventListener('click',e=>{const t=e.target.closest('[data-mv]');if(t){mv=t.dataset.mv;drawMore();window.scrollTo(0,0);return}
   if(e.target.closest('#mBack')){mv='';drawMore();window.scrollTo(0,0);return}
   const b=e.target.closest('[data-a]');if(b&&ACT[b.dataset.a])ACT[b.dataset.a](b.dataset,b)});
@@ -1143,7 +1163,7 @@ ACT.rpImg=()=>{const [a,b]=repRange(repP),d=repData(a,b),top=Object.entries(d.it
 const csvEsc=v=>{v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
 const toCsv=rows=>'\ufeff'+rows.map(r=>r.map(csvEsc).join(',')).join('\r\n');
 function csvRows(k){if(k==='cust')return[['الاسم','الهاتف','الحساب (موجب = عليه)','آخر معاملة']].concat(S.customers.map(c=>{const l=ledger(c),t=Math.max(0,...l.map(r=>r.ts));return[c.name,c.phone||'',balOf(c),t?dshort(t):'']}));
-  if(k==='inv')return[['التاريخ','النوع','الرقم','العميل','القيمة','المدفوع','المتبقي','طريقة الدفع']].concat(S.invoices.slice().sort((a,b)=>a.ts-b.ts).map(r=>[dshort(r.ts),plab(r,'فاتورة'),r.no||'',r.cname,val(r),pd(r),r.rest,METHODS[methodOf(r)]||'']));
+  if(k==='inv')return[['التاريخ','النوع','الرقم','الكود','العميل','القيمة','المدفوع','المتبقي','طريقة الدفع']].concat(S.invoices.slice().sort((a,b)=>a.ts-b.ts).map(r=>[dshort(r.ts),plab(r,'فاتورة'),r.no||'',r.code||'',r.cname,val(r),pd(r),r.rest,METHODS[methodOf(r)]||'']));
   if(k==='exp')return[['التاريخ','التصنيف','المبلغ','ملاحظة']].concat(S.expenses.slice().sort((a,b)=>a.ts-b.ts).map(e=>[dshort(e.ts),e.cat,e.amount,e.note||'']));
   return[['النوع','الاسم','السعر','الشراء','المقاس']].concat(S.items.map(i=>[i.type==='rd'?'جاهز':'مقطع',i.name,i.p||0,i.k||0,szOf(i)]))}
 ACT.csv=async d=>{const r=await dl(new Blob([toCsv(csvRows(d.k))],{type:'text/csv;charset=utf-8'}),'ElTabakha-'+d.k+'-'+dshort(Date.now()).replace(/\//g,'-')+'.csv');
@@ -1191,7 +1211,7 @@ $('tplReset').onclick=()=>{try{['shop','docw','custw','tpl_inv','tpl_pay','tpl_r
 const trashList=()=>{const l=lget('trash'),k=l.filter(x=>x.delAt>Date.now()-30*864e5);if(k.length!==l.length)lset('trash',k);return k};
 function trashPut(r){if(!r||!pget('trashOn',true))return;const l=trashList();l.push({...r,delAt:Date.now()});lset('trash',l)}
 function drawTrash(){const l=trashList().sort((a,b)=>b.delAt-a.delAt);$('trCnt').textContent=l.length?'('+l.length+')':'';
-  $('trList').innerHTML=l.map(r=>`<div class="rec"><div class="ro" style="color:var(--ink)"><b>${esc(r.cname)}</b><span>${plab(r,'فاتورة #'+r.no)}</span></div><div class="mute num">${stamp(r.ts)} · ${f(r.type==='pay'?r.amount:r.total)}</div><div class="btns"><button class="main b-green" data-tr="${r.id}">استرجاع</button><button class="alt b-red" data-trx="${r.id}">حذف نهائي</button></div></div>`).join('')||'<p class="mute">السلة فاضية.</p>'}
+  $('trList').innerHTML=l.map(r=>`<div class="rec"><div class="ro" style="color:var(--ink)"><b>${esc(r.cname)}</b><span>${plab(r,'فاتورة #'+r.no+(r.code?' · كود '+r.code:''))}</span></div><div class="mute num">${stamp(r.ts)} · ${f(r.type==='pay'?r.amount:r.total)}</div><div class="btns"><button class="main b-green" data-tr="${r.id}">استرجاع</button><button class="alt b-red" data-trx="${r.id}">حذف نهائي</button></div></div>`).join('')||'<p class="mute">السلة فاضية.</p>'}
 $('trList').onclick=e=>{const d=e.target.dataset,l=trashList(),m=$('trMsg');m.textContent='';
   if(d.tr){const r=l.find(x=>x.id===d.tr);if(!r)return;if(!getC(r.cid)){m.textContent='عميل الفاتورة دي اتحذف، مينفعش ترجعيها';return}
     const o={...r};delete o.delAt;lset('pdel',lget('pdel').filter(x=>!(x.k==='invoices'&&x.id===o.id)));
@@ -1213,14 +1233,15 @@ function drawDash(){
   $('d_week').textContent=f(inv.filter(r=>r.ts>=weekTs).reduce((a,r)=>a+val(r),0));
   $('d_debt').textContent=f(debtAll());
   const q=$('hq').value.trim(),from=hP==='d'?todayTs:hP==='w'?weekTs:hP==='m'?todayTs-29*DAY:0;
-  const l=S.invoices.filter(r=>r.ts>=from&&(!q||nm(r.cname).includes(nm(q)))).sort((x,y)=>y.ts-x.ts);
+  const qd=q.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[#\s]/g,''),byCode=/^\d+$/.test(qd);
+  const l=S.invoices.filter(r=>r.ts>=from&&(!q||nm(r.cname).includes(nm(q))||(byCode&&r.code&&String(r.code).includes(qd)))).sort((x,y)=>y.ts-x.ts);
   const T={};l.forEach(r=>{const k=dshort(r.ts),t=T[k]=T[k]||{s:0,p:0};t.s+=val(r);t.p+=pd(r)});
   drawChart();
   $('hTot').textContent=l.length+' معاملة · مبيعات '+f(l.reduce((a,r)=>a+val(r),0))+' · محصّل '+f(l.reduce((a,r)=>a+pd(r),0));
   let last='',h='';
   l.slice(0,hLim).forEach(r=>{const k=dshort(r.ts);
     if(k!==last){last=k;h+=`<div class="hday"><span>${dayLabel(r.ts)}</span><span class="num">مبيعات ${f(T[k].s)} · محصّل ${f(T[k].p)}</span>${pget('dayCl',true)?`<button class="lnk" data-dc="${r.ts}" style="padding:0 4px;font-size:12px">🧾 إقفال</button>`:''}</div>`}
-    h+=`<div class="hrow" data-h="${r.id}"><div class="hl"><b>${esc(r.cname)}</b><span class="mute">${plab(r,'فاتورة #'+r.no)} · ${hm(r.ts)}</span></div><div class="hr">${r.type==='pay'?`<b class="num">${f(r.amount)}</b><span class="tag ok">${r.kind==='cn'?'مرتجع':'دفعة'}</span>`:`<b class="num">${f(val(r))}</b>${r.rest>0?`<span class="tag dr">متبقي ${f(r.rest)}</span>`:`<span class="tag ok">مدفوعة</span>`}`}</div></div>`});
+    h+=`<div class="hrow" data-h="${r.id}"><div class="hl"><b>${esc(r.cname)}</b><span class="mute">${plab(r,'فاتورة #'+r.no+(r.code?' · كود '+r.code:''))} · ${hm(r.ts)}</span></div><div class="hr">${r.type==='pay'?`<b class="num">${f(r.amount)}</b><span class="tag ok">${r.kind==='cn'?'مرتجع':'دفعة'}</span>`:`<b class="num">${f(val(r))}</b>${r.rest>0?`<span class="tag dr">متبقي ${f(r.rest)}</span>`:`<span class="tag ok">مدفوعة</span>`}`}</div></div>`});
   if(l.length>hLim)h+=`<button class="lnk" data-more="1">عرض المزيد (${l.length-hLim})</button>`;
   $('hList').innerHTML=h||'<p class="mute">لا توجد معاملات.</p>'}
 $('hq').oninput=()=>{hLim=30;drawDash()};
@@ -1324,6 +1345,37 @@ async function lockInit(){bioOK=await bioAvail();
   lkUI();if(lkGet('lkOn')==='1'){lockNow();if(lkGet('lkBio')&&bioOK)tryBio()}}
 
 /* ---------- بداية ---------- */
+/* ---------- بحث الإعدادات ---------- */
+$('stQ').oninput=()=>{const q=nm($('stQ').value.trim());let any=false;
+  document.querySelectorAll('#t-st>details.grp').forEach(g=>{let hit=false;
+    [...g.children].filter(c=>c.tagName!=='SUMMARY').forEach(c=>{const m=!q||nm(c.textContent).includes(q);c.classList.toggle('sx',!m);if(c.tagName==='DETAILS'&&c.id!=='trD')c.open=!!q&&m;if(m)hit=true});
+    g.classList.toggle('sx',!hit);g.open=!!q&&hit;if(hit)any=true});
+  $('stNone').classList.toggle('hide',any||!q)};
+
+/* ---------- زرار الرجوع بتاع الموبايل ---------- */
+const curTab=()=>['dash','new','cu','it','more','st'].find(k=>!$('t-'+k).classList.contains('hide'))||'new';
+const OVL=[['res','resx'],['rem','remX'],['bulk','bulkX'],['calcModal','calcClose']];
+function navLevel(){let n=0;const t=curTab();
+  if(t!=='new')n++;if(t==='it'||t==='st')n++;
+  if(t==='more'&&mv)n++;
+  if(t==='cu'&&!$('cuDet').classList.contains('hide'))n++;
+  OVL.forEach(([o])=>{if(!$(o).classList.contains('hide'))n++});return n}
+function goBack(){
+  for(const [o,x] of OVL){if(!$(o).classList.contains('hide')){$(x).click();return}}
+  const t=curTab(),go=k=>document.querySelector('#bnav button[data-t="'+k+'"]').click();
+  if(t==='more'&&mv){$('mBack').click();return}
+  if(t==='cu'&&!$('cuDet').classList.contains('hide')){const b=$('cuDet').querySelector('[data-back]');if(b){b.click();return}}
+  if(t==='it'||t==='st'){go('more');return}
+  if(t!=='new')go('new')}
+let hHave=0,hIgn=0;
+function hSync(){if(hIgn>0)return;const want=navLevel();
+  if(want>hHave){for(let i=hHave;i<want;i++)history.pushState({lv:i+1},'');hHave=want}
+  else if(want<hHave){const k=hHave-want;hHave=want;hIgn=1;history.go(-k);setTimeout(()=>{hIgn=0},700)}}
+window.addEventListener('popstate',()=>{if(hIgn>0){hIgn=0;return}
+  if(hHave===0)return;hHave--;goBack();setTimeout(hSync,60)});
+document.addEventListener('click',()=>setTimeout(hSync,40),true);
+setInterval(hSync,400);
+
 loadLocal();drawDash();drawCusts();drawItems();calc();bkInfo();applyFeatures();lockInit();drawTrash();loadMsgUI();loadLogo();paperLabels();drawRecent();fixBar();document.body.classList.add('onNew');
 fbBoot();
 </script>
