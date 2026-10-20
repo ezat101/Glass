@@ -36,6 +36,7 @@ button.alt{background:var(--card);color:var(--ink);border:1px solid var(--line);
 .lnk{background:none;border:0;color:var(--acc);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer;padding:6px 2px}
 .del{background:none;border:0;color:var(--danger);font-size:22px;cursor:pointer;padding:0 6px;line-height:1}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+.rl{display:flex;align-items:center;gap:4px;flex-wrap:wrap}.row .ro{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:2px 6px}.r1.mq .cw{grid-row:2;grid-column:2}.r1.mq .ch{grid-row:2;grid-column:3}.cwi{display:none}.row.cwon .cwi{display:block;background:rgba(245,158,11,.16);border-color:#f59e0b;font-size:13px;text-align:center;padding:2px 2px;height:34px}
 .rg{display:grid;gap:6px;margin:6px 0 4px}.rg.a{grid-template-columns:repeat(4,1fr)}.rg.r{grid-template-columns:1fr 1fr}.rg input{text-align:center;padding:8px 2px}
 .r1{display:flex;gap:4px;align-items:center}
 .ro,.sum div{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -214,6 +215,7 @@ select{width:100%;height:34px;font-size:14px;border-radius:7px;border:1px solid 
 .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .mbtn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 8px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-size:14px;font-weight:700;cursor:pointer}
 .mbtn span{font-size:26px}
+.r1.mq{display:grid;grid-template-columns:minmax(100px,128px) minmax(40px,1fr) minmax(40px,1fr) minmax(28px,.6fr) minmax(46px,1.1fr) 20px;gap:3px 3px;align-items:start}.row .r1.mq .n{padding-left:18px;background-position:left 5px center}.cwi::placeholder{font-size:11px}.r1.mq input[type=number],.r1.one input[type=number]{-moz-appearance:textfield;appearance:textfield}.r1.mq input::-webkit-outer-spin-button,.r1.mq input::-webkit-inner-spin-button,.r1.one input::-webkit-outer-spin-button,.r1.one input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.row .r1.mq .n{font-size:13px;padding-left:16px}.r1.mq input{font-size:13.5px;padding:4px 1px;height:34px}.r1.mq input:not(.n){text-align:center}.r1.mq .del{width:20px;height:34px}
 </style>
 </head>
 <body>
@@ -791,7 +793,7 @@ function showDD(inp,tr){const q=nm(inp.value.trim()),t=tr.dataset.t;const l=S.it
   dd.style.display='block';placeDD()}
 dd.addEventListener('mousedown',e=>{e.preventDefault();const cd=e.target.closest('div[data-c]');if(cd){const c=getC(cd.dataset.c);if(c&&ddInp){ddInp.value=c.name;ddInp.dispatchEvent(new Event('input',{bubbles:true}))}dd.style.display='none';return}const d=e.target.closest('div[data-k]');if(!d)return;const it=S.items.find(x=>x.id===d.dataset.k),rd=it.type==='rd';
   ddInp.value=rd&&it.h&&it.w?`${it.name} ${it.h}×${it.w}`:it.name;
-  const s=(c,v)=>{const x=ddRow.querySelector(c);if(x)x.value=v||''};s('.p',it.p);s('.w',it.w);s('.h',it.h);ddRow.dataset.k=it.k||0;
+  const s=(c,v)=>{const x=ddRow.querySelector(c);if(x)x.value=v||''};s('.p',it.p);s('.w',it.w);s('.h',it.h);s('.cw','');s('.ch','');ddRow.dataset.k=it.k||0;
   if(lastC){const lp=lastPriceFor(lastC,it);if(lp&&lp!==it.p){s('.p',lp);toast('سعر '+it.name+' لـ '+lastC.name+': '+f(lp)+' (آخر سعر اتباع له)')}}
   dd.style.display='none';calc();const e0=[...ddRow.querySelectorAll('input.w,input.h,input.c,input.p')].find(i=>!i.value);if(e0)e0.focus()});
 function showCD(inp){if(inp.readOnly)return;const q=nm(inp.value.trim()),l=S.customers.filter(c=>!q||nm(c.name).includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'ar')).slice(0,40);
@@ -804,8 +806,9 @@ addEventListener('scroll',e=>{if(dd.contains(e.target))return;placeDD()},true);i
 document.addEventListener('focusin',e=>{if(e.target.type==='number'&&!e.target.readOnly)try{e.target.select()}catch(_){}});
 
 /* ---------- الفاتورة ---------- */
-const getVals=d=>{const o={};['n','w','h','c','p'].forEach(k=>{const i=d.querySelector('.'+k);if(i)o[k]=i.value});o._k=d.dataset.k||0;return o};
-const setVals=(d,o)=>{if(o._k)d.dataset.k=o._k;Object.keys(o).forEach(k=>{const i=d.querySelector('.'+k);if(i)i.value=o[k]})};
+const cwLbl=d=>{const b=d.querySelector('.cwt');if(b)b.textContent=d.classList.contains('cwon')?'إخفاء':'مقاس الحساب'};
+const getVals=d=>{const o={};['n','w','h','cw','ch','c','p'].forEach(k=>{const i=d.querySelector('.'+k);if(i)o[k]=i.value});o._k=d.dataset.k||0;return o};
+const setVals=(d,o)=>{if(o._k)d.dataset.k=o._k;Object.keys(o).forEach(k=>{const i=d.querySelector('.'+k);if(i)i.value=o[k]});if(o.cw||o.ch){d.classList.add('cwon');cwLbl(d)}};
 let toastT=0;
 function toast(msg,label,fn){const t=$('toast'),sp=document.createElement('span');sp.textContent=msg;t.innerHTML='';t.appendChild(sp);
   if(label){const b=document.createElement('button');b.textContent=label;b.onclick=()=>{t.classList.add('hide');fn()};t.appendChild(b)}
@@ -818,18 +821,20 @@ function swipeDel(d){let x0=0,y0=0,dx=0,on=false;
     if(Math.abs(dx)>12){d.style.transform='translateX('+dx+'px)';d.style.opacity=String(Math.max(.3,1-Math.abs(dx)/260))}},{passive:true});
   d.addEventListener('touchend',()=>{if(!on)return;on=false;if(Math.abs(dx)>110)delRow(d);else{d.style.transform='';d.style.opacity=''}})}
 function addRow(t){const rd=t==='rd',one=rd,d=document.createElement('div');d.className='row';d.dataset.t=t;
-  const num=(c,l)=>`<div><label>${l}</label><input class="${c}" type="number" inputmode="decimal"></div>`;
-  d.innerHTML=one?`<div class="r1 one"><input class="n" placeholder="اسم الصنف" autocomplete="off"><input class="c" type="number" inputmode="decimal" placeholder="العدد"><input class="p" type="number" inputmode="decimal" placeholder="السعر"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button class="del" aria-label="حذف">×</button><span class="qq hide"></span><b class="val hide"></b></div>`:`<div class="r1"><input class="n" placeholder="ابحث" autocomplete="off"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button class="del" aria-label="حذف">×</button></div><div class="rg ${rd?'r':'a'}">${rd?'':num('w','العرض')+num('h','الطول')}${num('c','العدد')}${num('p','السعر')}</div><div class="ro"><span class="qq"></span><span>القيمة: <b class="val num">0</b></span></div>`;
-  d.querySelector('.del').onclick=()=>delRow(d);d.querySelector('.cp').onclick=()=>{const d2=addRow(t);setVals(d2,getVals(d));d.after(d2);calc()};swipeDel(d);d.querySelectorAll('input').forEach(i=>i.oninput=calc);
+  const num=(c,l)=>`<div><label>${l}</label><input class="${c}" type="number" inputmode="decimal"></div>`,
+    sp=(c,cc,l)=>`<input class="${c}" type="number" inputmode="decimal" placeholder="${l}">`;
+  d.innerHTML=one?`<div class="r1 one"><input class="n" placeholder="اسم الصنف" autocomplete="off"><input class="c" type="number" inputmode="decimal" placeholder="العدد"><input class="p" type="number" inputmode="decimal" placeholder="السعر"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button class="del" aria-label="حذف">×</button><span class="qq hide"></span><b class="val hide"></b></div>`:`<div class="r1 mq"><input class="n" placeholder="ابحث" autocomplete="off">${sp('w','cw','عرض')}${sp('h','ch','طول')}<input class="c" type="number" inputmode="decimal" placeholder="عدد"><input class="p" type="number" inputmode="decimal" placeholder="سعر"><button class="del" aria-label="حذف">×</button><input class="cw cwi" type="number" inputmode="decimal" placeholder="حساب"><input class="ch cwi" type="number" inputmode="decimal" placeholder="حساب"></div><div class="ro"><span class="rl"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button type="button" class="lnk cwt">مقاس الحساب</button><span class="qq"></span></span><span>القيمة: <b class="val num">0</b></span></div>`;
+  d.querySelector('.del').onclick=()=>delRow(d);d.querySelector('.cp').onclick=()=>{const d2=addRow(t);setVals(d2,getVals(d));d.after(d2);calc()};swipeDel(d);d.querySelectorAll('input').forEach(i=>i.oninput=calc);const cwt=d.querySelector('.cwt');if(cwt){cwt.onclick=()=>{d.classList.toggle('cwon');cwLbl(d);if(d.classList.contains('cwon'))d.querySelector('.cw').focus()}}
   const n=d.querySelector('.n');n.onfocus=()=>showDD(n,d);n.addEventListener('click',()=>showDD(n,d));n.addEventListener('input',()=>showDD(n,d));$('rows').appendChild(d);return d}
 let TOT={},editId=null,docKind='inv',fromDoc=null,capOK=null,saveHas=false;
 function saveVis(){$('saveBar').classList.toggle('hide',!(document.body.classList.contains('onNew')&&saveHas))}
 function calc(){let sub=0,tq=0;const rows=[];
   document.querySelectorAll('#rows .row').forEach(d=>{const g=c=>d.querySelector(c),gv=c=>nv(g(c)&&g(c).value),rd=d.dataset.t==='rd';
     const w=gv('.w'),h=gv('.h'),c=gv('.c'),p=gv('.p'),area=!rd&&w>0&&h>0;
-    const q=area?rd2(w*h/10000*c):0,v=rd2((area?q:c)*p);
+    const cw0=rd?0:gv('.cw'),ch0=rd?0:gv('.ch'),cw=cw0>0?cw0:w,chh=ch0>0?ch0:h,cust=area&&(cw!==w||chh!==h);
+    const q=area?rd2(cw*chh/10000*c):0,v=rd2((area?q:c)*p);
     g('.qq').textContent=area?'الكمية: '+fq(q)+' م²':'';g('.val').textContent=f(v);
-    if(c>0){rows.push({t:d.dataset.t,n:g('.n').value,w,h,c,q,p,v,k:+d.dataset.k||0});sub+=v;tq+=q}});
+    if(c>0){rows.push({t:d.dataset.t,n:g('.n').value,w,h,c,q,p,v,k:+d.dataset.k||0,...(cust?{cw,ch:chh}:{})});sub+=v;tq+=q}});
   const prev=docKind==='inv'?nv($('prev').value):0,pf=nv($('dp').value),paidRaw=nv($('paid').value),pfv=rd2(paidRaw*pf/100),paid=rd2(paidRaw-pfv),total=sub+nv($('nylon').value)-nv($('disc').value)+prev;
   $('tqw').textContent=tq>0?' ('+fq(tq)+' م²)':'';$('sub').textContent=f(sub);$('grand').textContent=f(total);$('rest').textContent=f(total-paid);
   $('r_sub').classList.toggle('hide',['r_nylon','r_disc','r_dp','r_prev'].every(i=>$(i).classList.contains('hide')));
@@ -890,7 +895,7 @@ async function doSave(img){const m=$('msg');m.textContent='';
   catch(e){m.textContent='حصل خطأ: '+(e&&e.message||e)}}
 $('save').onclick=()=>doSave(false);$('saveImg').onclick=()=>doSave(true);
 $('editCancel').onclick=()=>{clearInv();$('msg').textContent=''};
-function fillRows(r){(r.rows||[]).forEach(x=>{const d=addRow(x.t),set=(k,v)=>{const i=d.querySelector(k);if(i&&v)i.value=v};set('.n',x.n);set('.w',x.w);set('.h',x.h);set('.c',x.c);set('.p',x.p);d.dataset.k=x.k||0})}
+function fillRows(r){(r.rows||[]).forEach(x=>{const d=addRow(x.t),set=(k,v)=>{const i=d.querySelector(k);if(i&&v)i.value=v};set('.n',x.n);set('.w',x.w);set('.h',x.h);set('.cw',x.cw);set('.ch',x.ch);set('.c',x.c);set('.p',x.p);d.dataset.k=x.k||0;if(x.cw||x.ch){d.classList.add('cwon');cwLbl(d)}})}
 function loadDup(r){const c=getC(r.cid);if(!c){$('resm').textContent='العميل مش موجود';return}
   if((r.rows||[]).some(x=>x.cols)){$('resm').textContent='الفاتورة دي بصيغة قديمة ومينفعش تتكرر';return}
   $('res').classList.add('hide');document.querySelector('#bnav button[data-t="new"]').click();
