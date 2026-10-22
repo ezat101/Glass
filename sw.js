@@ -1,4 +1,5 @@
-const C='eltabakha-v17';
+// اسم الكاش بيتاخد من رقم النسخة اللي في index.html (sw.js?v=..)، فمش محتاج تعدّل الملف ده مع كل تحديث
+const C='eltabakha-v'+(new URL(self.location.href).searchParams.get('v')||'0');
 const A=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all(A.map(u=>c.add(u).catch(()=>{})))));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
