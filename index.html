@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="light">
+<html lang="ar" dir="rtl" data-theme="light" data-pal="teal">
 <head>
 <meta charset="utf-8">
 <script>try{if(localStorage.getItem('lkOn')==='1')document.documentElement.classList.add('locked')}catch(e){}try{var z=localStorage.getItem('fz');if(z==='s'||z==='l')document.documentElement.classList.add('fz-'+z)}catch(e){}</script>
@@ -7,7 +7,7 @@
 <title>ElTabakha Glass</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0f766e">
-<script>try{if(/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)){const v=document.querySelector('meta[name="viewport"]');v.content+=', maximum-scale=1'}}catch(e){}try{if(localStorage.getItem('theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');document.querySelector('meta[name="theme-color"]').content='#14b8a6'}}catch(e){}</script>
+<script>try{if(/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)){const v=document.querySelector('meta[name="viewport"]');v.content+=', maximum-scale=1'}}catch(e){}try{if(localStorage.getItem('theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}try{var _p=localStorage.getItem('pal');if(_p)document.documentElement.setAttribute('data-pal',_p);if(localStorage.getItem('anim')==='0')document.documentElement.classList.add('noanim')}catch(e){}</script>
 <meta name="color-scheme" content="light">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,6 +17,39 @@
 <style>
 :root{--bg:#f3f6f5;--card:#fff;--ink:#111827;--mute:#4b5563;--line:#d1d5db;--acc:#0f766e;--accLight:#e2f1ef;--accInk:#fff;--accB:#0f766e;--tot:#eef3f2;--danger:#b91c1c;--drB:#fee2e2;--drI:#991b1b;--crB:#dcfce7;--crI:#166534;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);--shadowMd:0 4px 12px rgba(0,0,0,.1);--radius:12px;color-scheme:light}
 [data-theme="dark"]{--bg:#0f172a;--card:#1e293b;--ink:#e2e8f0;--mute:#94a3b8;--line:#334155;--acc:#14b8a6;--accLight:#134e4a;--accInk:#fff;--accB:#14b8a6;--tot:#1a2e2b;--danger:#f87171;--drB:#3b1111;--drI:#fca5a5;--crB:#0a2e1a;--crI:#86efac;--shadow:0 1px 3px rgba(0,0,0,.3);--shadowMd:0 4px 12px rgba(0,0,0,.4);color-scheme:dark}
+/* ===== ثيمات الألوان + خلفية متحركة ===== */
+[data-pal="teal"]{--bg:#e4f0ed;--card:#fafdfc;--line:#c9dcd7;--acc:#0f766e;--acc2:#0e9aa7;--h1:#0f766e;--h2:#0e9aa7;--accLight:#d3eae5;--tot:#e0eeea;--g1:#6ee7c8;--g2:#8fd3f4;--g3:#bfe8a8;--gop:.5;--shadow:0 1px 3px rgba(20,40,40,.08),0 4px 14px -6px rgba(20,40,40,.12)}
+[data-pal="ocean"]{--bg:#e3ecf8;--card:#fafcff;--line:#c9d8ec;--acc:#1d4ed8;--acc2:#0ea5e9;--h1:#1d4ed8;--h2:#0ea5e9;--accLight:#d6e4fa;--tot:#dfe9f6;--g1:#93c5fd;--g2:#7fe3f5;--g3:#c4b5fd;--gop:.5;--shadow:0 1px 3px rgba(20,40,40,.08),0 4px 14px -6px rgba(20,40,40,.12)}
+[data-pal="violet"]{--bg:#ece6f8;--card:#fcfaff;--line:#d8cdec;--acc:#6d28d9;--acc2:#c026d3;--h1:#6d28d9;--h2:#c026d3;--accLight:#e4d9f8;--tot:#e9e2f6;--g1:#c4b5fd;--g2:#f5a8e6;--g3:#a5b4fc;--gop:.5;--shadow:0 1px 3px rgba(20,40,40,.08),0 4px 14px -6px rgba(20,40,40,.12)}
+[data-pal="rose"]{--bg:#f8e6ea;--card:#fffafb;--line:#ebcdd4;--acc:#be123c;--acc2:#f97316;--h1:#be123c;--h2:#f97316;--accLight:#fadbe1;--tot:#f5e2e6;--g1:#fda4af;--g2:#fdba74;--g3:#f0abfc;--gop:.5;--shadow:0 1px 3px rgba(20,40,40,.08),0 4px 14px -6px rgba(20,40,40,.12)}
+[data-pal="sand"]{--bg:#f5ecd8;--card:#fffdf8;--line:#e5d7b8;--acc:#b45309;--acc2:#d97706;--h1:#b45309;--h2:#d97706;--accLight:#f6e3bd;--tot:#f2e8d0;--g1:#fcd34d;--g2:#fdba74;--g3:#d9f99d;--gop:.5;--shadow:0 1px 3px rgba(20,40,40,.08),0 4px 14px -6px rgba(20,40,40,.12)}
+[data-pal="forest"]{--bg:#e6efe1;--card:#fbfdf9;--line:#cddcc5;--acc:#166534;--acc2:#65a30d;--h1:#166534;--h2:#65a30d;--accLight:#d5e8cd;--tot:#e2ecdc;--g1:#86efac;--g2:#d9f99d;--g3:#99f6e4;--gop:.5;--shadow:0 1px 3px rgba(20,40,40,.08),0 4px 14px -6px rgba(20,40,40,.12)}
+[data-pal="teal"][data-theme="dark"]{--bg:#0e1d22;--card:#17292f;--line:#28434b;--acc:#14b8a6;--accInk:#fff;--accB:#14b8a6;--accLight:#16494a;--tot:#142a2e;--h1:#0f766e;--h2:#0e7490;--acc2:#0e7490;--g1:#0f766e;--g2:#155e75;--g3:#14532d;--gop:.55;--ink:#e7edf2;--mute:#9fb0bd;--shadow:0 1px 3px rgba(0,0,0,.25),0 6px 18px -8px rgba(0,0,0,.5)}
+[data-pal="ocean"][data-theme="dark"]{--bg:#0d1626;--card:#16233a;--line:#2a3d5c;--acc:#3b82f6;--accInk:#fff;--accB:#3b82f6;--accLight:#1b3a6b;--tot:#131f33;--h1:#1d4ed8;--h2:#0369a1;--acc2:#0369a1;--g1:#1d4ed8;--g2:#0e7490;--g3:#4c1d95;--gop:.55;--ink:#e7edf2;--mute:#9fb0bd;--shadow:0 1px 3px rgba(0,0,0,.25),0 6px 18px -8px rgba(0,0,0,.5)}
+[data-pal="violet"][data-theme="dark"]{--bg:#16112a;--card:#221b3b;--line:#3a2f5c;--acc:#8b5cf6;--accInk:#fff;--accB:#8b5cf6;--accLight:#3b2a6e;--tot:#1d1733;--h1:#6d28d9;--h2:#a21caf;--acc2:#a21caf;--g1:#6d28d9;--g2:#a21caf;--g3:#312e81;--gop:.55;--ink:#e7edf2;--mute:#9fb0bd;--shadow:0 1px 3px rgba(0,0,0,.25),0 6px 18px -8px rgba(0,0,0,.5)}
+[data-pal="rose"][data-theme="dark"]{--bg:#211116;--card:#321a22;--line:#52303b;--acc:#f43f5e;--accInk:#fff;--accB:#f43f5e;--accLight:#5a1d2e;--tot:#2a151b;--h1:#be123c;--h2:#c2410c;--acc2:#c2410c;--g1:#9f1239;--g2:#9a3412;--g3:#701a75;--gop:.55;--ink:#e7edf2;--mute:#9fb0bd;--shadow:0 1px 3px rgba(0,0,0,.25),0 6px 18px -8px rgba(0,0,0,.5)}
+[data-pal="sand"][data-theme="dark"]{--bg:#1e1710;--card:#2e2416;--line:#4d3d25;--acc:#f59e0b;--accInk:#1c1100;--accB:#f59e0b;--accLight:#5a3d0e;--tot:#271e12;--h1:#b45309;--h2:#a16207;--acc2:#a16207;--g1:#92400e;--g2:#854d0e;--g3:#3f6212;--gop:.55;--ink:#e7edf2;--mute:#9fb0bd;--shadow:0 1px 3px rgba(0,0,0,.25),0 6px 18px -8px rgba(0,0,0,.5)}
+[data-pal="forest"][data-theme="dark"]{--bg:#0e1b13;--card:#18291c;--line:#2c4533;--acc:#22c55e;--accInk:#052e16;--accB:#22c55e;--accLight:#1b4a2c;--tot:#132318;--h1:#166534;--h2:#4d7c0f;--acc2:#4d7c0f;--g1:#166534;--g2:#3f6212;--g3:#115e59;--gop:.55;--ink:#e7edf2;--mute:#9fb0bd;--shadow:0 1px 3px rgba(0,0,0,.25),0 6px 18px -8px rgba(0,0,0,.5)}
+html{background:var(--bg)}
+html,body{transition:background-color .45s}
+body{background:transparent!important;position:relative}
+body::before,body::after{content:"";position:fixed;inset:-25%;z-index:-1;pointer-events:none;opacity:var(--gop,.5);will-change:transform;transition:opacity .6s}
+body::before{background:radial-gradient(38% 34% at 18% 22%,var(--g1),transparent 70%),radial-gradient(34% 38% at 82% 28%,var(--g2),transparent 70%),radial-gradient(44% 38% at 55% 88%,var(--g3),transparent 70%);animation:bgFloat 26s ease-in-out infinite alternate}
+body::after{background:radial-gradient(30% 30% at 75% 70%,var(--g1),transparent 70%),radial-gradient(32% 30% at 12% 80%,var(--g2),transparent 70%);animation:bgFloat2 38s ease-in-out infinite alternate;opacity:calc(var(--gop,.5)*.7)}
+@keyframes bgFloat{0%{transform:translate(0,0) rotate(0) scale(1)}50%{transform:translate(5%,-4%) rotate(9deg) scale(1.1)}100%{transform:translate(-5%,4%) rotate(-7deg) scale(1.03)}}
+@keyframes bgFloat2{0%{transform:translate(0,0) scale(1.05)}50%{transform:translate(-6%,5%) scale(1)}100%{transform:translate(4%,-5%) scale(1.12)}}
+html.noanim body::before,html.noanim body::after{animation:none}
+@media (prefers-reduced-motion:reduce){body::before,body::after{animation:none}}
+@media print{body::before,body::after{display:none}}
+html.tsw *{transition:background-color .45s,border-color .45s,color .45s,box-shadow .45s!important}
+.card,.rec,.row{box-shadow:var(--shadow)}
+.app-header{background:linear-gradient(120deg,var(--h1),var(--h2))!important}
+.bottom-nav{background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.calc-fab,.fab-new{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--accInk)!important}
+.pals{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 4px}
+.pals button{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer;padding:0;box-shadow:var(--shadow);transition:transform .2s,border-color .2s}
+.pals button:active{transform:scale(.9)}
+.pals button.on{border-color:var(--ink);transform:scale(1.12)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 html,body{background:var(--bg);transition:background-color .3s}
@@ -205,6 +238,70 @@ html:not(.fz-s):not(.fz-l) .cn{font-size:13.5px}
 #t-cu .rowc{margin-bottom:4px}
 #t-cu .rowc .main{white-space:nowrap;padding:0 12px}
 #cuTot{font-size:12px!important;margin-bottom:4px!important;color:var(--mute)}
+/* ===== v2: خلفيات حية متناسقة + زجاج + تبويبات انسيابية ===== */
+@property --bgA{syntax:'<color>';inherits:true;initial-value:#e4f0ed}
+@property --bgB{syntax:'<color>';inherits:true;initial-value:#e4f0ed}
+@property --bgC{syntax:'<color>';inherits:true;initial-value:#e4f0ed}
+html{--gop:.75;--bgA:color-mix(in srgb,var(--g1) 34%,var(--bg));--bgB:var(--bg);--bgC:color-mix(in srgb,var(--g2) 36%,var(--bg));
+  background-color:var(--bg);background-image:linear-gradient(165deg,var(--bgA) 0%,var(--bgB) 52%,var(--bgC) 100%);background-attachment:fixed;
+  transition:--bgA .7s,--bgB .7s,--bgC .7s,background-color .45s}
+/* الدارك: مش أسود — درجات من لون الثيم نفسه */
+html[data-theme="dark"][data-pal]{--gop:.9;
+  --bg:color-mix(in srgb,var(--acc) 9%,#0d141b);--card:color-mix(in srgb,var(--acc) 12%,#17212b);--line:color-mix(in srgb,var(--acc) 22%,#2a3643);--tot:color-mix(in srgb,var(--acc) 14%,#131c25);
+  --g1:color-mix(in srgb,var(--acc) 62%,#0d141b);--g2:color-mix(in srgb,var(--acc2) 70%,#0d141b);--g3:color-mix(in srgb,var(--acc) 38%,var(--acc2) 38%);
+  --bgA:color-mix(in srgb,var(--acc) 36%,var(--bg));--bgB:color-mix(in srgb,var(--acc2) 18%,var(--bg));--bgC:color-mix(in srgb,var(--acc2) 42%,var(--bg))}
+/* النهاري: ألوان فاتحة دافية مش أبيض */
+html[data-theme="light"][data-pal]{--gop:.78;--card:color-mix(in srgb,#fff 78%,var(--g1))}
+body::before{background:radial-gradient(36% 32% at 16% 20%,var(--g1),transparent 70%),radial-gradient(32% 36% at 84% 26%,var(--g2),transparent 70%),radial-gradient(42% 36% at 52% 90%,var(--g3),transparent 70%),radial-gradient(24% 24% at 90% 82%,var(--g1),transparent 70%);animation:bgFloat 24s ease-in-out infinite alternate,bgBreath 14s ease-in-out infinite alternate}
+body::after{background:radial-gradient(30% 30% at 74% 68%,var(--g3),transparent 70%),radial-gradient(30% 28% at 10% 78%,var(--g2),transparent 70%),radial-gradient(22% 24% at 40% 12%,var(--g1),transparent 70%);animation:bgFloat2 36s ease-in-out infinite alternate,bgBreath2 18s ease-in-out infinite alternate}
+@keyframes bgBreath{0%{opacity:var(--gop)}100%{opacity:calc(var(--gop)*.55)}}
+@keyframes bgBreath2{0%{opacity:calc(var(--gop)*.35)}100%{opacity:calc(var(--gop)*.9)}}
+/* طبقة ثالثة: دوران لوني بطيء */
+html::before{content:"";position:fixed;left:50%;top:50%;width:170vmax;height:170vmax;margin:-85vmax 0 0 -85vmax;z-index:-2;pointer-events:none;
+  background:conic-gradient(from 0deg,var(--g1),var(--g2),var(--g3),var(--g1));opacity:.22;animation:bgSpin 70s linear infinite;will-change:transform}
+html[data-theme="dark"]::before{opacity:.3}
+@keyframes bgSpin{to{transform:rotate(360deg)}}
+html.noanim::before{animation:none}
+@media (prefers-reduced-motion:reduce){html::before{animation:none}}
+@media print{html::before{display:none}}
+/* كروت زجاجية */
+.card,.rec,.row,.hrow,.stat-card,.res-in .card{background:color-mix(in srgb,var(--card) 82%,transparent);border-color:color-mix(in srgb,var(--line) 75%,transparent)}
+html[data-theme="dark"] .card,html[data-theme="dark"] .rec,html[data-theme="dark"] .row,html[data-theme="dark"] .hrow,html[data-theme="dark"] .stat-card{box-shadow:inset 0 1px 0 rgba(255,255,255,.07),var(--shadow)}
+.stat-card::before{background:linear-gradient(90deg,var(--acc),var(--acc2))!important;opacity:.55}
+.stat-card.warn::before{background:var(--danger)!important;opacity:1}.stat-card.good::before{background:#16a34a!important;opacity:1}
+/* الهيدر */
+.app-header{background:linear-gradient(120deg,var(--h1),var(--h2),var(--h1))!important;background-size:220% 100%;animation:hdrShift 16s ease-in-out infinite alternate}
+@keyframes hdrShift{from{background-position:0 0}to{background-position:100% 0}}
+html.noanim .app-header{animation:none}
+/* شريط التبويبات: زجاج + مؤشر بينزلق */
+.bottom-nav{background:color-mix(in srgb,var(--card) 74%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-top:1px solid color-mix(in srgb,var(--acc) 18%,var(--line));border-radius:22px 22px 0 0;padding:4px 8px env(safe-area-inset-bottom,0px);box-shadow:0 -8px 28px -12px rgba(0,0,0,.28)}
+.bottom-nav button{z-index:1;border-radius:16px;padding:7px 2px 5px}
+.bottom-nav button.on::after{display:none}
+.bottom-nav .nav-ind{position:absolute;top:4px;bottom:calc(4px + env(safe-area-inset-bottom,0px));left:0;width:0;border-radius:16px;pointer-events:none;opacity:0;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--acc) 26%,transparent),color-mix(in srgb,var(--acc2) 22%,transparent));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 34%,transparent),0 6px 16px -8px var(--acc);
+  transition:transform .5s cubic-bezier(.34,1.35,.5,1),width .5s cubic-bezier(.34,1.35,.5,1),opacity .25s}
+.bottom-nav.ready .nav-ind{opacity:1}
+.bottom-nav button .nav-icon{display:inline-block;transition:transform .45s cubic-bezier(.34,1.8,.5,1)}
+.bottom-nav button.on .nav-icon{transform:translateY(-2px) scale(1.2)}
+.bottom-nav button:active .nav-icon{transform:scale(.88)}
+.bottom-nav button.on .nav-label{font-weight:700}
+/* الأزرار والسيجمنت بنفس روح التبويبات */
+.seg{background:color-mix(in srgb,var(--card) 62%,transparent);border:1px solid color-mix(in srgb,var(--line) 75%,transparent);padding:3px;border-radius:14px;gap:2px}
+.seg button{border-color:transparent;background:transparent;border-radius:11px}
+.seg button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));border-color:transparent;box-shadow:0 4px 12px -5px var(--acc);animation:segPop .35s cubic-bezier(.34,1.6,.5,1)}
+@keyframes segPop{0%{transform:scale(.9)}100%{transform:scale(1)}}
+button.main:not([class*="b-"]),a.main:not([class*="b-"]){background:linear-gradient(135deg,var(--acc),var(--acc2));border-color:transparent;box-shadow:0 5px 14px -6px var(--acc)}
+.qs button,.addbar button{border-radius:99px}
+.pals button.on{box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 25%,transparent),var(--shadow)}
+.savebar{background:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+/* حركة الدخول بين الصفحات */
+section:not(.hide){animation:secIn .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes secIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+section:not(.hide)>.card,section:not(.hide)>.stat-grid,section:not(.hide)>details,section:not(.hide)>.grp{animation:riseIn .45s cubic-bezier(.2,.8,.2,1) both}
+section:not(.hide)>:nth-child(2){animation-delay:.04s}section:not(.hide)>:nth-child(3){animation-delay:.08s}section:not(.hide)>:nth-child(4){animation-delay:.12s}section:not(.hide)>:nth-child(5){animation-delay:.16s}section:not(.hide)>:nth-child(n+6){animation-delay:.2s}
+@keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){section:not(.hide),section:not(.hide)>*{animation:none!important}.bottom-nav .nav-ind{transition:none}}
 </style>
 </head>
 <body>
@@ -324,6 +421,8 @@ html:not(.fz-s):not(.fz-l) .cn{font-size:13.5px}
 <div class="card"><b>خيارات</b>
     <label class="opt"><input type="checkbox" id="calcOn"> إظهار الآلة الحاسبة</label>
     <label class="opt"><input type="checkbox" id="themeChk"> الوضع الليلي</label>
+    <label class="opt"><input type="checkbox" id="animChk"> حركة الخلفية</label>
+    <label style="margin-top:8px">لون الخلفية</label><div class="pals" id="pals"><button type="button" data-p="teal" aria-label="teal" style="background:linear-gradient(135deg,#0f766e,#8fd3f4)"></button><button type="button" data-p="ocean" aria-label="ocean" style="background:linear-gradient(135deg,#1d4ed8,#7fe3f5)"></button><button type="button" data-p="violet" aria-label="violet" style="background:linear-gradient(135deg,#6d28d9,#f5a8e6)"></button><button type="button" data-p="rose" aria-label="rose" style="background:linear-gradient(135deg,#be123c,#fdba74)"></button><button type="button" data-p="sand" aria-label="sand" style="background:linear-gradient(135deg,#b45309,#fcd34d)"></button><button type="button" data-p="forest" aria-label="forest" style="background:linear-gradient(135deg,#166534,#d9f99d)"></button></div>
     <label style="margin-top:8px">حجم الخط</label><select id="fzSel"><option value="s">صغير</option><option value="m">وسط</option><option value="l">كبير</option></select></div>
 <div class="card"><b>🖨 الطباعة والـ PDF واللوجو</b>
     <label class="opt" style="margin-top:6px"><input type="checkbox" id="pdfOn"> إظهار زرار PDF والطباعة تحت الفاتورة</label>
@@ -529,6 +628,14 @@ const navClick=e=>{const b=e.target.closest('button[data-t]');if(!b)return;const
   $('saveBar').classList.toggle('hide',t!=='new');document.body.classList.toggle('onNew',t==='new');fixBar();
   if(t==='new'){drawRecent();drawQS()}if(t==='dash')drawDash();if(t==='cu')drawCusts();if(t==='new'&&lastC&&!editId){$('prev').value=balOf(lastC)||'';calc()}};
 $('bnav').onclick=navClick;$('hdrSet').onclick=navClick;
+(function(){const nav=$('bnav'),ind=document.createElement('span');ind.className='nav-ind';nav.prepend(ind);let first=true;
+function place(){const b=nav.querySelector('button.on');if(!b){nav.classList.remove('ready');return}if(!b.offsetWidth)return;
+ if(first){ind.style.transition='none'}
+ ind.style.width=(b.offsetWidth-6)+'px';ind.style.transform='translateX('+(b.offsetLeft+3)+'px)';nav.classList.add('ready');
+ if(first){void ind.offsetWidth;ind.style.transition='';first=false}}
+nav.addEventListener('click',()=>requestAnimationFrame(place));$('hdrSet').addEventListener('click',()=>requestAnimationFrame(place));
+window.addEventListener('resize',place);window.addEventListener('load',place);if(window.ResizeObserver)new ResizeObserver(place).observe(nav);place()})();
+
 setTimeout(()=>{try{syncNav()}catch(e){}},0);
 
 /* ---------- رسم الصورة (بدون مكتبات) ---------- */
@@ -1077,12 +1184,20 @@ $('autoWa').onchange=()=>{try{localStorage.setItem('autoWa',$('autoWa').checked?
 const pget=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:v==='1'}catch(e){return d}};
 const pset=(k,v)=>{try{localStorage.setItem(k,v?'1':'0')}catch(e){}};
 const getGN=()=>{try{return localStorage.getItem('gnote')||''}catch(e){return''}};
-function setTheme(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');try{localStorage.setItem('theme',dark?'dark':'light')}catch(e){}try{document.querySelector('meta[name="theme-color"]').content=dark?'#14b8a6':'#0f766e'}catch(e){}}
+const PALS=['teal','ocean','violet','rose','sand','forest'];
+function metaTheme(){try{document.querySelector('meta[name="theme-color"]').content=getComputedStyle(document.documentElement).getPropertyValue('--h1').trim()||'#0f766e'}catch(e){}}
+function swFade(){const h=document.documentElement;h.classList.add('tsw');clearTimeout(swFade.t);swFade.t=setTimeout(()=>h.classList.remove('tsw'),600)}
+function setTheme(dark){swFade();document.documentElement.setAttribute('data-theme',dark?'dark':'light');try{localStorage.setItem('theme',dark?'dark':'light')}catch(e){}metaTheme()}
+function setPal(p){if(!PALS.includes(p))p='teal';swFade();document.documentElement.setAttribute('data-pal',p);try{localStorage.setItem('pal',p)}catch(e){}document.querySelectorAll('#pals button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));metaTheme()}
+function applyAnim(){const on=pget('anim',true);document.documentElement.classList.toggle('noanim',!on)}
 function applyCalc(){const on=pget('calcOn',true);$('calcFab').classList.toggle('hide',!on);if(!on)$('calcModal').classList.add('hide')}
 $('gnote').value=getGN();$('gnote').oninput=()=>{try{localStorage.setItem('gnote',$('gnote').value)}catch(e){}};
 $('calcOn').checked=pget('calcOn',true);$('calcOn').onchange=()=>{pset('calcOn',$('calcOn').checked);applyCalc()};applyCalc();
 try{if(localStorage.getItem('theme')==='dark'){$('themeChk').checked=true;setTheme(true)}}catch(e){}
 $('themeChk').onchange=()=>setTheme($('themeChk').checked);
+(function(){let p='teal';try{p=localStorage.getItem('pal')||'teal'}catch(e){}setPal(p);
+document.querySelectorAll('#pals button').forEach(b=>b.onclick=()=>setPal(b.dataset.p));
+$('animChk').checked=pget('anim',true);$('animChk').onchange=()=>{pset('anim',$('animChk').checked);applyAnim()};applyAnim()})();
 [['editInv','editInv'],['dupInv','dupInv'],['dayCl','dayCl'],['monCl','monCl'],['bulkRemChk','bulkRem'],['trashOn','trashOn'],['bkAl','bkAl'],['autoBk','autoBk'],['logoOn','logoOn'],['pdfOn','pdfOn']].forEach(([id,k])=>{$(id).checked=pget(k,true);$(id).onchange=()=>{pset(k,$(id).checked);applyFeatures();drawCusts()}});
 const DEFPRE='تحويل محفظة=1\nتحويل انستا=0';
 const pfPresets=()=>lsv('pfPre',DEFPRE).split('\n').map(l=>{const i=l.lastIndexOf('=');return i<0?null:{n:l.slice(0,i).trim(),p:nv(l.slice(i+1))}}).filter(x=>x&&x.n);
