@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl" data-theme="light" data-pal="teal">
 <head>
 <meta charset="utf-8">
-<script>try{if(localStorage.getItem('lkOn')==='1')document.documentElement.classList.add('locked')}catch(e){}try{var z=localStorage.getItem('fz');if(z==='s'||z==='l')document.documentElement.classList.add('fz-'+z)}catch(e){}</script>
+<script>try{if(localStorage.getItem('lkOn')==='1')document.documentElement.classList.add('locked')}catch(e){}try{var z=localStorage.getItem('fz');if(z==='x'||z==='s'||z==='l'||z==='xl')document.documentElement.classList.add('fz-'+z)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ElTabakha Glass</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -201,26 +201,7 @@ details.card textarea{direction:rtl;text-align:right;font-size:14px;width:100%;m
 /* الكيبورد مفتوح: شريط الحفظ فوق الكيبورد على طول، والتبويبات والأزرار العايمة بتستخبى */
 .kb .bottom-nav,.kb .calc-fab,.kb .fab-new{display:none}
 
-/* ===== حجم الخط ===== */
-.fz-s input:not([type=checkbox]),.fz-s textarea,.fz-s select{font-size:12.5px}.fz-s input:not([type=checkbox]){height:30px}
-.fz-s button.main,.fz-s button.alt,.fz-s a.main,.fz-s .ab{font-size:12.5px}.fz-s .cn,.fz-s .hrow .hl b{font-size:13px}.fz-s .mute,.fz-s .info{font-size:11px}
-.fz-l input:not([type=checkbox]),.fz-l textarea,.fz-l select{font-size:16px}.fz-l input:not([type=checkbox]),.fz-l select{height:40px}
-.fz-l button.main,.fz-l button.alt,.fz-l a.main,.fz-l .ab{font-size:16px}.fz-l .cn,.fz-l .hrow .hl b{font-size:16px}.fz-l .mute,.fz-l .info{font-size:13px}.fz-l label{font-size:12px}.fz-l .stat-value{font-size:19px}
 button.arm,.lnk.arm{background:var(--danger)!important;border-color:var(--danger)!important;color:#fff!important;text-decoration:none;border-radius:8px;padding-inline:8px}
-/* ===== تصغير عام للحجم العادي (الصغير والكبير من الإعدادات زي ما هما) ===== */
-html:not(.fz-s):not(.fz-l) body{font-size:13px}
-html:not(.fz-s):not(.fz-l) input:not([type=checkbox]){height:30px;font-size:13px;padding:3px 7px}
-html:not(.fz-s):not(.fz-l) textarea{font-size:13px;padding:4px 7px}
-html:not(.fz-s):not(.fz-l) select{height:30px;font-size:13px}
-html:not(.fz-s):not(.fz-l) .it input{font-size:13px;padding:3px}
-html:not(.fz-s):not(.fz-l) .it button{height:30px}
-html:not(.fz-s):not(.fz-l) button.main,html:not(.fz-s):not(.fz-l) a.main,html:not(.fz-s):not(.fz-l) button.alt{padding:6px 10px;font-size:13px}
-html:not(.fz-s):not(.fz-l) .seg button{padding:5px 4px;font-size:13px}
-html:not(.fz-s):not(.fz-l) .seg.s button{padding:4px 4px;font-size:12px}
-html:not(.fz-s):not(.fz-l) .card,html:not(.fz-s):not(.fz-l) .rec{padding:8px;margin-bottom:5px}
-html:not(.fz-s):not(.fz-l) .row{padding:6px 8px;margin-bottom:5px}
-html:not(.fz-s):not(.fz-l) label{font-size:10.5px}
-html:not(.fz-s):not(.fz-l) .cn{font-size:13.5px}
 /* ===== تضييق صفحتي السجل والعملاء ===== */
 #t-dash .stat-grid{grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:4px}
 #t-dash .stat-card{padding:6px 3px;text-align:center}
@@ -326,6 +307,44 @@ section:not(.hide)>.card,section:not(.hide)>.stat-grid,section:not(.hide)>detail
 section:not(.hide)>:nth-child(2){animation-delay:.04s}section:not(.hide)>:nth-child(3){animation-delay:.08s}section:not(.hide)>:nth-child(4){animation-delay:.12s}section:not(.hide)>:nth-child(5){animation-delay:.16s}section:not(.hide)>:nth-child(n+6){animation-delay:.2s}
 @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){section:not(.hide),section:not(.hide)>*{animation:none!important}.bottom-nav .nav-ind{transition:none}}
+
+/* مقترحات الفاتورة + الإجمالي/المتبقي */
+.qs button small.sz{opacity:.8;margin-inline-start:3px}.qs button small.pr{margin-inline-start:6px;padding-inline-start:6px;border-inline-start:1px solid currentColor;font-weight:700;opacity:.9}
+.tcell.tg1{background:var(--accLight)}.tcell.tg1 b{color:var(--acc)}
+.tcell.trm.dr{background:var(--drB)}.tcell.trm.dr b,.tcell.trm.dr label{color:var(--drI)}
+.tcell.trm.ok{background:var(--crB)}.tcell.trm.ok b,.tcell.trm.ok label{color:var(--crI)}
+/* ===== أحجام العرض (مضغوط جداً / صغير / وسط / كبير) ===== */
+:root{--fs:12px;--pad:6px;--gap:4px;--ih:28px;--bp:4px 8px;--hh:38px;--ni:16px;--nl:9.5px}
+html.fz-x{--fs:11px;--pad:4px;--gap:3px;--ih:24px;--bp:3px 6px;--hh:34px;--ni:14px;--nl:8.5px}
+html.fz-s{--fs:11.5px;--pad:5px;--gap:3px;--ih:26px;--bp:3px 7px;--hh:36px;--ni:15px;--nl:9px}
+html.fz-l{--fs:13.5px;--pad:8px;--gap:5px;--ih:32px;--bp:6px 10px;--hh:42px;--ni:18px;--nl:10.5px}
+html.fz-xl{--fs:15px;--pad:10px;--gap:6px;--ih:38px;--bp:8px 12px;--hh:46px;--ni:20px;--nl:11px}
+body{font-size:var(--fs);padding-top:calc(var(--hh) + 6px + env(safe-area-inset-top,0px))}
+.app-header{height:calc(var(--hh) + env(safe-area-inset-top,0px))}
+.hdr-set{height:calc(var(--hh) - 10px);width:calc(var(--hh) - 8px);font-size:calc(var(--fs) + 6px)}
+input:not([type=checkbox]),select{height:var(--ih);font-size:var(--fs);padding:2px 7px}
+textarea{font-size:var(--fs);padding:4px 7px}
+.it input{font-size:var(--fs);padding:2px}.it button{height:var(--ih)}
+.card,.rec{padding:var(--pad);margin-bottom:var(--gap)}
+.row{padding:calc(var(--pad) - 1px) var(--pad);margin-bottom:var(--gap)}
+button.main,a.main,button.alt{padding:var(--bp);font-size:var(--fs)}
+.ab{font-size:calc(var(--fs) - .5px);padding:calc(var(--pad) - 2px) var(--pad)}
+.seg button{padding:calc(var(--pad) - 2px) 4px;font-size:var(--fs)}
+.seg.s button{font-size:calc(var(--fs) - .5px)}
+.qs button,.addbar button{font-size:calc(var(--fs) - .5px)}
+.cn{font-size:calc(var(--fs) + 1px)}
+label{font-size:calc(var(--fs) - 2px)}
+.mute,.info,.ro{font-size:calc(var(--fs) - 1px)}
+.stat-value{font-size:calc(var(--fs) + 4px)}
+.hrow{padding:calc(var(--pad) - 1px) calc(var(--pad) + 2px);margin-bottom:var(--gap)}
+.hrow .hl b{font-size:calc(var(--fs) + .5px)}.hrow .hr b{font-size:calc(var(--fs) + 1px)}
+.sum div{padding:calc(var(--gap) + 1px) 0;font-size:var(--fs)}.sum div.big{font-size:calc(var(--fs) + 1.5px)}
+.st td,.st th{padding:calc(var(--gap) + 2px) 2px}table.st{font-size:calc(var(--fs) - .5px)}
+.sumg b{font-size:calc(var(--fs) + 2px)}
+.bottom-nav button{padding:calc(var(--gap) + 2px) 2px var(--gap)}
+.bottom-nav button .nav-icon{font-size:var(--ni)}.bottom-nav button .nav-label{font-size:var(--nl)}
+.calc-fab{width:calc(var(--ih) + 12px);height:calc(var(--ih) + 12px)}
+#t-dash .stat-value{font-size:calc(var(--fs) + 2px)}#t-dash .stat-label{font-size:calc(var(--fs) - 2.5px)}
 </style>
 </head>
 <body>
@@ -393,7 +412,7 @@ section:not(.hide)>:nth-child(2){animation-delay:.04s}section:not(.hide)>:nth-ch
   </div>
   <div id="rows"></div>
   <div id="qwrap" class="hide"><div class="qs" id="qs"></div></div>
-  <div class="addbar"><button class="alt b-amber" data-add="mq">+ إضافة</button></div>
+  <div class="addbar" id="addbar"><button class="alt b-amber" data-add="mq">+ إضافة</button></div>
   <div class="card isum">
     <div id="r_sub" class="sub hide"><span>إجمالي الإذن<span class="num" id="tqw"></span></span><b class="num" id="sub">0</b></div>
     <div class="xg">
@@ -406,8 +425,8 @@ section:not(.hide)>:nth-child(2){animation-delay:.04s}section:not(.hide)>:nth-ch
     <div id="r_dp" class="hide" style="margin-bottom:6px"><label>خصم من المدفوع<span id="dpAmt"></span></label><div class="ro" style="gap:6px;flex-wrap:wrap"><input id="pfWhy" placeholder="السبب" style="display:none"><input id="dp" type="text" inputmode="decimal" placeholder="%" style="width:64px;flex:none"><div class="addbar" id="pfPre" style="flex-wrap:wrap;margin:0;flex:1"></div></div></div>
     <div class="tg">
       <div><label>المدفوع الآن</label><input id="paid" type="text" inputmode="decimal" placeholder="0"></div>
-      <div class="tcell"><label>الإجمالي</label><b class="num" id="grand">0</b></div>
-      <div class="tcell"><label>المتبقي</label><b class="num" id="rest">0</b></div>
+      <div class="tcell tg1"><label>الإجمالي</label><b class="num" id="grand">0</b></div>
+      <div class="tcell trm"><label>المتبقي</label><b class="num" id="rest">0</b></div>
     </div>
   </div>
   <div id="retBox" class="hide"><button class="lnk" id="lessBtn" style="display:block;margin-inline-start:auto">إخفاء الإضافات ▴</button><div class="addbar"><button class="alt b-red" data-ret="free">↩ مرتجع</button><button class="alt b-red" data-ret="inv">↩ من فاتورة</button></div><div id="retPane" class="card hide"><div class="ro" style="gap:6px;margin:0"><input id="retNo" type="text" inputmode="numeric" placeholder="كود الفاتورة (مثلاً 1031)" style="flex:1"><button class="main" id="retGo" style="flex:none">بحث</button></div><div id="retRes"></div></div></div>
@@ -457,7 +476,7 @@ section:not(.hide)>:nth-child(2){animation-delay:.04s}section:not(.hide)>:nth-ch
     <label class="opt"><input type="checkbox" id="themeChk"> الوضع الليلي</label>
     <label class="opt"><input type="checkbox" id="animChk"> حركة الخلفية</label>
     <label style="margin-top:8px">لون الخلفية</label><div class="pals" id="pals"><button type="button" data-p="teal" aria-label="teal" style="background:linear-gradient(135deg,#0f766e,#8fd3f4)"></button><button type="button" data-p="ocean" aria-label="ocean" style="background:linear-gradient(135deg,#1d4ed8,#7fe3f5)"></button><button type="button" data-p="violet" aria-label="violet" style="background:linear-gradient(135deg,#6d28d9,#f5a8e6)"></button><button type="button" data-p="rose" aria-label="rose" style="background:linear-gradient(135deg,#be123c,#fdba74)"></button><button type="button" data-p="sand" aria-label="sand" style="background:linear-gradient(135deg,#b45309,#fcd34d)"></button><button type="button" data-p="forest" aria-label="forest" style="background:linear-gradient(135deg,#166534,#d9f99d)"></button><button type="button" data-p="graphite" aria-label="graphite" style="background:linear-gradient(135deg,#0f1114,#9ca3af)"></button><label class="pc" id="pcLbl" title="اختار لونك"><input type="color" id="palCustom" value="#0f766e"></label></div>
-    <label style="margin-top:8px">حجم الخط</label><select id="fzSel"><option value="s">صغير</option><option value="m">وسط</option><option value="l">كبير</option></select></div>
+    <label style="margin-top:8px">حجم الخط</label><select id="fzSel"><option value="x">مضغوط جداً</option><option value="s">صغير</option><option value="m">وسط</option><option value="l">كبير</option><option value="xl">كبير جداً</option></select></div>
 <div class="card"><b>🖨 الطباعة والـ PDF واللوجو</b>
     <label class="opt" style="margin-top:6px"><input type="checkbox" id="pdfOn"> إظهار زرار PDF والطباعة تحت الفاتورة</label>
     <div id="paperBox"><label style="margin-top:6px">مقاس الورق</label>
@@ -954,7 +973,7 @@ function placeDD(){if(dd.style.display==='none'||!ddInp)return;const r=ddInp.get
   dd.style.top=top+'px';dd.style.right=Math.max(4,innerWidth-r.right)+'px';dd.style.width=Math.max(230,r.width)+'px'}
 function showDD(inp,tr){const q=nm(inp.value.trim()),t=tr.dataset.t;const l=S.items.filter(it=>(!q||nm(it.name).includes(q)));{const u=usageCat(invCat);l.sort((a,b)=>(u[b.id]||0)-(u[a.id]||0))}
   if(!l.length){dd.style.display='none';return}ddInp=inp;ddRow=tr;
-  dd.innerHTML=l.map(it=>`<div data-k="${it.id}"><span style="flex:1">${esc(it.name)}</span><small class="num">${esc(szOf(it))}</small><small>${it.type==='rd'?'جاهز':'مقطع'}</small><b class="num">${priceOf(it,invCat)||''}</b></div>`).join('');
+  dd.innerHTML=l.map(it=>`<div data-k="${it.id}"><span style="flex:1">${esc(it.name)}</span><small class="num">${szOf(it)?'('+esc(szOf(it))+')':''}</small><small>${it.type==='rd'?'جاهز':'مقطع'}</small><b class="num">${priceOf(it,invCat)||''}</b></div>`).join('');
   dd.style.display='block';placeDD()}
 dd.addEventListener('mousedown',e=>{e.preventDefault();const cd=e.target.closest('div[data-c]');if(cd){const c=getC(cd.dataset.c);if(c&&ddInp){ddInp.value=c.name;ddInp.dispatchEvent(new Event('input',{bubbles:true}))}dd.style.display='none';return}const d=e.target.closest('div[data-k]');if(!d)return;const it=S.items.find(x=>x.id===d.dataset.k),rd=it.type==='rd';
   if(it.type!==ddRow.dataset.t){const nd=addRow(it.type,ddRow.dataset.rt,ddRow.dataset.src);ddRow.after(nd);ddRow.remove();ddRow=nd;ddInp=nd.querySelector('.n')}
@@ -999,7 +1018,7 @@ function calc(){{const a=$('discWhy'),b=$('pfWhy');if(b.value!==a.value){if(b.va
     g('.qq').textContent=area?'الكمية: '+fq(q)+' م²':'';g('.val').textContent=f(v);
     if(c>0){const o={t:d.dataset.t,n:g('.n').value,w,h,c,q,p,v};if(sg<0){o.rt=1;if(d.dataset.src)o.src=d.dataset.src}rows.push(o);sub+=v;tq+=q*sg}});
   const prev=nv($('prev').value),pf=Math.min(100,Math.max(0,nv($('dp').value))),paidRaw=nv($('paid').value),pfv=rd2(paidRaw*pf/100),refund=nv($('refund').value),paid=rd2(paidRaw-pfv-refund),total=sub+nv($('nylon').value)-nv($('disc').value)+prev;
-  $('tqw').textContent=tq>0?' ('+fq(tq)+' م²)':'';$('sub').textContent=f(sub);$('grand').textContent=f(total);$('rest').textContent=f(total-paid);
+  $('tqw').textContent=tq>0?' ('+fq(tq)+' م²)':'';$('sub').textContent=f(sub);$('grand').textContent=f(total);$('rest').textContent=f(total-paid);{const pr=$('rest').parentNode;pr.classList.toggle('dr',total-paid>0);pr.classList.toggle('ok',total-paid<=0&&(total!==0||paid!==0))}
   $('r_sub').classList.toggle('hide',['r_nylon','r_disc','r_dp','r_prev','r_ref'].every(i=>$(i).classList.contains('hide')));
   $('dpAmt').textContent=pfv?' = '+f(pfv):'';TOT={rows,sub,tq:rd2(tq),prev,pf,pfv,pfWhy:$('pfWhy').value.trim(),paidRaw,refund,total,paid,rest:total-paid};
   const pay=!rows.length&&paid>0;$('save').textContent=(editId?'حفظ التعديل':pay?'تسجيل دفعة':'حفظ الفاتورة')+(rows.length?' · '+f(total):pay?' · '+f(paid):'');$('saveImg').textContent=pay?'دفعة كصورة':'حفظ كصورة'}
@@ -1026,15 +1045,16 @@ $('lessBtn').onclick=()=>{if(['nylon','disc','discWhy','dp','refund','note'].som
   ['r_nylon','r_disc','r_dp','r_ref'].forEach(i=>$(i).classList.add('hide'));$('discWhy').classList.add('hide');if(!lastC&&!$('prev').value)$('r_prev').classList.add('hide');$('note').classList.add('hide');$('retBox').classList.add('hide');$('retPane').classList.add('hide');$('moreBtn').classList.remove('hide');calc()};
 $('moreBtn').onclick=()=>{['r_nylon','r_disc','r_dp','r_ref'].forEach(i=>$(i).classList.remove('hide'));$('discWhy').classList.remove('hide');if(!lastC)$('r_prev').classList.remove('hide');$('note').classList.remove('hide');$('retBox').classList.remove('hide');$('moreBtn').classList.add('hide');calc()};
 let lastC=null,invCat='d';
-function drawQS(){const w=$('qwrap'),q=$('qs');if(!$('cust').value.trim()){w.classList.add('hide');return}
+function drawQS(){const w=$('qwrap'),q=$('qs'),ab=$('addbar');if(!$('cust').value.trim()){w.classList.add('hide');ab.classList.remove('hide');return}
   const u=usageCat(invCat),l=S.items.filter(it=>it.type===(invCat==='rdy'?'rd':'mq')).sort((a,b)=>(u[b.id]||0)-(u[a.id]||0)||a.name.localeCompare(b.name,'ar'));
-  if(!l.length){w.classList.add('hide');return}
-  w.classList.remove('hide');renderFit(q,l.map(it=>({k:it.id,h:`<button class="alt b-blue" data-q="${it.id}">${esc(it.name)}${szOf(it)?`<small class="num">${esc(szOf(it))}</small>`:''}<small class="num">${priceOf(it,invCat)||''}</small></button>`})),null)}
+  if(!l.length){w.classList.add('hide');ab.classList.remove('hide');return}
+  w.classList.remove('hide');ab.classList.add('hide');renderFit(q,l.map(it=>({k:it.id,h:`<button class="alt b-blue" data-q="${it.id}">${esc(it.name)}${szOf(it)?` <small class="num sz">(${esc(szOf(it))})</small>`:''}${priceOf(it,invCat)?` <small class="num pr">${priceOf(it,invCat)}</small>`:''}</button>`})),{k:'__add',h:'<button class="alt b-amber" data-add="mq">+ إضافة</button>'})}
 $('qs').onclick=e=>{const b=e.target.closest('button[data-q]');if(!b)return;const it=S.items.find(x=>x.id===b.dataset.q);if(!it)return;
-  const rd=it.type==='rd',d=addRow(it.type);setVals(d,rd?{n:it.h&&it.w?`${it.name} ${it.w}×${it.h}`:it.name,p:it.p||''}:{n:it.name,w:it.w||'',h:it.h||'',p:priceOf(it,invCat)||''});calc();const c=d.querySelector('.c');if(c)c.focus()};
+  const rd=it.type==='rd',d=addRow(it.type);setVals(d,rd?{n:it.h&&it.w?`${it.name} ${it.w}×${it.h}`:it.name,p:it.p||''}:{n:it.name,w:it.w||'',h:it.h||'',p:priceOf(it,invCat)||''});calc();const e0=['w','h','c','p'].map(k=>d.querySelector('input.'+k)).filter(Boolean).find(i=>!i.value)||d.querySelector('input.c');if(e0)e0.focus()};
 function renderFit(box,items,last){const mk=l=>l.map(x=>x.h).join('');
   const vis=()=>{const ch=[...box.children];if(!ch.length)return 0;const tops=[...new Set(ch.map(c=>c.offsetTop))].sort((a,b)=>a-b),lim=tops[Math.min(1,tops.length-1)];return ch.filter(c=>c.offsetTop<=lim).length};
   box.innerHTML=mk(items);if(!box.clientWidth||!items.length)return;
+  if(last&&!items.some(x=>x.k===last.k)){box.innerHTML=mk(items.concat(last));if(vis()===items.length+1)return;box.innerHTML=mk(items)}
   const n=vis();let list=items.slice(0,n);
   if(last&&!list.some(x=>x.k===last.k)){list=items.filter(x=>x.k!==last.k).slice(0,Math.max(0,n-1)).concat(last);box.innerHTML=mk(list);
     while(list.length>1&&vis()<list.length){list.splice(list.length-2,1);box.innerHTML=mk(list)}}
@@ -1255,7 +1275,7 @@ const svk=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 function loadMsgUI(){$('pfPreT').value=lsv('pfPre',DEFPRE);$('shopN').value=shopN();$('custW').value=custW();$('docW').value=docW();$('tplInv').value=tplOf('inv');$('tplPay').value=tplOf('pay');$('tplRem').value=tplOf('rem')}
 $('shopN').oninput=()=>svk('shop',$('shopN').value.trim());$('docW').oninput=()=>svk('docw',$('docW').value.trim());$('custW').oninput=()=>svk('custw',$('custW').value.trim());
 [['tplInv','tpl_inv'],['tplPay','tpl_pay'],['tplRem','tpl_rem']].forEach(([i,k])=>$(i).oninput=()=>svk(k,$(i).value));
-$('fzSel').value=lsv('fz','m')||'m';$('fzSel').onchange=()=>{const v=$('fzSel').value;svk('fz',v);document.documentElement.classList.remove('fz-s','fz-l');if(v!=='m')document.documentElement.classList.add('fz-'+v);fixBar()};
+$('fzSel').value=lsv('fz','m')||'m';$('fzSel').onchange=()=>{const v=$('fzSel').value;svk('fz',v);document.documentElement.classList.remove('fz-x','fz-s','fz-l','fz-xl');if(v!=='m')document.documentElement.classList.add('fz-'+v);fixBar()};
 $('paperSel').value=lsv('paper','a4');$('paperSel').onchange=()=>{svk('paper',$('paperSel').value);paperLabels()};
 /* لوجو المحل */
 const logoSrc=()=>lsv('logo','');
