@@ -380,6 +380,12 @@ label{font-size:calc(var(--fs) - 2px)}
   <img id="resimg" alt="الصورة">
 </div></div>
 
+<div id="clOv" class="res-ov hide" style="z-index:65"><div class="card res-in">
+  <div class="ro" style="color:var(--ink)"><b>🗂 الإقفالات</b><button class="del" id="clX" aria-label="إغلاق">×</button></div>
+  <div class="seg s" id="clTab" style="margin:4px 0 6px"><button data-k="d" class="on">يومي</button><button data-k="w">أسبوعي (جمعة ← خميس)</button></div>
+  <div id="clBody"></div>
+</div></div>
+
 <section id="t-dash" class="hide">
   <div class="card hide" id="autoBan"></div>
   <div class="stat-grid">
@@ -393,7 +399,7 @@ label{font-size:calc(var(--fs) - 2px)}
     <input id="hq" placeholder="ابحث بالاسم أو الكود" inputmode="search">
     <div class="seg s" id="hPer" style="margin:6px 0 4px"><button data-p="all" class="on">الكل</button><button data-p="d">اليوم</button><button data-p="w">7 أيام</button><button data-p="m">30 يوم</button></div>
     <div class="seg s" id="hTy" style="margin:0 0 4px"><button data-y="all" class="on">الكل</button><button data-y="inv">فواتير</button><button data-y="pay">دفعات</button><button data-y="ret">مرتجع</button><button data-y="due">متبقي</button></div>
-    <div class="ro"><span class="mute" id="hTot"></span><span style="display:flex;gap:6px"><button class="ab hide" id="dayClose">🧾 إقفال</button><button class="ab hide" id="monRep">📊 تقرير</button></span></div>
+    <div class="ro"><span class="mute" id="hTot"></span><span style="display:flex;gap:6px"><button class="ab hide" id="clBtn">🗂 الإقفالات</button><button class="ab hide" id="dayClose">🧾 إقفال</button><button class="ab hide" id="monRep">📊 تقرير</button></span></div>
   </div>
   <div id="hList"></div>
   </div>
@@ -499,7 +505,8 @@ label{font-size:calc(var(--fs) - 2px)}
 <div class="card"><b>ميزات إضافية</b><div class="mute" style="margin:4px 0 0">فعّلي اللي تحبيه وقفلي اللي مش محتاجاه</div>
     <label class="opt"><input type="checkbox" id="editInv"> تعديل الفاتورة بعد حفظها</label>
     <label class="opt"><input type="checkbox" id="dupInv"> تكرار فاتورة قديمة لنفس العميل</label>
-    <label class="opt"><input type="checkbox" id="dayCl"> إقفال اليوم (زرار + إقفال أمس يظهر لوحده)</label>
+    <label class="opt"><input type="checkbox" id="dayCl"> إقفال يومي تلقائي (آخر اليوم الساعة 12 بالليل)</label>
+    <label class="opt"><input type="checkbox" id="weekCl"> إقفال أسبوعي تلقائي (من الجمعة للخميس)</label>
     <label class="opt"><input type="checkbox" id="monCl"> تقرير الشهر (زرار + تقرير الشهر اللي فات يظهر لوحده)</label>
     <label class="opt"><input type="checkbox" id="bulkRemChk"> تذكير كل المديونين مرة واحدة</label>
     <label class="opt"><input type="checkbox" id="trashOn"> سلة المحذوفات (الفاتورة المحذوفة تتحفظ 30 يوم)</label>
@@ -562,9 +569,9 @@ label{font-size:calc(var(--fs) - 2px)}
 <div id="toast" class="toast hide"></div>
 <nav class="bottom-nav" id="bnav">
   <button data-t="new" class="on"><span class="nav-icon">🧾</span><span class="nav-label">فاتورة</span></button>
-  <button data-t="cu"><span class="nav-icon">👥</span><span class="nav-label">العملاء</span></button>
-  <button data-t="it"><span class="nav-icon">📦</span><span class="nav-label">الأصناف</span></button>
   <button data-t="dash"><span class="nav-icon">📒</span><span class="nav-label">سجل</span></button>
+  <button data-t="it"><span class="nav-icon">📦</span><span class="nav-label">الأصناف</span></button>
+  <button data-t="cu"><span class="nav-icon">👥</span><span class="nav-label">العملاء</span></button>
 </nav>
 
 <div id="dd"></div>
@@ -1271,7 +1278,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='27';
+const APP_VER='29';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
@@ -1312,7 +1319,7 @@ $('themeChk').onchange=()=>setTheme($('themeChk').checked);
 (function(){let p='teal';try{p=localStorage.getItem('pal')||'teal'}catch(e){}setPal(p);
 document.querySelectorAll('#pals button').forEach(b=>b.onclick=()=>setPal(b.dataset.p));$('palCustom').value=getCC();$('palCustom').oninput=()=>{try{localStorage.setItem('cc',$('palCustom').value)}catch(e){}setPal('custom')};
 $('animChk').checked=pget('anim',animDef());$('animChk').onchange=()=>{pset('anim',$('animChk').checked);applyAnim()};applyAnim();perfWatch()})();
-[['editInv','editInv'],['dupInv','dupInv'],['dayCl','dayCl'],['monCl','monCl'],['bulkRemChk','bulkRem'],['trashOn','trashOn'],['bkAl','bkAl'],['autoBk','autoBk'],['logoOn','logoOn'],['pdfOn','pdfOn']].forEach(([id,k])=>{$(id).checked=pget(k,true);$(id).onchange=()=>{pset(k,$(id).checked);applyFeatures();drawCusts()}});
+[['editInv','editInv'],['dupInv','dupInv'],['dayCl','dayCl'],['weekCl','weekCl'],['monCl','monCl'],['bulkRemChk','bulkRem'],['trashOn','trashOn'],['bkAl','bkAl'],['autoBk','autoBk'],['logoOn','logoOn'],['pdfOn','pdfOn']].forEach(([id,k])=>{$(id).checked=pget(k,true);$(id).onchange=()=>{pset(k,$(id).checked);applyFeatures();drawCusts()}});
 const DEFPRE='تحويل محفظة=1\nتحويل انستا=0';
 const pfPresets=()=>lsv('pfPre',DEFPRE).split('\n').map(l=>{const i=l.lastIndexOf('=');return i<0?null:{n:l.slice(0,i).trim(),p:nv(l.slice(i+1))}}).filter(x=>x&&x.n);
 const preHtml=()=>pfPresets().map((x,i)=>`<button class="alt" data-pre="${i}">${esc(x.n)} ${fq(x.p)}%</button>`).join('');
@@ -1387,7 +1394,7 @@ function showClose(ts){const a=dayStart(ts),l=S.invoices.filter(r=>r.ts>=a&&r.ts
   const inv=l.filter(r=>r.type==='inv');
   const cv=sheet({title:'إقفال اليوم',name:'',sub:dayLabel(a),date:stamp(Date.now()),
     tables:[{th:['العميل','النوع','القيمة','المدفوع'],w:[.38,.18,.22,.22],rows:l.map(r=>[r.cname,numTag(r),r.type==='pay'?'-':f(val(r)),f(pd(r))])}],
-    sum:[['عدد الفواتير',String(inv.length)],['إجمالي المبيعات',f(l.reduce((x,r)=>x+val(r),0))],['إجمالي المدفوع',f(l.reduce((x,r)=>x+pd(r),0)),1],['إجمالي المديونيات الآن',f(debtAll()),1]]});
+    sum:[['عدد الفواتير',String(inv.length)],['إجمالي المبيعات',f(l.reduce((x,r)=>x+val(r),0))],['إجمالي المدفوع',f(l.reduce((x,r)=>x+pd(r),0)),1],...clDiff('d'+dkey(a),l),['إجمالي المديونيات الآن',f(debtAll()),1]]});
   showImg(cv,'إقفال-'+dshort(a).replace(/\//g,'-')+'.png','إقفال '+dayLabel(a),false,'',null)}
 function showMonth(ts){const d=new Date(ts),y=d.getFullYear(),mo=d.getMonth(),a=new Date(y,mo,1).getTime(),b=new Date(y,mo+1,1).getTime();
   const l=S.invoices.filter(r=>r.ts>=a&&r.ts<b);if(!l.length){$('hTot').textContent='مفيش معاملات في الشهر ده';return}
@@ -1429,15 +1436,52 @@ $('t-dash').addEventListener('click',e=>{const t=e.target;
   const rc=t.closest('[data-rec]');if(rc){const r=S.invoices.find(x=>x.id===rc.dataset.rec);if(r)showRec(r,false,'');return}
   const h=t.closest('[data-h]');if(h){const r=S.invoices.find(x=>x.id===h.dataset.h);if(r)showRec(r,false,'')}});
 
+/* ===== الإقفال التلقائي: يومي (12 بالليل) + أسبوعي (من الجمعة للخميس) ===== */
+const clGet=()=>{try{return JSON.parse(localStorage.getItem('closes')||'{}')||{}}catch(e){return{}}};
+const clSet=o=>{try{localStorage.setItem('closes',JSON.stringify(o))}catch(e){}};
+const dkey=a=>{const d=new Date(a);return d.getFullYear()+'-'+two(d.getMonth()+1)+'-'+two(d.getDate())};
+const addD=(a,n)=>{const d=new Date(a);d.setDate(d.getDate()+n);return d.getTime()};
+const tot=l=>({n:l.filter(r=>r.type==='inv').length,s:rd2(l.reduce((x,r)=>x+val(r),0)),p:rd2(l.reduce((x,r)=>x+pd(r),0))});
+const inRange=(a,b)=>S.invoices.filter(r=>r.ts>=a&&r.ts<b);
+const clDiff=(k,l)=>{const c=clGet()[k];if(!c)return[];const t=tot(l);return(Math.abs(t.s-c.s)>.004||Math.abs(t.p-c.p)>.004)?[['⚠ اتعدّل بعد الإقفال (كان مبيعات '+f(c.s)+' · مدفوع '+f(c.p)+')','']]:[]};
+function autoClose(){if(!S.invoices.length)return 0;
+  const C=clGet(),now=Date.now(),t0=dayStart(now);let add=0,st=+lsv('clStart','0');if(!st){st=addD(t0,-7);svk('clStart',String(st))}
+  if(pget('dayCl',true)){const by={};S.invoices.forEach(r=>{if(r.ts>=st&&r.ts<t0){const a=dayStart(r.ts);(by[a]=by[a]||[]).push(r)}});
+    Object.keys(by).forEach(a=>{a=+a;const k='d'+dkey(a);if(C[k])return;C[k]={t:'d',a,at:now,...tot(by[a])};add++})}
+  if(pget('weekCl',true)){const F=addD(t0,-((new Date(t0).getDay()-5+7)%7));for(let f=F,i=0;f>st&&i<60;f=addD(f,-7),i++){const a=addD(f,-7),k='w'+dkey(a);if(C[k])continue;const l=inRange(a,f);if(l.length){C[k]={t:'w',a,b:f,at:now,...tot(l)};add++}}}
+  if(add)clSet(C);return add}
+function showWeek(a){const b=addD(a,7),l=inRange(a,b);if(!l.length){toast('مفيش معاملات في الأسبوع ده');return}
+  const days=[];for(let i=0;i<7;i++){const x=addD(a,i),y=addD(a,i+1),t=tot(inRange(x,y));if(t.n||t.s||t.p)days.push([WD[new Date(x).getDay()]+' '+new Date(x).getDate()+'/'+(new Date(x).getMonth()+1),String(t.n),f(t.s),f(t.p)])}
+  const cu={};l.forEach(r=>{const c=cu[r.cname]=cu[r.cname]||{s:0,p:0};c.s+=val(r);c.p+=pd(r)});
+  const best=Object.entries(cu).filter(x=>x[1].s>0).sort((x,y)=>y[1].s-x[1].s).slice(0,5).map(([n,v])=>[n,f(v.s),f(v.p)]);
+  const tables=[{title:'اليوميات',th:['اليوم','فواتير','مبيعات','مدفوع'],w:[.34,.14,.26,.26],rows:days}];
+  if(best.length)tables.push({title:'أعلى العملاء شراءً',th:['العميل','مبيعات','مدفوع'],w:[.46,.27,.27],rows:best});
+  const t=tot(l),last=addD(b,-1);
+  const cv=sheet({title:'إقفال الأسبوع',name:'',sub:'من '+WD[new Date(a).getDay()]+' '+dshort(a)+' إلى '+WD[new Date(last).getDay()]+' '+dshort(last),date:stamp(Date.now()),tables,
+    sum:[['عدد الفواتير',String(t.n)],['إجمالي المبيعات',f(t.s)],['إجمالي المدفوع',f(t.p),1],...clDiff('w'+dkey(a),l),['إجمالي المديونيات الآن',f(debtAll()),1]]});
+  showImg(cv,'إقفال-أسبوع-'+dkey(a)+'.png','إقفال الأسبوع',false,'',null)}
+let clK='d';
+function drawCl(){const C=clGet(),l=Object.values(C).filter(x=>x.t===clK).sort((x,y)=>y.a-x.a).slice(0,60);
+  document.querySelectorAll('#clTab button').forEach(b=>b.classList.toggle('on',b.dataset.k===clK));
+  $('clBody').innerHTML=l.length?l.map(x=>`<div class="hrow" data-cl="${x.t}" data-a="${x.a}"><div class="hl"><b>${x.t==='d'?dayLabel(x.a):'من '+dshort(x.a)+' إلى '+dshort(addD(x.b,-1))}</b><small class="mute">${x.n} فاتورة</small></div><div class="hr"><b class="num">${f(x.s)}</b><small class="mute num">مدفوع ${f(x.p)}</small></div></div>`).join(''):'<div class="info">لسه مفيش إقفالات. أول إقفال هيتعمل لوحده بعد آخر اليوم.</div>'}
+$('clBtn').onclick=()=>{drawCl();$('clOv').classList.remove('hide')};
+$('clX').onclick=()=>$('clOv').classList.add('hide');
+$('clOv').addEventListener('click',e=>{if(e.target===$('clOv'))$('clOv').classList.add('hide')});
+$('clTab').onclick=e=>{const k=e.target.dataset.k;if(!k)return;clK=k;drawCl()};
+$('clBody').onclick=e=>{const r=e.target.closest('[data-cl]');if(!r)return;r.dataset.cl==='d'?showClose(+r.dataset.a):showWeek(+r.dataset.a)};
+setInterval(()=>{if(!document.hidden)autoBan()},60000);
 /* إقفال أمس / تقرير الشهر اللي فات (بيظهروا لوحدهم) */
-function autoBan(){let h='';const t0=dayStart(Date.now()),n=new Date();
-  if(pget('dayCl',true)){const past=S.invoices.filter(r=>r.ts<t0);if(past.length){const last=Math.max(...past.map(r=>r.ts)),k=dshort(last);
-    if(lsv('dcSeen','')!==k)h+=`<div class="ro" style="color:var(--ink);margin-bottom:4px"><span>🧾 إقفال ${dayLabel(last)} جاهز</span><span style="display:flex;gap:6px"><button class="ab" data-ab="d" data-ts="${last}" data-k="${k}">عرض</button><button class="lnk" data-abx="dcSeen" data-k="${k}">إخفاء</button></span></div>`}}
+function autoBan(){let h='';const n=new Date();try{autoClose()}catch(e){}
+  $('clBtn').classList.toggle('hide',!(pget('dayCl',true)||pget('weekCl',true)));
+  const C=clGet(),lastOf=t=>Object.values(C).filter(x=>x.t===t).sort((x,y)=>y.a-x.a)[0];
+  const ld=pget('dayCl',true)&&lastOf('d'),lw=pget('weekCl',true)&&lastOf('w');
+  if(ld){const k=dkey(ld.a);if(lsv('dcSeen','')!==k)h+=`<div class="ro" style="color:var(--ink);margin-bottom:4px"><span>🧾 اتقفل ${dayLabel(ld.a)} تلقائي · مبيعات ${f(ld.s)} · مدفوع ${f(ld.p)}</span><span style="display:flex;gap:6px"><button class="ab" data-ab="d" data-ts="${ld.a}" data-k="${k}">عرض</button><button class="lnk" data-abx="dcSeen" data-k="${k}">إخفاء</button></span></div>`}
+  if(lw){const k=dkey(lw.a);if(lsv('wcSeen','')!==k)h+=`<div class="ro" style="color:var(--ink);margin-bottom:4px"><span>🗓 اتقفل الأسبوع (جمعة ← خميس) · مبيعات ${f(lw.s)} · مدفوع ${f(lw.p)}</span><span style="display:flex;gap:6px"><button class="ab" data-ab="w" data-ts="${lw.a}" data-k="${k}">عرض</button><button class="lnk" data-abx="wcSeen" data-k="${k}">إخفاء</button></span></div>`}
   if(pget('monCl',true)){const ps=new Date(n.getFullYear(),n.getMonth()-1,1),pe=new Date(n.getFullYear(),n.getMonth(),1).getTime(),key=ps.getFullYear()+'-'+two(ps.getMonth()+1);
     if(lsv('mcSeen','')!==key&&S.invoices.some(r=>r.ts>=ps.getTime()&&r.ts<pe))h+=`<div class="ro" style="color:var(--ink)"><span>📊 تقرير ${MN[ps.getMonth()]} جاهز</span><span style="display:flex;gap:6px"><button class="ab" data-ab="m" data-ts="${ps.getTime()}" data-k="${key}">عرض</button><button class="lnk" data-abx="mcSeen" data-k="${key}">إخفاء</button></span></div>`}
   $('autoBan').innerHTML=h;$('autoBan').classList.toggle('hide',!h)}
 $('autoBan').onclick=e=>{const d=e.target.dataset;
-  if(d.ab){svk(d.ab==='d'?'dcSeen':'mcSeen',d.k);autoBan();d.ab==='d'?showClose(+d.ts):showMonth(+d.ts)}
+  if(d.ab){svk(d.ab==='d'?'dcSeen':d.ab==='w'?'wcSeen':'mcSeen',d.k);autoBan();d.ab==='d'?showClose(+d.ts):d.ab==='w'?showWeek(+d.ts):showMonth(+d.ts)}
   else if(d.abx){svk(d.abx,d.k);autoBan()}};
 
 /* ========== حاسبة الزجاج ========== */
@@ -1498,7 +1542,7 @@ async function lockInit(){bioOK=await bioAvail();
 /* ---------- بداية ---------- */
 loadLocal();if(!fbCfg()){reflowAll();syncNames()}drawDash();drawCusts();drawItems();calc();bkInfo();applyFeatures();lockInit();drawTrash();loadMsgUI();loadLogo();paperLabels();drawRecent();fixBar();document.body.classList.add('onNew');
 /* ---------- زرار الرجوع في الموبايل ---------- */
-const OVS=['res','rem','bulk','calcModal'],OVX={res:'resx',rem:'remX',bulk:'bulkX',calcModal:'calcClose'};
+const OVS=['res','rem','bulk','calcModal','clOv'],OVX={res:'resx',rem:'remX',bulk:'bulkX',calcModal:'calcClose',clOv:'clX'};
 let NS=[],navIgnore=false,exitArm=false,exitT=0,navOK=false;
 const wantNav=()=>{const w=tabHist.map((t,i)=>'t'+i+':'+t);if(curTab==='cu'&&selC&&getC(selC))w.push('cu');if(curTab==='dash'&&dbMode){w.push('db');if(dbSel&&getC(dbSel))w.push('dbs')}OVS.forEach(id=>{if(!$(id).classList.contains('hide'))w.push('o:'+id)});return w};
 function syncNav(){if(!navOK||navIgnore)return;const w=wantNav();let p=0;while(p<NS.length&&p<w.length&&NS[p]===w[p])p++;
