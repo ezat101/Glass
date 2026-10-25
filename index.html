@@ -233,6 +233,19 @@ button.arm,.lnk.arm{background:var(--danger)!important;border-color:var(--danger
 #t-cu .rowc{margin-bottom:4px}
 #t-cu .rowc .main{white-space:nowrap;padding:0 12px}
 #cuTot{font-size:12px!important;margin-bottom:4px!important;color:var(--mute)}
+/* ===== تفاصيل المديون: هيدر مضغوط + المبلغ وزرار الدفع + رسالة/اتصال ===== */
+.dbh{display:flex;align-items:center;gap:6px}.dbh .lnk{flex:none;font-size:18px;text-decoration:none;padding:0 6px;line-height:1}.dbh .cn{flex:1;min-width:0;font-size:calc(var(--fs) + 3px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dbsub{margin:1px 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dbamt{flex:none;white-space:nowrap;padding:3px 10px;border-radius:99px;background:var(--tot);color:var(--ink)}
+.dbamt.dr{background:var(--drB);color:var(--drI)}.dbamt.cr{background:var(--crB);color:var(--crI)}
+.dbamt small{font-size:calc(var(--fs) - 1px)}.dbamt b{font-size:calc(var(--fs) + 4px);color:inherit}
+.dbh>.main{flex:none;padding:5px 12px;white-space:nowrap}
+.dbact{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:5px;margin-top:6px}
+.dbact>*{text-align:center;white-space:nowrap;margin:0;padding:6px 4px!important;font-weight:600}
+a.ab.wa{background:#16a34a;border-color:#16a34a;color:#fff}
+a.ab.tel{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}[data-theme="dark"] a.ab.tel{background:#1e3a5f;border-color:#3b6aa5;color:#bfdbfe}
+.dbpay{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+.dbpay .tg{margin-bottom:6px}.dbpay .addbar{flex-wrap:wrap;margin:4px 0 0}
 
 [data-pal="graphite"]{--bg:#e6e8eb;--card:#fbfbfc;--line:#cfd3d8;--acc:#374151;--acc2:#6b7280;--h1:#1f2937;--h2:#4b5563;--accLight:#dcdfe3;--tot:#e2e5e8;--g1:#cbd5e1;--g2:#d4d4d8;--g3:#bfdbfe;--gop:.5;--shadow:0 1px 3px rgba(20,40,40,.08),0 4px 14px -6px rgba(20,40,40,.12)}
 [data-pal="graphite"][data-theme="dark"]{--bg:#0f1114;--card:#1a1d21;--line:#2f343a;--acc:#cbd5e1;--accInk:#0f1114;--accB:#cbd5e1;--accLight:#2b3036;--tot:#15181b;--h1:#1f2328;--h2:#343a42;--acc2:#64748b;--g1:#3b4350;--g2:#2a3a52;--g3:#3f3f46;--gop:.5;--ink:#e7edf2;--mute:#9fb0bd}
@@ -854,7 +867,7 @@ function sheet(o){lastSpec=o;const D=invd();
       let xr=xr0;tb.th.forEach((t,i)=>{T(t,xr-cw[i]/2,y+hdh/2,'center','bold '+(opt.fs?fs-1:D.th)+'px '+F,PL.hfg);xr-=cw[i]});
       yy=y+hdh;tb.rows.forEach((r,k)=>{let xr=xr0;r.forEach((c,i)=>{const bold=opt.bold&&opt.bold(i),col=tb.red&&tb.red[k]?'#b42318':(opt.colr&&opt.colr(i))||PL.ink;lines[k][i].forEach((s,j)=>T(s,xr-cw[i]/2,yy+pad/2+lhh*j+lhh/2,'center',(bold||D.bold?'bold ':'')+fs+'px '+F,col));xr-=cw[i]});yy+=rh[k]});
       x.strokeStyle=EDGEC;x.lineWidth=1.2;rr(X,y,w,h,R);x.stroke();return h};
-    const tstyle=(a,b)=>a==='الإجمالي'?PL.tot:/^(المتبقي|الحساب بعد الدفعة)$/.test(a)?PL.gold:/^(المدفوع|صافي المدفوع|صافي الدفعة|المبلغ المدفوع)$/.test(a)?PL.paid:b?PL.lite:PL.lite2;
+    const tstyle=(a,b)=>a==='الإجمالي'?PL.tot:/^(المتبقي|الحساب بعد الدفعة)$/.test(a)?PL.gold:/^(المدفوع|صافي المدفوع|صافي الدفعة|المبلغ المدفوع)( \(.*\))?$/.test(a)?PL.paid:b?PL.lite:PL.lite2;
     const totals=(X,w,vw)=>{const rows=(o.sum||[]).filter(r=>!(D.hPrev&&r[0]==='رصيد سابق')).map(([a,b,bold])=>{const fz=bold?D.sumBig:D.sum,fo=(bold?'bold ':'')+fz+'px '+F,ls=wrap(a,w-vw-16,fo);return{a,b,fo,fz,ls,st:tstyle(a,bold),rh:Math.max(D.sumH,ls.length*(fz+4)+10)}}),h=rows.reduce((q,r)=>q+r.rh,0);
       x.save();rr(X,y,w,h,R);x.clip();let yy=y;rows.forEach(r=>{x.fillStyle=r.st[0];x.fillRect(X,yy,w,r.rh);yy+=r.rh});
       x.strokeStyle=GRIDC;x.lineWidth=1;yy=y;rows.forEach((r,k)=>{yy+=r.rh;if(k<rows.length-1){x.beginPath();x.moveTo(X,yy);x.lineTo(X+w,yy);x.stroke()}});x.beginPath();x.moveTo(X+vw,y);x.lineTo(X+vw,y+h);x.stroke();x.restore();
@@ -884,7 +897,7 @@ function sheet(o){lastSpec=o;const D=invd();
 const nn=x=>x.rt?'مرتجع'+(x.src?' من فاتورة '+x.src:'')+' - '+x.n:x.n;
 function invSheet(r,paper){const TH=paper==='t80'||paper==='t58',fancy=!TH&&pget('fancyInv',true)&&!(r.rows||[]).some(x=>x.cols),lbl=x=>nn(x)+(x.q>0?' ('+x.w+'/'+x.h+')':'');const base={name:r.cname,date:stamp(r.ts),note:r.note};
   const cd=(pureRet(r)?'مرتجع · ':'')+(r.code?'كود '+r.code+' · ':'')+(r.rcode?'كود المرتجع '+r.rcode+' · ':'');
-  if(r.type==='pay')return{...base,fancy,sub:cd+'إذن دفعة'+(r.no?' رقم '+r.no:''),sum:[['الحساب قبل الدفعة',f(r.prev)],...(r.pfv?[['المبلغ المدفوع',f(r.amtRaw)],['خصم '+(r.pfWhy?r.pfWhy+' ':'')+fq(r.pf)+'% من المدفوع',f(r.pfv)],['صافي الدفعة',f(r.amount),1]]:[['المبلغ المدفوع',f(r.amount),1]]),['الحساب بعد الدفعة',f(r.rest),1]]};
+  if(r.type==='pay')return{...base,fancy,sub:cd+'إذن دفعة'+(r.no?' رقم '+r.no:''),sum:[['الحساب قبل الدفعة',f(r.prev)],...(r.pfv?[['المبلغ المدفوع',f(r.amtRaw)],['خصم '+(r.pfWhy?r.pfWhy+' ':'')+fq(r.pf)+'% من المدفوع',f(r.pfv)],['صافي الدفعة',f(r.amount),1]]:[['المبلغ المدفوع'+(r.pfWhy?' ('+r.pfWhy+')':''),f(r.amount),1]]),['الحساب بعد الدفعة',f(r.rest),1]]};
   const pl=r.rows.filter(x=>!x.cols),ar=pl.some(x=>x.q>0),tables=[];
   const cmap={};let cn=0;pl.forEach(x=>{if(!(x.n in cmap))cmap[x.n]=cn++});
   const grp={},ord=[];pl.forEach(x=>{const k=x.n+'|'+(+x.p||0);if(!grp[k]){grp[k]={n:x.n,p:+x.p||0,c:0,q:0,v:0,a:x.q>0};ord.push(k)}const sg=x.rt?-1:1;grp[k].c+=sg*(+x.c||0);grp[k].q+=sg*(+x.q||0);grp[k].v+=(+x.v||0)});
@@ -897,7 +910,7 @@ function invSheet(r,paper){const TH=paper==='t80'||paper==='t58',fancy=!TH&&pget
   Object.values(G).forEach(g=>{const k=g[0].cols.length;tables.push({title:g[0].tn||'',th:['البيان',...g[0].cols.map(c=>c.l)],w:[.3,...g[0].cols.map(()=>.7/k)],rows:g.map(x=>[x.n,...x.cols.map(c=>c.v)])})});
   const sum=[['إجمالي الإذن'+(r.tq>0?' ('+fq(r.tq)+' م²)':''),f(r.sub)]];(r.sums||[]).forEach(x=>sum.push(['إجمالي '+x.l,f(x.v)]));
   if(r.nylon)sum.push(['نولون',f(r.nylon)]);if(r.disc)sum.push(['خصم'+(r.discWhy?' ('+r.discWhy+')':''),f(r.disc)]);if(r.dpv)sum.push(['خصم '+fq(r.dp)+'%',f(r.dpv)]);
-  sum.push(['رصيد سابق',f(r.prev)],['الإجمالي',f(r.total),1]);if(r.pfv)sum.push(['المبلغ المدفوع',f(r.paidRaw)],['خصم '+(r.pfWhy?r.pfWhy+' ':'')+fq(r.pf)+'% من المدفوع',f(r.pfv)],['صافي المدفوع',f(r.paid+(r.refund||0))]);else sum.push(['المدفوع',f(r.paid+(r.refund||0))]);if(r.refund)sum.push(['رد كاش للعميل',f(-r.refund)]);sum.push(['المتبقي',f(r.rest),1]);
+  sum.push(['رصيد سابق',f(r.prev)],['الإجمالي',f(r.total),1]);if(r.pfv)sum.push(['المبلغ المدفوع',f(r.paidRaw)],['خصم '+(r.pfWhy?r.pfWhy+' ':'')+fq(r.pf)+'% من المدفوع',f(r.pfv)],['صافي المدفوع',f(r.paid+(r.refund||0))]);else sum.push(['المدفوع'+(r.pfWhy?' ('+r.pfWhy+')':''),f(r.paid+(r.refund||0))]);if(r.refund)sum.push(['رد كاش للعميل',f(-r.refund)]);sum.push(['المتبقي',f(r.rest),1]);
   return{...base,fancy,items:fancy?items:[],sub:cd+((lsv('docw','إذن صرف')?lsv('docw','إذن صرف')+' ':'')+'رقم '+r.no),tables,sum,gnote:r.gnote||''}}
 
 /* ---------- عرض/حفظ/مشاركة الصورة ---------- */
@@ -1310,6 +1323,8 @@ $('resedit').onclick=async()=>{if(curRec&&await guard(curRec,'اكتب الرق�
 
 /* ---------- أدوات واتساب (رقم العميل ونص التذكير) ---------- */
 const waNum=p=>{let d=toEn(p||'').replace(/\D/g,'');if(d.startsWith('00'))d=d.slice(2);else if(d.startsWith('0'))d='20'+d.slice(1);return d};
+/* الاتصال بنفس الرقم المتسجل بالظبط (بس من غير مسافات، والأرقام العربي تتحول إنجليزي) */
+const telNum=p=>toEn(p||'').replace(/[^\d+]/g,'');
 function remLink(c){return 'https://wa.me/'+waNum(c.phone)+'?text='+encodeURIComponent(remText(c))}
 
 /* ---------- النسخة الاحتياطية ---------- */
@@ -1411,7 +1426,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='45';
+const APP_VER='47';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
@@ -1545,27 +1560,50 @@ $('monRep').onclick=()=>showMonth(Date.now());
 $('res').addEventListener('click',e=>{if(e.target===$('res'))$('res').classList.add('hide')});
 
 /* النقر على المعاملات في الداشبورد */
-let dbMode=false,dbSel=null;
+let dbMode=false,dbSel=null,dbPay=null,dbPV={a:'',w:'',p:''};
+/* دفعة من صفحة المديون: نفس حساب "خصم من المدفوع" اللي في الفاتورة */
+function dbpCalc(){const c=getC(dbSel);if(!c||!$('dbp_in'))return;const raw=nv($('dbp_in').value),pf=Math.min(100,Math.max(0,nv($('dbp_pf').value))),pfv=rd2(raw*pf/100),rest=rd2(balOf(c)-rd2(raw-pfv));
+  $('dbp_amt').textContent=pfv?' = '+f(pfv):'';$('dbp_rest').textContent=bsg(rest);const pr=$('dbp_rest').parentNode;pr.classList.toggle('dr',rest>0);pr.classList.toggle('ok',rest<=0)}
+function dbPayGo(btn){const c=getC(dbSel),m=$('dbp_msg');if(!c||!$('dbp_in'))return;const raw=nv($('dbp_in').value),pfp=Math.min(100,Math.max(0,nv($('dbp_pf').value)));
+  if(raw<=0){m.textContent='اكتب المبلغ المدفوع';$('dbp_in').focus();return}
+  if(btn.disabled)return;btn.disabled=true;
+  const pfv=rd2(raw*pfp/100),amt=rd2(raw-pfv),prev=balOf(c),r={id:uid(),type:'pay',cid:c.id,cname:c.name,phone:c.phone||'',ts:Date.now(),amount:amt,amtRaw:raw,pf:pfp,pfv,pfWhy:$('dbp_why').value.trim(),prev,rest:rd2(prev-amt),no:nextPayNo(c),code:nextCode()};
+  S.invoices.push(r);put('invoices',r);dbPay=null;dbPV={a:'',w:'',p:''};try{document.activeElement.blur()}catch(e){}drawDash();showRec(r,false,'تم تسجيل الدفعة ✓')}
 function drawDebt(){$('hMain').classList.toggle('hide',dbMode);$('dbView').classList.toggle('hide',!dbMode);$('dbCard').classList.toggle('on',dbMode);if(!dbMode)return;
   let c=dbSel&&getC(dbSel);if(dbSel&&!c)dbSel=null;
   $('dbList0').classList.toggle('hide',!!c);$('dbDet').classList.toggle('hide',!c);
   if(c){let run=c.open||0;const rows=ledger(c).slice().sort((a,b)=>a.ts-b.ts).map(r=>{run=rd2(run+(r.type==='pay'?-r.amount:val(r)-r.paid));return{r,run}}).reverse();
-    $('dbDet').innerHTML=`<div class="card"><div class="ro" style="color:var(--ink)"><button class="lnk" data-dback="1">→ رجوع للمديونين</button><span class="cb ${bcls(c)} num">${bal(c)}</span></div>
-      <div class="cn" style="font-size:17px;margin:6px 0 2px">${esc(c.name)}</div><div class="mute">${esc(cSub(c))}</div>
-      ${balOf(c)>0?`<button class="ab b-out" data-drem="1" style="display:block;width:100%;margin-top:8px">📨 تذكير بالواتساب</button>`:''}</div>
-      <div class="card">${rows.length?`<table class="st"><thead><tr><th>التاريخ</th><th>الكود</th><th>القيمة</th><th>المدفوع</th><th>الحساب</th></tr></thead><tbody>${rows.map(({r,run})=>`<tr data-rec="${r.id}"><td class="num">${dshort(r.ts)}</td><td>${stTag(r)}</td><td class="num">${r.type==='pay'?'-':f(val(r))}</td><td class="num">${f(pd(r))}</td><td class="num">${f(run)}</td></tr>`).join('')}</tbody></table><div class="mute" style="margin-top:4px">اضغط أي صف لعرض الفاتورة.</div>`:'<p class="mute">لا توجد فواتير.</p>'}</div>`;return}
+    const b=balOf(c),wn=waNum(c.phone),tn=telNum(c.phone);
+    $('dbDet').innerHTML=`<div class="card"><div class="dbh"><button class="lnk" data-dback="1" aria-label="رجوع للمديونين">→</button><div class="cn">${esc(c.name)}</div><span class="dbamt ${bcls(c)}">${b?`<small>${b>0?'عليه':'له'}</small> <b class="num">${f(Math.abs(b))}</b>`:'<b>خالص</b>'}</span><button class="main b-green" data-dpay="1">💵 دفع</button></div>
+      <div class="mute dbsub">${esc(cSub(c))}</div>
+      ${b>0||wn?`<div class="dbact">${b>0?`<button class="ab b-out" data-drem="1">📨 تذكير</button>`:''}${wn?`<a class="ab wa" target="_blank" rel="noopener" href="https://wa.me/${wn}">💬 رسالة</a>`:''}${tn?`<a class="ab tel" href="tel:${tn}">📞 اتصال</a>`:''}</div>`:''}
+      ${wn?'':'<div class="mute" style="margin-top:4px">مفيش رقم متسجل للعميل · يتضاف من صفحة العملاء</div>'}
+      ${dbPay===c.id?`<div class="dbpay isum">
+        <div class="tg"><div><label>المدفوع الآن</label><input id="dbp_in" type="text" inputmode="decimal" placeholder="0" value="${esc(dbPV.a)}"></div><div class="tcell trm"><label>الحساب بعد الدفعة</label><b class="num" id="dbp_rest"></b></div></div>
+        ${b>0?`<div class="addbar" style="margin:0 0 4px"><button class="alt" data-dpall="1">كل المبلغ ${f(b)}</button></div>`:''}
+        <label>خصم من المدفوع<span id="dbp_amt"></span></label><div class="ro" style="gap:6px"><input id="dbp_why" placeholder="سبب خصم المدفوع (اختياري)" value="${esc(dbPV.w)}" style="flex:1"><input id="dbp_pf" type="text" inputmode="decimal" placeholder="%" value="${esc(dbPV.p)}" style="width:64px;flex:none"></div>
+        <div class="addbar">${preHtml()}</div>
+        <div class="btns"><button class="main b-green" data-dpgo="1">✓ تسجيل الدفعة</button><button class="alt" data-dpx="1" style="flex:none">إلغاء</button></div>
+        <div class="info" id="dbp_msg" style="color:var(--danger)"></div></div>`:''}</div>
+      <div class="card">${rows.length?`<table class="st"><thead><tr><th>التاريخ</th><th>الكود</th><th>القيمة</th><th>المدفوع</th><th>الحساب</th></tr></thead><tbody>${rows.map(({r,run})=>`<tr data-rec="${r.id}"><td class="num">${dshort(r.ts)}</td><td>${stTag(r)}</td><td class="num">${r.type==='pay'?'-':f(val(r))}</td><td class="num">${f(pd(r))}</td><td class="num">${f(run)}</td></tr>`).join('')}</tbody></table><div class="mute" style="margin-top:4px">اضغط أي صف لعرض الفاتورة.</div>`:'<p class="mute">لا توجد فواتير.</p>'}</div>`;if(dbPay===c.id)dbpCalc();return}
   const q=$('dbq').value.trim(),l=S.customers.filter(x=>balOf(x)>0&&qm(x.name,q)).sort((a,b)=>balOf(b)-balOf(a));
   $('dbTot').textContent='إجمالي المديونيات: '+f(l.reduce((a,x)=>a+balOf(x),0))+' ('+l.length+' عميل)';
   $('bulkRem').classList.toggle('hide',!(pget('bulkRem',true)&&l.length));
   $('dbList').innerHTML=l.map(x=>`<div class="rec cr2" data-dopen="${x.id}"${agStyle(x)}><div style="flex:1;min-width:0"><div class="cn">${esc(x.name)}</div><div class="mute">${esc(cSub(x))}</div></div><span class="cb ${bcls(x)} num">${bal(x)}</span></div>`).join('')||'<p class="mute">لا يوجد مديونين.</p>'}
 $('dbq').oninput=drawDebt;
+$('dbDet').addEventListener('input',e=>{const k={dbp_in:'a',dbp_why:'w',dbp_pf:'p'}[e.target.id];if(!k)return;dbPV[k]=e.target.value;dbpCalc()});
 $('bnav').addEventListener('click',e=>{if(e.target.closest('button[data-t="dash"]')&&dbMode){dbMode=false;dbSel=null;drawDebt()}});
 $('t-dash').addEventListener('click',e=>{const t=e.target;
   if(t.closest('#dbCard')){dbMode=true;dbSel=null;drawDebt();window.scrollTo(0,0);return}
   if(t.closest('#dbBack')){dbMode=false;dbSel=null;drawDebt();window.scrollTo(0,0);return}
-  const o=t.closest('[data-dopen]');if(o){dbSel=o.dataset.dopen;drawDebt();window.scrollTo(0,0);return}
-  if(t.closest('[data-dback]')){dbSel=null;drawDebt();return}
+  const o=t.closest('[data-dopen]');if(o){dbSel=o.dataset.dopen;dbPay=null;drawDebt();window.scrollTo(0,0);return}
+  if(t.closest('[data-dback]')){dbSel=null;dbPay=null;drawDebt();return}
   if(t.closest('[data-drem]')){const c=getC(dbSel);if(c)openRem(c);return}
+  if(t.closest('[data-dpay]')){dbPay=dbPay===dbSel?null:dbSel;dbPV={a:'',w:'',p:''};drawDebt();const i=$('dbp_in');if(i)i.focus();return}
+  if(t.closest('[data-dpx]')){dbPay=null;drawDebt();return}
+  if(t.closest('[data-dpall]')){const c=getC(dbSel);if(c&&$('dbp_in')){$('dbp_in').value=dbPV.a=String(balOf(c));dbpCalc()}return}
+  if(t.dataset.pre!==undefined&&$('dbp_in')){const x=pfPresets()[+t.dataset.pre];if(x){$('dbp_pf').value=dbPV.p=x.p?String(x.p):'';$('dbp_why').value=dbPV.w=x.n;dbpCalc()}return}
+  const pg=t.closest('[data-dpgo]');if(pg){dbPayGo(pg);return}
   const rc=t.closest('[data-rec]');if(rc){const r=S.invoices.find(x=>x.id===rc.dataset.rec);if(r)showRec(r,false,'');return}
   const h=t.closest('[data-h]');if(h){const r=S.invoices.find(x=>x.id===h.dataset.h);if(r)showRec(r,false,'')}});
 
