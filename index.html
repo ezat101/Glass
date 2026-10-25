@@ -374,7 +374,7 @@ label{font-size:calc(var(--fs) - 2px)}
   <div class="ro" style="color:var(--ink)"><b id="resm"></b><button class="del" id="resx" aria-label="إغلاق">×</button></div>
     <div class="btns rbt"><button class="main b-green" id="ressh">إرسال للعميل</button><a class="main b-green" id="reswa" target="_blank" rel="noopener" href="#">إرسال للعميل</a><button class="alt" id="resdl">حفظ الصورة</button></div>
   <div class="btns rbt" id="pdfRow" style="margin-top:4px"><button class="alt b-out" id="respdf">📄 PDF</button><button class="alt" id="resprint">🖨 طباعة</button></div>
-  <div class="btns rlk" style="margin-top:0"><a class="lnk hide" id="restx" target="_blank" rel="noopener" href="#">نص فقط</a><button class="lnk hide" id="resedit">✏️ تعديل</button><button class="lnk hide" id="resdup">🔁 تكرار</button><button class="lnk hide" id="resdel" style="color:var(--danger)">حذف</button></div>
+  <div class="btns rlk" style="margin-top:0"><a class="lnk hide" id="restx" target="_blank" rel="noopener" href="#">نص فقط</a><button class="lnk hide" id="resedit">✏️ تعديل</button><button class="lnk hide" id="resdup">🔁 تكرار</button><button class="lnk hide" id="rescut">📐 تقطيع</button><button class="lnk hide" id="resdel" style="color:var(--danger)">حذف</button></div>
   <div class="mute" id="reshint"></div>
   <details id="resTxtBox" class="hide" style="margin-top:6px"><summary class="mute" style="cursor:pointer">نص رسالة الواتساب</summary><textarea id="resTxt" rows="5" style="direction:rtl;text-align:right;font-size:14px;width:100%;margin-top:4px"></textarea><button class="lnk" id="resTpl">⚙ الصيغة الثابتة في الإعدادات</button></details>
   <img id="resimg" alt="الصورة">
@@ -466,6 +466,10 @@ label{font-size:calc(var(--fs) - 2px)}
     <div id="cuList"></div>
   </div>
   <div id="cuDet" class="hide"></div>
+</section>
+
+<section id="t-cl" class="hide">
+  <div id="clHost"></div>
 </section>
 
 <section id="t-it" class="hide">
@@ -582,6 +586,7 @@ label{font-size:calc(var(--fs) - 2px)}
 <nav class="bottom-nav" id="bnav">
   <button data-t="new" class="on"><span class="nav-icon">🧾</span><span class="nav-label">فاتورة</span></button>
   <button data-t="dash"><span class="nav-icon">📒</span><span class="nav-label">سجل</span></button>
+  <button data-t="cl"><span class="nav-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" style="display:block;margin:0 auto" aria-hidden="true"><rect x="3" y="3" width="8" height="7" rx="1.2"/><rect x="13" y="3" width="8" height="11" rx="1.2"/><rect x="3" y="12" width="8" height="9" rx="1.2"/><rect x="13" y="16" width="8" height="5" rx="1.2"/></svg></span><span class="nav-label">CutList</span></button>
   <button data-t="it"><span class="nav-icon">📦</span><span class="nav-label">الأصناف</span></button>
   <button data-t="cu"><span class="nav-icon">👥</span><span class="nav-label">العملاء</span></button>
 </nav>
@@ -730,7 +735,7 @@ window.addEventListener('resize',fixBar);
 let curTab='new',tabHist=[],navNoHist=false;
 const navClick=e=>{const b=e.target.closest('button[data-t]');if(!b)return;const t=b.dataset.t;if(!navNoHist&&t!==curTab)tabHist.push(curTab);curTab=t;
   document.querySelectorAll('#bnav button,#hdrSet').forEach(x=>x.classList.toggle('on',x===b));
-  ['dash','new','cu','it','st'].forEach(k=>$('t-'+k).classList.toggle('hide',k!==t));
+  ['dash','new','cl','cu','it','st'].forEach(k=>$('t-'+k).classList.toggle('hide',k!==t));
   $('saveBar').classList.toggle('hide',t!=='new');document.body.classList.toggle('onNew',t==='new');fixBar();
   if(t==='new'){drawRecent();drawQS()}if(t==='dash')drawDash();if(t==='cu')drawCusts();if(t==='new'&&lastC&&!editId){$('prev').value=balOf(lastC)||'';calc()}};
 $('bnav').onclick=navClick;$('hdrSet').onclick=navClick;
@@ -848,7 +853,7 @@ async function downloadCur(){if(!curBlob)return;const s=await dl(curBlob,curName
   $('resm').textContent=baseMsg+({ok:' · تم حفظ الصورة ✓',anchor:' · تم تنزيل الصورة ✓',declined:' · تم الإلغاء',fail:' · اضغط مطولاً على الصورة لحفظها'}[s]||'')}
 async function showImg(cv,name,msg,auto,phone,rec){
   curSpec=lastSpec;paperLabels();curBlob=await new Promise(x=>cv.toBlob(x,'image/png'));curName=name;curPhone=phone||'';baseMsg=msg||'';curRec=rec||null;
-  $('resdel').classList.toggle('hide',!rec);$('resedit').classList.toggle('hide',!(rec&&pget('editInv',true)&&!(rec.rows||[]).some(x=>x.cols)));$('resdup').classList.toggle('hide',!(rec&&rec.type==='inv'&&pget('dupInv',true)&&!(rec.rows||[]).some(x=>x.cols)));disarm($('resdel'));$('resdel').textContent='حذف';$('restx').classList.toggle('hide',!rec);$('resTxtBox').classList.toggle('hide',!rec);if(rec){$('resTxt').value=txtOf(rec);syncTx()}
+  $('resdel').classList.toggle('hide',!rec);$('resedit').classList.toggle('hide',!(rec&&pget('editInv',true)&&!(rec.rows||[]).some(x=>x.cols)));$('resdup').classList.toggle('hide',!(rec&&rec.type==='inv'&&pget('dupInv',true)&&!(rec.rows||[]).some(x=>x.cols)));{const rc=$('rescut');if(rc)rc.classList.toggle('hide',!(rec&&rec.type==='inv'&&(rec.rows||[]).some(x=>!x.rt&&x.t!=='rd'&&+x.w>0&&+x.h>0)))}disarm($('resdel'));$('resdel').textContent='حذف';$('restx').classList.toggle('hide',!rec);$('resTxtBox').classList.toggle('hide',!rec);if(rec){$('resTxt').value=txtOf(rec);syncTx()}
   let canS=false;try{canS=!!(navigator.canShare&&navigator.canShare({files:[new File([curBlob],name,{type:'image/png'})]}))}catch(e){}
   $('ressh').classList.toggle('hide',!canS);$('reswa').classList.toggle('hide',canS);
   $('reshint').textContent=canS?'':'الصورة بتتنسخ ويتفتح شات العميل. الصقها (اضغط مطولاً ثم لصق) وأرسل.';
@@ -1661,6 +1666,1376 @@ new MutationObserver(()=>syncNav()).observe(document.body,{subtree:true,attribut
 const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncNav();return r};
 fbBoot();
 </script>
+<!-- ===== CutList: مخطط التقطيع ===== -->
+<script id="cutlist-widget">
+/* CutList — مخطط التقطيع (نفس ملف cutlist-widget.js بدون التعليق اللي فوق). لتحديثه: استبدل محتوى الـ script ده بالنسخة الجديدة. */
+(function (global) {
+  'use strict';
+
+  /* ================= نصوص ================= */
+  var T = {
+    ar: {
+      title: 'مخطط التقطيع', save: 'حفظ', sure: 'اضغط تاني للتأكيد',
+      shapesOpt: 'إظهار الدائرة والبيضاوي',
+      invLabel: 'بحث بكود الفاتورة', invPh: 'كود الفاتورة', invGo: 'بحث', invBusy: 'بدوّر…', invNone: 'مفيش فاتورة بالكود ده.', invErr: 'حصلت مشكلة في البحث. جرّب تاني.',
+      invTitle: function (c) { return 'فاتورة #' + c; }, invPick: 'اختار الصنف اللي هتنقل مقاساته:',
+      invPieces: function (n, m) { return n + ' قطعة · ' + m + (m === 1 ? ' مقاس' : ' مقاسات'); },
+      invReady: 'أصناف جاهزة (من غير مقاسات، مش هتتنقل):', invNoCut: 'الفاتورة دي كلها أصناف جاهزة، مفيش مقاسات تتنقل.',
+      invReplace: 'استبدال القطع الحالية', invAppend: 'إضافة للقطع الحالية',
+      invStock: function (t) { return 'استخدم شيتات الصنف ده (' + t + ')'; },
+      invDo: function (n) { return 'نقل ' + n + ' قطعة واحسب'; }, invCancel: 'إلغاء', invDone: function (n) { return 'اتنقل ' + n + ' قطعة'; },
+      invFrom: function (c, g) { return 'من فاتورة #' + c + ' · ' + g; }, invClose: 'قفل', all: 'الكل', calc: 'احسب', example: 'مثال', clear: 'مسح الكل',
+      tIn: 'المدخلات', tLay: 'الرسم', tRes: 'النتائج',
+      panels: 'القطع المطلوبة', stock: 'الشيتات المتاحة', opts: 'الخيارات',
+      len: 'الطول', wid: 'العرض', qty: 'العدد', mat: 'الخامة',
+      kerf: 'سُمك الشفرة (الفاصل)', labels: 'ترقيم القطع', one: 'استخدام شيت واحد فقط',
+      material: 'مراعاة الخامة', grain: 'منع تدوير القطع',
+      g: 'الإحصائيات العامة', s: 'إحصائيات الشيت', c: 'القطعات',
+      usedSheets: 'الشيتات المستخدمة', usedArea: 'المساحة المستخدمة', sUsed: 'المساحة المستخدمة', sWaste: 'المساحة الهالكة', wastedArea: 'المساحة الهالكة',
+      totalCuts: 'عدد القطعات', totalLen: 'إجمالي طول القص', kerfRow: 'سُمك الشفرة', prio: 'الأولوية',
+      prioV: 'أقل هالك', unplaced: 'قطع لم تتسع',
+      sheet: 'الشيت', cuts: 'القطعات', cutLen: 'طول القص', panelsN: 'عدد القطع', wastedN: 'قطع الهالك',
+      cNo: '#', cPanel: 'القطعة', cCut: 'القص', cRes: 'الناتج', vert: 'رأسي', horiz: 'أفقي', surplus: 'هالك',
+      sheetOf: function (i, n) { return 'شيت ' + i + ' من ' + n; },
+      sheetTab: function (i) { return 'شيت ' + i; },
+      empty1: 'أضف القطع المطلوبة والشيتات ثم اضغط «احسب».',
+      empty2: 'أضف شيت واحد على الأقل.',
+      none: 'لا توجد نتائج بعد.',
+      hint: 'اسحب القطعة لتحريكها (القطع الصغيرة ممكن تتحط في أركان مربع الدائرة). اضغط عليها للتدوير أو التثبيت.', rot90: 'تدوير 90°', pin: 'تثبيت', unpin: 'إلغاء التثبيت', rearr: 'أعد ترتيب الباقي', chg: 'غيّر التقسيمة', compact: 'ضغط الفوارغ', compacted: 'تم ضغط الفوارغ', alreadyCompact: 'القطع مضغوطة بالفعل.', layoutN: function (i, n) { return 'التقسيمة ' + i + ' / ' + n; }, noAlt: 'لا توجد تقسيمة بديلة لهذه القطع.', hintOne: 'خيار «استخدام شيت واحد فقط» شغال. أوقفه لاستخدام باقي الشيتات.', hintMat: 'خيار «مراعاة الخامة» شغال: القطعة تتحط فقط على شيت من نفس الخامة. راجع عمود الخامة.', hintMore: 'أضف شيتات أكثر (أو زوّد عدد الشيتات).', cantDrop: 'لا يمكن وضعها هنا: تتداخل مع قطعة أخرى أو لا يمكن قصها بقصات مستقيمة. حول الدائرة لازم القطعة تبقى جوه مربع الدائرة نفسها، في ركن.', cantRot: 'لا توجد مساحة للتدوير هنا.', needPin: 'ثبّت قطعة واحدة على الأقل ثم أعد ترتيب الباقي.', rearranged: 'تم تحديث الترتيب', cantPack: 'لا يمكن قص القطع المثبتة بقصات مستقيمة.', pinned: 'مثبتة',
+      gaps: 'استخدام الفراغات حول الدوائر', gapN: 'قطع داخل الفراغات', gapNote: 'القطع ذات الإطار الأحمر المتقطع بتطلع من أركان مربع الدائرة/البيضاوي: اقطع المربع حسب القائمة، وبعدين اقطع الدائرة منه، وبعدين اقطع القطع دي من الأركان اللي فضلت. المكان محسوب من الركن العلوي الشمال للشيت.', shape: 'الشكل', shapeR: 'مستطيل', shapeC: 'دائرة (القطر)', shapeO: 'بيضاوي',
+      copy: 'نسخ قائمة القطع', copied: 'تم النسخ', saved: 'تم الحفظ في المتصفح', copyFail: 'تعذر النسخ',
+      warn: function (n, list) { return n + ' قطعة لا تتسع في الشيتات المتاحة: ' + list + '.'; }, hintBig: 'فيه قطع أكبر من كل الشيتات المتاحة.',
+      zin: 'تكبير', zout: 'تصغير', zfit: 'ملائمة العرض', fup: 'تكبير الخط', fdn: 'تصغير الخط', col: 'الألوان', dim: 'أبعاد الشيت',
+      enable: 'تفعيل / إيقاف', del: 'حذف', rot: 'مُدوَّرة', panel: 'قطعة'
+    },
+    en: {
+      title: 'Cutlist Planner', save: 'Save', sure: 'Tap again to confirm',
+      shapesOpt: 'Show circle and oval',
+      invLabel: 'Search by invoice code', invPh: 'Invoice code', invGo: 'Search', invBusy: 'Searching…', invNone: 'No invoice with this code.', invErr: 'The search failed. Try again.',
+      invTitle: function (c) { return 'Invoice #' + c; }, invPick: 'Choose the product whose sizes you want to bring in:',
+      invPieces: function (n, m) { return n + ' pcs · ' + m + (m === 1 ? ' size' : ' sizes'); },
+      invReady: 'Ready-made items (no sizes, not imported):', invNoCut: 'Every item on this invoice is ready-made, so there are no sizes to bring in.',
+      invReplace: 'Replace current panels', invAppend: 'Add to current panels',
+      invStock: function (t) { return 'Use this product\u2019s sheets (' + t + ')'; },
+      invDo: function (n) { return 'Bring in ' + n + ' pcs and calculate'; }, invCancel: 'Cancel', invDone: function (n) { return n + ' pcs brought in'; },
+      invFrom: function (c, g) { return 'From invoice #' + c + ' · ' + g; }, invClose: 'Close', all: 'All', calc: 'Calculate', example: 'Example', clear: 'Clear all',
+      tIn: 'Inputs', tLay: 'Layout', tRes: 'Results',
+      panels: 'Panels', stock: 'Stock sheets', opts: 'Options',
+      len: 'Length', wid: 'Width', qty: 'Qty', mat: 'Material',
+      kerf: 'Cut / blade / kerf thickness', labels: 'Labels on panels', one: 'Use only one sheet from stock',
+      material: 'Consider material', grain: 'Consider grain direction',
+      g: 'Global statistics', s: 'Sheet statistics', c: 'Cuts',
+      usedSheets: 'Used stock sheets', usedArea: 'Total used area', sUsed: 'Used area', sWaste: 'Wasted area', wastedArea: 'Total wasted area',
+      totalCuts: 'Total cuts', totalLen: 'Total cut length', kerfRow: 'Kerf thickness', prio: 'Optimization priority',
+      prioV: 'Least wasted area', unplaced: 'Unplaced panels',
+      sheet: 'Stock sheet', cuts: 'Cuts', cutLen: 'Cut length', panelsN: 'Panels', wastedN: 'Wasted panels',
+      cNo: '#', cPanel: 'Panel', cCut: 'Cut', cRes: 'Result', vert: 'vertical', horiz: 'horizontal', surplus: 'surplus',
+      sheetOf: function (i, n) { return 'Sheet ' + i + ' of ' + n; },
+      sheetTab: function (i) { return 'Sheet ' + i; },
+      empty1: 'Add panels and stock sheets, then press Calculate.',
+      empty2: 'Add at least one stock sheet.',
+      none: 'No results yet.',
+      hint: 'Drag a panel to move it (small panels can also go into the corners around a circle). Tap a panel to rotate or pin it.', rot90: 'Rotate 90°', pin: 'Pin', unpin: 'Unpin', rearr: 'Re-arrange others', chg: 'Change layout', compact: 'Compact leftovers', compacted: 'Leftovers compacted', alreadyCompact: 'Already compact.', layoutN: function (i, n) { return 'Layout ' + i + ' / ' + n; }, noAlt: 'No other layout for these panels.', hintOne: 'The option \u201cUse only one sheet from stock\u201d is on. Turn it off to use the other sheets.', hintMat: 'The option \u201cConsider material\u201d is on: panels only go on sheets of the same material. Check the Material column.', hintMore: 'Add more stock sheets (or raise their Qty).', cantDrop: 'Can\u2019t drop it there: it overlaps another panel or can\u2019t be cut with straight cuts. Around a circle, a piece must sit fully inside that circle\u2019s square, in a corner.', cantRot: 'No room to rotate it here.', needPin: 'Pin at least one panel first, then re-arrange the rest.', rearranged: 'Layout updated', cantPack: 'The pinned panels can\u2019t be cut with straight cuts.', pinned: 'pinned',
+      gaps: 'Use gaps around circles', gapN: 'Pieces in gaps', gapNote: 'Pieces with a dashed red outline come from the corners of a circle/oval blank. Cut the square blank as listed, cut the circle out of it, then cut these pieces from the leftover corners. Position is from the sheet\u2019s top-left.', shape: 'Shape', shapeR: 'Rectangle', shapeC: 'Circle (diameter)', shapeO: 'Oval',
+      copy: 'Copy cut list', copied: 'Copied', saved: 'Saved in this browser', copyFail: 'Could not copy',
+      warn: function (n, list) { return n + ' panel(s) do not fit on the available stock: ' + list + '.'; }, hintBig: 'Some panels are bigger than every stock sheet.',
+      zin: 'Zoom in', zout: 'Zoom out', zfit: 'Fit width', fup: 'Larger text', fdn: 'Smaller text', col: 'Colours', dim: 'Sheet dimensions',
+      enable: 'Enable / disable', del: 'Remove', rot: 'rotated', panel: 'Panel'
+    }
+  };
+
+  /* ================= CSS (كله تحت .cl عشان ما يتعارضش مع التطبيق) ================= */
+  var CSS = [
+    '.cl{--bg:#eef1f4;--surface:#fff;--side:#f6f7f9;--bar:#1e2830;--bar-fg:#f1f4f6;--hd:#587286;--hd-fg:#fff;--hd2:#dde3e8;--hd2-fg:#3a4650;',
+    '--line:#d6dce1;--stripe:#f1f4f6;--fg:#1c2329;--muted:#66737e;--ok:#2e9b4d;--bad:#d1352b;--dimline:#d9534f;--sheet:#f7f7f8;--sheet-line:#2b333a;',
+    '--freefg:#8fa5b8;--freeline:#c8ced4;--g1:95%;--g2:83%;--btn:#3a4852;--btn-hover:#4a5964;--btn-fg:#fff;--focus:#2f7fc1;--accent:#2f7d4f;',
+    'color-scheme:light;container-type:inline-size;display:block;position:relative;background:var(--bg);color:var(--fg);',
+    'font:13px/1.4 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;-webkit-text-size-adjust:100%;box-sizing:border-box}',
+    '.cl[data-theme="dark"]{--bg:#12171b;--surface:#181e23;--side:#161c20;--bar:#0b0f12;--bar-fg:#e6ebef;--hd:#3f5566;--hd-fg:#eef2f5;--hd2:#232c33;--hd2-fg:#c3ccd3;',
+    '--line:#2b353d;--stripe:#1c2329;--fg:#e3e8ec;--muted:#8d9aa5;--ok:#4cc16d;--bad:#ff6b5f;--dimline:#e0645c;--sheet:#1f272d;--sheet-line:#8d9aa5;--freefg:#8d9aa5;--freeline:#3a4650;--g1:36%;--g2:27%;--btn:#34424d;--btn-hover:#425361;--focus:#5aa9e6;color-scheme:dark}',
+    /* عزل عن تنسيقات تطبيق الفاتورة: أي تنسيق عام عندك (button, table, input, .card…) ما يأثرش هنا */
+    '.cl.cl :where(:not(svg):not(svg *)),.cl.cl :where(:not(svg):not(svg *))::before,.cl.cl :where(:not(svg):not(svg *))::after{all:revert}',
+    '.cl{margin:0;padding:0;border:0;box-shadow:none;text-align:start;line-height:1.4;letter-spacing:normal;text-transform:none}',
+    '.cl.cl *,.cl.cl *::before,.cl.cl *::after{box-sizing:border-box}',
+    '.cl.cl :where(button,input){font:inherit;color:inherit}',
+    '.cl.cl :where(table){font-size:inherit}',
+    '.cl.cl :where(button){-webkit-tap-highlight-color:transparent;touch-action:manipulation}',
+    '.cl.cl :focus-visible{outline:2px solid var(--focus);outline-offset:1px}',
+
+    '.cl .bar{background:var(--bar);color:var(--bar-fg);display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:40px;padding:4px max(12px,env(safe-area-inset-right,0px)) 6px max(12px,env(safe-area-inset-left,0px))}',
+    '.cl .brand{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:500;margin-inline-end:auto}',
+    '.cl .brand svg{width:20px;height:20px}',
+    '.cl .btn{background:var(--btn);color:var(--btn-fg);border:0;border-radius:3px;padding:0 12px;min-height:32px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:500}',
+    '.cl .btn:hover{background:var(--btn-hover)}',
+    '.cl .btn svg{width:12px;height:12px;fill:currentColor}',
+    '.cl .btn.go{background:var(--accent)}',
+    '.cl .btn[data-armed]{background:var(--bad)}',
+
+    '.cl .main{display:grid;grid-template-columns:minmax(0,1fr);align-items:start}',
+    '.cl .left{background:var(--side);border-bottom:1px solid var(--line)}',
+    '.cl .center{padding:10px 12px 18px;min-width:0}',
+    '.cl .right{padding:10px 12px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}',
+    '@container (min-width:720px){.cl .main{grid-template-columns:minmax(280px,380px) minmax(0,1fr)}.cl .left{grid-row:span 2;border-bottom:0;border-inline-end:1px solid var(--line);align-self:stretch}.cl .right{flex-direction:row;flex-wrap:wrap}.cl .right>*{flex:1 1 300px}}',
+    '@container (min-width:1100px){.cl .main{grid-template-columns:minmax(260px,380px) minmax(0,1fr) minmax(280px,400px)}.cl .left{grid-row:auto}.cl .right{flex-direction:column;flex-wrap:nowrap}.cl .right>*{flex:none}}',
+
+    '.cl .sec>.hd2{display:flex;align-items:center;gap:8px;width:100%;background:var(--hd2);color:var(--hd2-fg);border:0;padding:6px 12px;font-weight:600;font-size:13px;text-align:start;cursor:pointer}',
+    '.cl .sec>.hd2 svg.chev{margin-inline-start:auto;width:12px;height:12px;transition:transform .15s}',
+    '.cl .sec.closed>.hd2 svg.chev,.cl .card.closed>.hd svg.chev{transform:rotate(-90deg)}',
+    '.cl .sec.closed>.body,.cl .card.closed>.cb,.cl .card.closed>.chipsrow{display:none}',
+    '.cl .tw{overflow-x:auto}',
+    '.cl table.t{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}',
+    '.cl .t th{text-align:center;font-weight:600;font-size:12px;padding:4px 6px;border-bottom:1px solid var(--line);background:var(--side);white-space:nowrap}',
+    '.cl .t td{padding:0;border:1px solid var(--line);border-top:0}',
+    '.cl .t td:first-child{border-inline-start:0}.cl .t td:last-child{border-inline-end:0}',
+    '.cl .t tr:nth-child(even) td{background:var(--stripe)}',
+    '.cl .t input{width:100%;min-width:40px;height:26px;border:0;background:transparent;padding:0 6px;font-size:13px;text-align:center}',
+    '.cl .t input:focus{background:var(--surface);outline:2px solid var(--focus);outline-offset:-2px}',
+    '.cl .t tr.off input{opacity:.4;text-decoration:line-through}',
+    '.cl .t td.shp{width:30px;text-align:center}',
+    '.cl .ic.shape{color:var(--hd)}',
+    '.cl .t input[readonly]{opacity:.55}',
+    '.cl .t td.act{width:52px;text-align:center;white-space:nowrap}',
+    '.cl .ic{background:none;border:0;cursor:pointer;width:22px;height:22px;padding:0;display:inline-grid;place-items:center;border-radius:4px}',
+    '.cl .ic svg{width:14px;height:14px}',
+    '.cl .ic.ok{color:var(--ok)}.cl .ic.ok.off{color:var(--muted)}.cl .ic.del{color:var(--bad)}',
+
+    '.cl .opts{padding:6px 12px 8px;display:grid;gap:0}',
+    '.cl .opt{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;min-height:28px;font-size:13px}',
+    '.cl .opt label{text-align:end}',
+    '.cl .opt input.k{width:56px;height:24px;border:1px solid var(--line);background:var(--surface);padding:0 8px;border-radius:2px;font-size:14px}',
+    '.cl .sw{position:relative;width:34px;height:19px;display:inline-block}',
+    '.cl .sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1;width:100%;height:100%}',
+    '.cl .sw i{position:absolute;inset:0;border-radius:10px;background:var(--line);transition:background .15s}',
+    '.cl .sw i::after{content:"";position:absolute;inset-inline-start:2px;top:2px;width:15px;height:15px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px #0004;transition:transform .15s}',
+    '.cl .sw input:checked+i{background:var(--ok)}',
+    '.cl .sw input:checked+i::after{transform:translateX(15px)}',
+    '.cl[dir="rtl"] .sw input:checked+i::after{transform:translateX(-15px)}',
+    '.cl .sw input:focus-visible+i{outline:2px solid var(--focus);outline-offset:2px}',
+
+    '.cl .tool{display:flex;gap:2px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:12px}',
+    '.cl .tool button{background:none;border:0;min-width:30px;height:28px;border-radius:3px;cursor:pointer;color:var(--hd);display:inline-grid;place-items:center;font-weight:600}',
+    '.cl .tool button:hover{background:var(--stripe)}',
+    '.cl .tool button.on{background:var(--stripe);box-shadow:inset 0 -2px 0 var(--hd)}',
+    '.cl .tool svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}',
+    '.cl .tool .sp{width:1px;background:var(--line);margin:4px 4px}',
+    '.cl .cv-wrap{direction:ltr;overflow-x:auto;min-width:0}',
+    '.cl .sheetbox{margin-bottom:20px}',
+    '.cl .sheetbox h4{margin:0 0 4px;font-size:13px;font-weight:500;color:var(--muted)}',
+    '.cl svg.cv{display:block;max-width:none}',
+    '.cl svg.cv text{font-family:inherit;font-variant-numeric:tabular-nums}',
+    '.cl svg.cv{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}',
+    '.cl svg.cv g.pn{cursor:grab}.cl svg.cv.dragging g.pn{cursor:grabbing}',
+    '.cl.cl [hidden]{display:none!important}',
+    '.cl .hint{margin:0 0 8px;font-size:12px;color:var(--muted)}',
+    '.cl .selbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:0 0 10px;padding:8px 10px;background:var(--surface);border:1px solid var(--line);border-radius:3px}',
+    '.cl .selbar b{margin-inline-end:auto;font-weight:600}',
+    '.cl .selbar button{min-height:30px;padding:0 10px;font-size:12px;border:1px solid var(--line);background:var(--stripe);border-radius:3px;cursor:pointer;font-weight:500}',
+    '.cl .tool button.txt{width:auto;padding:0 10px;font-size:12px;margin-inline-start:auto;border:1px solid var(--line);gap:6px;display:inline-flex;align-items:center;color:var(--fg)}',
+    '.cl .tool button.txt+button.txt{margin-inline-start:0}',
+    '.cl .empty{padding:50px 10px;text-align:center;color:var(--muted)}',
+    '.cl .notice{margin:0 0 14px;padding:10px 12px;border:1px solid var(--bad);color:var(--bad);border-radius:3px;font-size:13px}',
+
+    '.cl .card{background:var(--surface);border:1px solid var(--line);border-radius:2px}',
+    '.cl .card>.hd{display:flex;align-items:center;gap:8px;width:100%;background:var(--hd);color:var(--hd-fg);border:0;padding:7px 12px;font-size:14px;cursor:pointer;text-align:start}',
+    '.cl .card>.hd .chev{margin-inline-start:auto;width:12px;height:12px;transition:transform .15s}',
+    '.cl .cb{padding:4px 12px 8px;overflow-x:auto}',
+    '.cl table.kv{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}',
+    '.cl .kv th{text-align:start;font-weight:600;padding:3px 6px;white-space:nowrap;padding-inline-end:18px}',
+    '.cl .kv td{padding:3px 6px}',
+    '.cl .kv tr:nth-child(even){background:var(--stripe)}',
+    '.cl .kv small{color:var(--muted);margin:0 6px;font-weight:400;display:inline-block}',
+    '.cl .bad{color:var(--bad)!important}',
+    '.cl .chips{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px 0}',
+    '.cl .chips button{border:1px solid var(--line);background:var(--surface);border-radius:14px;min-height:28px;padding:0 12px;cursor:pointer;font-size:12px}',
+    '.cl .chips button[aria-pressed="true"]{background:var(--hd);color:var(--hd-fg);border-color:var(--hd)}',
+    '.cl table.cuts{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13px}',
+    '.cl .cuts th{text-align:start;padding:5px 6px;border-bottom:1px solid var(--line);font-weight:600}',
+    '.cl .cuts td{padding:3px 6px;white-space:nowrap}',
+    '.cl .cuts tr:nth-child(even) td{background:var(--stripe)}',
+    '.cl .cuts .sur{color:var(--muted)}',
+    '.cl .n{direction:ltr;unicode-bidi:isolate;display:inline-block}',
+    '.cl .copy{margin:0 12px 10px;width:calc(100% - 24px);min-height:32px;border:1px solid var(--line);background:var(--surface);border-radius:3px;cursor:pointer;font-weight:500}',
+    '.cl .toast{position:fixed;left:50%;bottom:calc(var(--nh,0px) + 20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--bar);color:var(--bar-fg);padding:9px 16px;border-radius:4px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50;font-size:13px}',
+    '.cl .toast.show{opacity:1}',
+    '.cl .inv{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));background:var(--hd2);color:var(--hd2-fg);border-bottom:1px solid var(--line)}',
+    '.cl .inv label{font-weight:600;font-size:13px}',
+    '.cl .inv input{flex:1 1 140px;max-width:240px;height:32px;border:1px solid var(--line);border-radius:3px;padding:0 10px;background:var(--surface);color:var(--fg);font-size:14px}',
+    '.cl .inv .btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4}',
+    '.cl .invmsg{font-size:12px;color:var(--muted)}',
+    '.cl .src{display:flex;align-items:center;gap:6px;margin:6px 8px;padding:4px 6px 4px 10px;background:var(--surface);border:1px solid var(--line);border-inline-start:3px solid var(--accent);border-radius:3px;font-size:12px}',
+    '.cl .src span{flex:1;min-width:0}',
+    '.cl .ov{position:fixed;inset:0;z-index:60;background:rgba(15,20,25,.45);display:flex;align-items:center;justify-content:center;padding:16px}',
+    '.cl .dlg{background:var(--surface);color:var(--fg);width:min(560px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;border-radius:6px;box-shadow:0 12px 32px rgba(0,0,0,.3);overflow:hidden}',
+    '.cl .dh{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--hd);color:var(--hd-fg)}',
+    '.cl .dh>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}',
+    '.cl .dh b{font-size:16px}.cl .dh span{font-size:12px;opacity:.85}',
+    '.cl .dh .ic{color:var(--hd-fg)}',
+    '.cl .db{padding:12px 14px;overflow:auto;display:flex;flex-direction:column;gap:10px}',
+    '.cl .dq{margin:0;font-weight:600}',
+    '.cl .grps{display:flex;flex-direction:column;gap:8px}',
+    '.cl .grp{border:1px solid var(--line);border-radius:5px;overflow:hidden}',
+    '.cl .grp.on{border:2px solid var(--accent)}',
+    '.cl .gh{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:0;background:var(--surface);cursor:pointer;text-align:start;min-height:44px}',
+    '.cl .grp.on .gh{background:var(--stripe)}',
+    '.cl .gh .rd{width:16px;height:16px;border-radius:50%;border:2px solid var(--muted);flex:none}',
+    '.cl .grp.on .gh .rd{border:5px solid var(--accent)}',
+    '.cl .gh .gn{flex:1;font-weight:600}.cl .gh .gm{font-size:12px;color:var(--muted);white-space:nowrap}',
+    '.cl .its{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:2px 12px;padding:8px 12px 10px;border-top:1px solid var(--line)}',
+    '.cl .it{display:flex;align-items:center;gap:8px;min-height:30px;cursor:pointer;font-variant-numeric:tabular-nums;white-space:nowrap}',
+    '.cl .it.all{grid-column:1/-1;font-weight:600;border-bottom:1px solid var(--line)}',
+    '.cl .it input{width:16px;height:16px;margin:0;accent-color:var(--accent)}',
+    '.cl .it .iq{color:var(--muted)}.cl .it .shp{font-size:11px;color:var(--hd)}',
+    '.cl .rdy{margin:0;font-size:12px;color:var(--muted)}',
+    '.cl .dopts{display:flex;flex-direction:column;gap:6px;font-size:13px}',
+    '.cl .dopts label{display:flex;align-items:center;gap:8px;cursor:pointer}',
+    '.cl .dopts input{margin:0;accent-color:var(--accent)}',
+    '.cl .df{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--line);background:var(--side)}',
+    '.cl .df .btn{min-height:38px}',
+    '.cl .btn[disabled]{opacity:.5;cursor:default}',
+    '@media (max-width:560px){.cl .ov{padding:0;align-items:flex-end}.cl .dlg{width:100%;max-height:92vh;border-radius:10px 10px 0 0}.cl .df{padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}}',
+    '@media (pointer:coarse){.cl .t input{height:32px;font-size:16px}.cl .ic{width:28px;height:28px}.cl .t td.act{width:62px}.cl .opt input.k{height:28px;font-size:16px}.cl .tool button{min-width:34px;height:32px}}',
+    '@media (prefers-reduced-motion:reduce){.cl *{transition:none!important}}'
+  ].join('\n');
+
+  function injectCss() {
+    if (document.getElementById('cl-widget-css')) return;
+    var st = document.createElement('style');
+    st.id = 'cl-widget-css';
+    st.textContent = CSS;
+    document.head.appendChild(st);
+  }
+
+  /* ================= أدوات ================= */
+  var EPS = 1e-9;
+  // بيقبل الأرقام العربي (٠١٢٣) والفارسي (۰۱۲۳) والفاصلة العشرية العربي (٫) أو العادية (, .)
+  var normNum = function (v) {
+    return String(v == null ? '' : v)
+      .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+      .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); })
+      .replace(/\u066C/g, '').replace(/[\u066B,]/g, '.').trim();
+  };
+  var num = function (v) { var n = parseFloat(normNum(v)); return isFinite(n) && n > 0 ? n : 0; };
+  // العدد: فاضي = 1 ، صفر أو سالب = القطعة مش داخلة في الحساب
+  var qtyOf = function (v) { var t = normNum(v); if (!t) return 1; var n = parseFloat(t); if (!isFinite(n)) return 1; return Math.max(0, Math.floor(n)); };
+  var fmt = function (n) { return String(Math.round(n * 100) / 100); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
+  var isBlank = function (r) { return !String(r.l).trim() && !String(r.w).trim() && !String(r.q).trim(); };
+  var blank = function () { return { l: '', w: '', q: '', on: true, m: '', s: 'r' }; };
+  var dim = function (a, b) { return '<span class="n">' + fmt(a) + '×' + fmt(b) + '</span>'; };
+  var pct = function (a, b) { return b ? Math.round(a / b * 100) : 0; };
+  var now = function () { return (global.performance && performance.now) ? performance.now() : Date.now(); };
+  // وحدة تقريب مناسبة لمقاس الشيت (سم أو مم أو متر): 321 → 1 ، 3210 → 10 ، 3.21 → 0.01
+  var quantum = function (W, H, extra) { var m = Math.max(W, H); if (!(m > 0)) return 1; return Math.pow(10, Math.floor(Math.log(m) / Math.LN10) - 2 - (extra || 0)); };
+  var roundQ = function (v, q) { return Number((Math.round(v / q) * q).toFixed(6)); };
+  var isRoundIt = function (it) { return !!it && (it.s === 'c' || it.s === 'o'); };
+  var strRow = function (r) {
+    var o = { l: r.l == null ? '' : String(r.l), w: r.w == null ? '' : String(r.w), q: r.q == null ? '' : String(r.q), on: r.on !== false, m: r.m ? String(r.m) : '', s: (r.s === 'c' || r.s === 'o') ? r.s : 'r' };
+    if (o.s === 'c') o.w = o.l;
+    if (!o.q.trim() && num(o.l) && num(o.w)) o.q = '1';
+    return o;
+  };
+  var EXAMPLE = function () {
+    return {
+      panels: [{ l: '50', w: '100', q: '2', on: true, m: '' }, { l: '25', w: '50', q: '6', on: true, m: '' }],
+      stock: [{ l: '225', w: '321', q: '1', on: true, m: '' }],
+      opts: { kerf: '0', labels: false, one: false, material: false, grain: false, gaps: true, shapes: false }
+    };
+  };
+
+  var ICON_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="17" height="17" rx="3"/><path d="M8 12l3.5 3.5L21 6"/></svg>';
+  var ICON_DEL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+  /* ================= الحل (قص مستقيم guillotine) ================= */
+  function solve(S) {
+    var k = Math.max(0, parseFloat(normNum(S.opts.kerf)) || 0);
+    var items = [], stock = [];
+    S.panels.forEach(function (r, ri) {
+      if (!r.on) return;
+      var shp = S.opts.shapes && (r.s === 'c' || r.s === 'o') ? r.s : 'r';
+      var l = num(r.l), w = shp === 'c' ? num(r.l) : num(r.w); if (!l || !w) return;
+      var q = qtyOf(r.q);
+      for (var j = 0; j < q; j++) items.push({ w: l, h: w, ri: ri, s: shp, m: S.opts.material ? String(r.m).trim() : '' });
+    });
+    S.stock.forEach(function (r, ri) {
+      if (!r.on) return; var l = num(r.l), w = num(r.w); if (!l || !w) return;
+      var q = qtyOf(r.q);
+      for (var j = 0; j < q; j++) stock.push({ W: w, H: l, ri: ri, m: S.opts.material ? String(r.m).trim() : '' });
+    });
+    if (!items.length || !stock.length) return { sheets: [], unplaced: items, k: k, nItems: items.length, nStock: stock.length };
+    var best = bestPack(S, items, stock, k, null);
+    best.k = k; best.nItems = items.length; best.nStock = stock.length; best.stock = stock; best.items = items;
+    finalize(best);
+    return best;
+  }
+  function bestPack(S, items, stock, k, makeInitial, collect) {
+    var sorts = {
+      area: function (a, b) { return b.w * b.h - a.w * a.h; },
+      side: function (a, b) { return Math.max(b.w, b.h) - Math.max(a.w, a.h) || b.w * b.h - a.w * a.h; },
+      w: function (a, b) { return b.w - a.w || b.h - a.h; },
+      h: function (a, b) { return b.h - a.h || b.w - a.w; }
+    };
+    var best = null;
+    Object.keys(sorts).forEach(function (sn) {
+      ['SAS', 'LAS', 'H', 'V'].forEach(function (rule) {
+        var list = items.map(function (it, n) { return Object.assign({ n: n }, it); }).sort(sorts[sn]);
+        var res = pack(S, list, stock, rule, k, makeInitial ? makeInitial() : null);
+        var waste = res.sheets.reduce(function (a, s) { return a + s.W * s.H; }, 0);
+        var freeCount = res.sheets.reduce(function (a, s) { return a + s.free.length; }, 0);
+        var cutCount = res.sheets.reduce(function (a, s) { return a + s.cuts.length; }, 0);
+        var score = [res.unplaced.length, waste, res.sheets.length, freeCount, cutCount];
+        res.score = score;
+        if (collect) collect.push(res);
+        if (!best || cmp(score, best.score) < 0) { best = res; }
+      });
+    });
+    if (collect) {
+      var seed = 12345, rnd = function () { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+      var rules = ['SAS', 'LAS', 'H', 'V'];
+      for (var t = 0; t < 40; t++) {
+        var lst = items.map(function (it, n) { var o = Object.assign({ n: n }, it); o.key = o.w * o.h * (1 + (rnd() - .5) * .9); return o; })
+          .sort(function (a, b) { return b.key - a.key; });
+        var r2 = pack(S, lst, stock, rules[Math.floor(rnd() * 4)], k, makeInitial ? makeInitial() : null);
+        r2.score = [r2.unplaced.length, r2.sheets.reduce(function (a, x) { return a + x.W * x.H; }, 0), r2.sheets.length,
+          r2.sheets.reduce(function (a, x) { return a + x.free.length; }, 0), r2.sheets.reduce(function (a, x) { return a + x.cuts.length; }, 0)];
+        collect.push(r2);
+      }
+    }
+    return best;
+  }
+  function cmp(a, b) { for (var i = 0; i < a.length; i++) { if (a[i] !== b[i]) return a[i] - b[i]; } return 0; }
+
+  function pack(S, list, stock, rule, k, initial) {
+    var open = initial || [], used = stock.map(function () { return false; }), unplaced = [];
+    open.forEach(function (sh) { if (sh.si != null) used[sh.si] = true; });
+    var orients = function (it) { return S.opts.grain ? [[it.w, it.h, false]] : [[it.w, it.h, false], [it.h, it.w, true]]; };
+    function find(sheets, it) {
+      var b = null;
+      sheets.forEach(function (sh) {
+        if (S.opts.material && sh.m && it.m && sh.m !== it.m) return;
+        sh.free.forEach(function (f, fi) {
+          orients(it).forEach(function (o) {
+            var pw = o[0], ph = o[1];
+            if (pw <= f.w + EPS && ph <= f.h + EPS) {
+              var s = f.w * f.h - pw * ph, t = Math.min(f.w - pw, f.h - ph);
+              if (!b || s < b.s - EPS || (Math.abs(s - b.s) <= EPS && t < b.t)) b = { sh: sh, fi: fi, pw: pw, ph: ph, rot: o[2], s: s, t: t };
+            }
+          });
+        });
+      });
+      return b;
+    }
+    list.forEach(function (it) {
+      var b = find(open, it);
+      if (!b) {
+        if (S.opts.one && open.length >= 1) { unplaced.push(it); return; }
+        var found = -1;
+        for (var j = 0; j < stock.length && found < 0; j++) {
+          if (used[j]) continue; var st = stock[j];
+          if (S.opts.material && st.m && it.m && st.m !== it.m) continue;
+          if (orients(it).some(function (o) { return o[0] <= st.W + EPS && o[1] <= st.H + EPS; })) found = j;
+        }
+        if (found < 0) { unplaced.push(it); return; }
+        used[found] = true; var s0 = stock[found];
+        var sh = { W: s0.W, H: s0.H, m: s0.m, ri: s0.ri, si: found, k: k, free: [{ x: 0, y: 0, w: s0.W, h: s0.H }], placed: [], cuts: [] };
+        open.push(sh); b = find([sh], it);
+      }
+      place(b.sh, b.fi, it, b.pw, b.ph, b.rot, rule, k);
+    });
+    return { sheets: open, unplaced: unplaced };
+  }
+  function place(sh, fi, it, pw, ph, rot, rule, k) {
+    var f = sh.free[fi]; sh.free.splice(fi, 1);
+    var dw = f.w - pw, dh = f.h - ph;
+    var horiz = rule === 'H' ? true : rule === 'V' ? false : rule === 'LAS' ? dw >= dh : dw < dh;
+    if (dh <= EPS) horiz = false; else if (dw <= EPS) horiz = true;
+    var mk = function (x, y, w, h) { return (w > EPS && h > EPS) ? { x: x, y: y, w: w, h: h } : null; };
+    sh.placed.push({ x: f.x, y: f.y, w: pw, h: ph, it: it, rot: rot });
+    var A, B;
+    if (horiz) {
+      if (dh > EPS) { A = { x: f.x, y: f.y, w: f.w, h: ph }; B = mk(f.x, f.y + ph + k, f.w, dh - k); sh.cuts.push({ rw: f.w, rh: f.h, axis: 'y', pos: ph, len: f.w, A: A, B: B }); if (B) sh.free.push(B); }
+      if (dw > EPS) { A = { x: f.x, y: f.y, w: pw, h: ph }; B = mk(f.x + pw + k, f.y, dw - k, ph); sh.cuts.push({ rw: f.w, rh: ph, axis: 'x', pos: pw, len: ph, A: A, B: B }); if (B) sh.free.push(B); }
+    } else {
+      if (dw > EPS) { A = { x: f.x, y: f.y, w: pw, h: f.h }; B = mk(f.x + pw + k, f.y, dw - k, f.h); sh.cuts.push({ rw: f.w, rh: f.h, axis: 'x', pos: pw, len: f.h, A: A, B: B }); if (B) sh.free.push(B); }
+      if (dh > EPS) { A = { x: f.x, y: f.y, w: pw, h: ph }; B = mk(f.x, f.y + ph + k, pw, dh - k); sh.cuts.push({ rw: pw, rh: f.h, axis: 'y', pos: ph, len: pw, A: A, B: B }); if (B) sh.free.push(B); }
+    }
+  }
+  function finalize(res) {
+    var same = function (a, b) { return a && Math.abs(a.x - b.x) < 1e-6 && Math.abs(a.y - b.y) < 1e-6 && Math.abs(a.w - b.w) < 1e-6 && Math.abs(a.h - b.h) < 1e-6; };
+    res.sheets.forEach(function (sh) {
+      var lab = function (p) {
+        if (!p) return { t: '-', s: false, w: 0, h: 0 };
+        if (sh.placed.some(function (q) { return same(p, q); })) return { t: 'p', s: false, w: p.w, h: p.h };
+        if (sh.free.some(function (q) { return same(p, q); })) return { t: 's', s: true, w: p.w, h: p.h };
+        return { t: '-', s: false, w: 0, h: 0 };
+      };
+      sh.cuts.forEach(function (c) { c.la = lab(c.A); c.lb = lab(c.B); });
+      sh.used = sh.placed.reduce(function (a, p) { var ell = p.it && (p.it.s === 'c' || p.it.s === 'o'); return a + (ell ? Math.PI / 4 : 1) * p.w * p.h; }, 0);
+      sh.waste = sh.W * sh.H - sh.used;
+      sh.cutLen = sh.cuts.reduce(function (a, c) { return a + c.len; }, 0);
+    });
+  }
+
+  /* استنتاج قصات مستقيمة (guillotine) من أماكن القطع الحالية — بتتستخدم بعد التحريك اليدوي */
+  function derive(sh, k) {
+    var cuts = [], free = [], ok = true;
+    var close = function (a, b) { return Math.abs(a.x - b.x) < 1e-6 && Math.abs(a.y - b.y) < 1e-6 && Math.abs(a.w - b.w) < 1e-6 && Math.abs(a.h - b.h) < 1e-6; };
+    // كل قصة بتشيل شريحة [s,e] عرضها سُمك الشفرة (أو أقل لو جنب حافة القطعة)
+    function rec(r, ps) {
+      if (!ps.length) { free.push(r); return; }
+      if (ps.length === 1 && close(ps[0], r)) return;
+      var best = null;
+      ['x', 'y'].forEach(function (ax) {
+        var len = ax === 'x' ? 'w' : 'h', r0 = r[ax], r1 = r[ax] + r[len], cands = [];
+        ps.forEach(function (p) {
+          cands.push([p[ax] + p[len], Math.min(p[ax] + p[len] + k, r1), p[ax] + p[len]]);   // قصة على يمين/تحت القطعة
+          cands.push([Math.max(p[ax] - k, r0), p[ax], p[ax]]);                               // قصة على شمال/فوق القطعة
+        });
+        cands.forEach(function (cd) {
+          var s0 = cd[0], e0 = cd[1];
+          if (s0 >= r1 - EPS || e0 <= r0 + EPS) return;                 // القصة لازم تبقى جوه القطعة
+          if (s0 <= r0 + EPS && e0 >= r1 - EPS) return;
+          var A = [], B = [], bad = false;
+          ps.forEach(function (p) {
+            if (p[ax] + p[len] <= s0 + EPS) A.push(p); else if (p[ax] >= e0 - EPS) B.push(p); else bad = true;
+          });
+          if (bad) return;
+          var aw = s0 - r0, bw = r1 - e0;
+          var trim = !(A.length && B.length);
+          var ea = trim ? (A.length ? Math.max(0, bw) : Math.max(0, aw)) * (ax === 'x' ? r.h : r.w) : 0;
+          var sc = trim ? 0 : 1;
+          if (!best || sc < best.sc || (sc === best.sc && trim && ea > best.ea + EPS)) best = { ax: ax, s: s0, e: e0, pos: cd[2], A: A, B: B, sc: sc, ea: ea, aw: aw, bw: bw };
+        });
+      });
+      if (!best) { ok = false; return; }
+      var Ar = null, Br = null;
+      if (best.ax === 'x') {
+        if (best.aw > EPS) Ar = { x: r.x, y: r.y, w: best.aw, h: r.h };
+        if (best.bw > EPS) Br = { x: best.e, y: r.y, w: best.bw, h: r.h };
+        cuts.push({ rw: r.w, rh: r.h, axis: 'x', pos: best.pos - r.x, len: r.h, A: Ar, B: Br });
+      } else {
+        if (best.aw > EPS) Ar = { x: r.x, y: r.y, w: r.w, h: best.aw };
+        if (best.bw > EPS) Br = { x: r.x, y: best.e, w: r.w, h: best.bw };
+        cuts.push({ rw: r.w, rh: r.h, axis: 'y', pos: best.pos - r.y, len: r.w, A: Ar, B: Br });
+      }
+      if (Ar) rec(Ar, best.A); else if (best.A.length) { ok = false; return; }
+      if (Br) rec(Br, best.B); else if (best.B.length) { ok = false; return; }
+    }
+    rec({ x: 0, y: 0, w: sh.W, h: sh.H }, sh.placed.filter(function (p) { return !p.free; }));
+    sh.cuts = ok ? cuts : []; sh.free = ok ? free : []; sh.ok = ok; sh.k = k;
+    return ok;
+  }
+  function repack(S, R) {
+    var k = R.k, items = [], bad = false;
+    R.sheets.forEach(function (sh) { sh.placed.forEach(function (p) { if (!p.locked || p.free) items.push(p.it); }); });
+    items = items.concat(R.unplaced);
+    var make = function () {
+      var out = [];
+      R.sheets.forEach(function (sh) {
+        var pins = sh.placed.filter(function (p) { return p.locked && !p.free; });
+        if (!pins.length) return;
+        var t = { W: sh.W, H: sh.H, m: sh.m, ri: sh.ri, si: sh.si, placed: pins.map(function (p) { return Object.assign({}, p); }), free: [], cuts: [] };
+        if (!derive(t, k)) bad = true;
+        t.cuts = [];
+        out.push(t);
+      });
+      return out;
+    };
+    make(); if (bad) return null;
+    var best = bestPack(S, items, R.stock, k, make);
+    best.sheets.forEach(function (sh) { derive(sh, k); });
+    best.sheets = best.sheets.filter(function (sh) { return sh.placed.length; });
+    best.k = k; best.nItems = R.nItems; best.nStock = R.nStock; best.stock = R.stock; best.items = R.items;
+    finalize(best);
+    return best;
+  }
+
+  /* ملء الفراغات حول الدوائر/البيضاوي بقطع مستطيلة (خارج القصات المستقيمة) */
+  function ellOverlap(rx, ry, rw, rh, e, k) {
+    var cx = e.x + e.w / 2, cy = e.y + e.h / 2, a = e.w / 2 + k, b = e.h / 2 + k;
+    var u0 = (rx - cx) / a, u1 = (rx + rw - cx) / a, v0 = (ry - cy) / b, v1 = (ry + rh - cy) / b;
+    var u = Math.max(u0, Math.min(0, u1)), v = Math.max(v0, Math.min(0, v1));
+    return u * u + v * v < 1 - 1e-9;
+  }
+  function pieceClash(x, y, w, h, q, k) {
+    var sh = q.it && q.it.s;
+    if (sh === 'c' || sh === 'o') return ellOverlap(x, y, w, h, q, k);
+    return x < q.x + q.w + k - EPS && q.x < x + w + k - EPS && y < q.y + q.h + k - EPS && q.y < y + h + k - EPS;
+  }
+  function hasRound(R) { return R.sheets.some(function (sh) { return sh.placed.some(function (p) { return isRoundIt(p.it); }); }); }
+  // هل القطعة المستطيلة (x,y,w,h) ممكن تطلع من ركن مربع دائرة/بيضاوي؟
+  // لازم تبقى جوه مربع دائرة واحدة بالكامل (عشان القصات المستقيمة ما تقطعهاش)، وبره الدائرة نفسها.
+  function gapSpotOk(sh, others, x, y, w, h, k) {
+    if (x < -EPS || y < -EPS || x + w > sh.W + EPS || y + h > sh.H + EPS) return false;
+    var host = null;
+    for (var i = 0; i < others.length; i++) {
+      var q = others[i];
+      if (!q.free && isRoundIt(q.it) && x >= q.x - EPS && y >= q.y - EPS && x + w <= q.x + q.w + EPS && y + h <= q.y + q.h + EPS) { host = q; break; }
+    }
+    if (!host) return false;
+    for (var j = 0; j < others.length; j++) { if (pieceClash(x, y, w, h, others[j], k)) return false; }
+    return true;
+  }
+  function gapFill(S, R) {
+    if (!R || !R.sheets.length || !hasRound(R)) return;
+    var k = R.k, t0 = now(), BUDGET = 1200, out = false, ticks = 0;
+    function tryPlace(sh, it, fails) {
+      if (out || isRoundIt(it)) return null;
+      if (S.opts.material && sh.m && it.m && sh.m !== it.m) return null;
+      var rot = !S.opts.grain;
+      var a0 = rot ? Math.min(it.w, it.h) : it.w, b0 = rot ? Math.max(it.w, it.h) : it.h;
+      for (var f = 0; f < fails.length; f++) { if (a0 >= fails[f][0] - EPS && b0 >= fails[f][1] - EPS) return null; }
+      var os = rot ? [[it.w, it.h, false], [it.h, it.w, true]] : [[it.w, it.h, false]];
+      var q3 = quantum(sh.W, sh.H, 1), st = Math.max(q3, roundQ(Math.max(sh.W, sh.H) / 250, q3));
+      var rounds = sh.placed.filter(function (q) { return isRoundIt(q.it); });
+      for (var oi = 0; oi < os.length; oi++) {
+        var w = os[oi][0], h = os[oi][1];
+        if (w > sh.W + EPS || h > sh.H + EPS) continue;
+        for (var ri = 0; ri < rounds.length; ri++) {
+          var rb = rounds[ri];
+          if (w > rb.w + EPS || h > rb.h + EPS) continue;
+          var x0 = rb.x, x1 = rb.x + rb.w - w, y0 = rb.y, y1 = rb.y + rb.h - h;
+          // الأركان الأربعة الأول، وبعدين باقي الأماكن
+          var corners = [[x0, y0], [x1, y0], [x0, y1], [x1, y1]];
+          for (var cI = 0; cI < 4; cI++) {
+            if (gapSpotOk(sh, sh.placed, corners[cI][0], corners[cI][1], w, h, k)) return { x: corners[cI][0], y: corners[cI][1], w: w, h: h, it: it, rot: os[oi][2], free: true };
+          }
+          for (var y = y0; y <= y1 + EPS; y += st) {
+            for (var x = x0; x <= x1 + EPS; x += st) {
+              if ((++ticks & 255) === 0 && now() - t0 > BUDGET) { out = true; return null; }
+              var xr = Math.max(x0, Math.min(x1, roundQ(x, q3))), yr = Math.max(y0, Math.min(y1, roundQ(y, q3)));
+              if (gapSpotOk(sh, sh.placed, xr, yr, w, h, k)) return { x: xr, y: yr, w: w, h: h, it: it, rot: os[oi][2], free: true };
+            }
+          }
+        }
+      }
+      fails.push([a0, b0]);
+      return null;
+    }
+    var changed = false;
+    // 1) القطع اللي ملقتش مكان (الأكبر الأول)
+    var still = [], fails = R.sheets.map(function () { return []; });
+    R.unplaced.slice().sort(function (a, b) { return b.w * b.h - a.w * a.h; }).forEach(function (it) {
+      var put = null;
+      for (var i = 0; i < R.sheets.length && !put; i++) { put = tryPlace(R.sheets[i], it, fails[i]); if (put) R.sheets[i].placed.push(put); }
+      if (put) changed = true; else still.push(it);
+    });
+    R.unplaced = still;
+    // 2) نقل قطع آخر شيت لفراغات الشيتات اللي قبله، ولو نجحت كلها يتشال الشيت
+    var guard = 0;
+    while (R.sheets.length > 1 && guard++ < 4 && !out) {
+      var last = R.sheets[R.sheets.length - 1], added = [], ok = true, f2 = R.sheets.map(function () { return []; });
+      last.placed.slice().sort(function (a, b) { return b.w * b.h - a.w * a.h; }).forEach(function (p) {
+        if (!ok) return;
+        var put = null;
+        for (var i = 0; i < R.sheets.length - 1 && !put; i++) { put = tryPlace(R.sheets[i], p.it, f2[i]); if (put) { R.sheets[i].placed.push(put); added.push([R.sheets[i], put]); } }
+        if (!put) ok = false;
+      });
+      if (ok) { R.sheets.pop(); changed = true; }
+      else { added.forEach(function (a) { a[0].placed.splice(a[0].placed.indexOf(a[1]), 1); }); break; }
+    }
+    if (changed) { R.sheets.forEach(function (sh) { derive(sh, k); }); finalize(R); }
+  }
+
+  /* ================= الـ widget ================= */
+  function mount(el, options) {
+    options = options || {};
+    injectCss();
+    var lang = options.lang === 'en' ? 'en' : 'ar';
+    var L = T[lang];
+    var storageKey = options.storageKey === undefined ? 'cutlist-widget-v1' : options.storageKey;
+    var S = EXAMPLE();
+    var view = { zoom: 1, font: 11, color: true, dims: true, sheet: 0, tab: 'in', sel: null };
+    var R = null;
+    var geo = { s: 1, ml: 0, mt: 0 };
+    var drag = null;
+
+    if (storageKey) {
+      try {
+        var raw = localStorage.getItem(storageKey);
+        if (raw) {
+          var o = JSON.parse(raw);
+          if (o && Array.isArray(o.panels) && Array.isArray(o.stock) && o.opts && typeof o.opts === 'object') {
+            S = { panels: o.panels.map(strRow), stock: o.stock.map(strRow), opts: Object.assign(EXAMPLE().opts, o.opts), src: o.src || null };
+            S.opts.kerf = String(S.opts.kerf == null ? '0' : S.opts.kerf);
+            // بيانات قديمة فيها دواير ومفيهاش الخيار → نسيبه ظاهر
+            if (o.opts.shapes === undefined) S.opts.shapes = S.panels.some(function (r) { return r.s === 'c' || r.s === 'o'; });
+          }
+        }
+      } catch (e) {}
+    }
+    if (S.opts.gaps === undefined) S.opts.gaps = true;
+    if (options.state) applyState(options.state);
+
+    el.innerHTML = '';
+    var root = document.createElement('div');
+    root.className = 'cl';
+    root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    if (options.theme === 'light' || options.theme === 'dark') root.setAttribute('data-theme', options.theme);
+    var CHEV = '<svg class="chev" viewBox="0 0 12 12"><path d="M1 3l5 6 5-6z" fill="currentColor"/></svg>';
+    root.innerHTML =
+      '<header class="bar"><div class="brand"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z"/></svg><span>' + L.title + '</span></div>' +
+        '<button class="btn go" data-a="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg>' + L.calc + '</button>' +
+        '<button class="btn" data-a="save">' + L.save + '</button>' +
+        '<button class="btn" data-a="example">' + L.example + '</button>' +
+        '<button class="btn" data-a="clear">' + L.clear + '</button></header>' +
+      (options.findInvoice ? '<form class="inv" role="search" data-r="invf"><label for="clinv' + uid + '">' + L.invLabel + '</label>' +
+        '<input id="clinv' + uid + '" data-r="invq" type="search" placeholder="' + L.invPh + '" autocomplete="off" enterkeyhint="search">' +
+        '<button class="btn" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>' + L.invGo + '</button>' +
+        '<span class="invmsg" data-r="invmsg" role="status">' + (options.searchHint ? esc(options.searchHint) : '') + '</span></form>' : '') +
+      '<div class="main">' +
+      '<aside class="left">' +
+        '<section class="sec"><button class="hd2"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h4v14H3zM9 5h12v6H9zM9 13h12v6H9z"/></svg>' + L.panels + CHEV + '</button><div class="body"><div data-r="src"></div><div class="tw"><table class="t" data-t="panels"><thead></thead><tbody></tbody></table></div></div></section>' +
+        '<section class="sec"><button class="hd2"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l10 5-10 5L2 7zM2 12l10 5 10-5-2-1-8 4-8-4zM2 16l10 5 10-5-2-1-8 4-8-4z"/></svg>' + L.stock + CHEV + '</button><div class="body tw"><table class="t" data-t="stock"><thead></thead><tbody></tbody></table></div></section>' +
+        '<section class="sec"><button class="hd2"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 13a7.6 7.6 0 000-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 00-1.7-1L15 3h-4l-.4 2.9a7.4 7.4 0 00-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 000 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 001.7 1L11 21h4l.4-2.9a7.4 7.4 0 001.7-1l2.5 1 2-3.5zM13 15.5A3.5 3.5 0 1113 8.5a3.5 3.5 0 010 7z"/></svg>' + L.opts + CHEV + '</button><div class="body opts">' +
+          '<div class="opt"><label for="clk' + uid + '">' + L.kerf + '</label><input class="k" id="clk' + uid + '" data-o="kerf" inputmode="decimal"></div>' +
+          opt('labels', L.labels) + opt('one', L.one) + opt('material', L.material) + opt('grain', L.grain) + opt('shapes', L.shapesOpt) + opt('gaps', L.gaps) +
+        '</div></section>' +
+      '</aside>' +
+      '<main class="center">' +
+        '<div class="tool" role="toolbar">' +
+          '<button data-a="zin" title="' + L.zin + '" aria-label="' + L.zin + '"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M15 15l6 6M10 7v6M7 10h6"/></svg></button>' +
+          '<button data-a="zout" title="' + L.zout + '" aria-label="' + L.zout + '"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M15 15l6 6M7 10h6"/></svg></button>' +
+          '<button data-a="zfit" title="' + L.zfit + '" aria-label="' + L.zfit + '"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>' +
+          '<span class="sp"></span>' +
+          '<button data-a="fup" title="' + L.fup + '" aria-label="' + L.fup + '"><span style="font-size:17px">A</span><span style="font-size:11px">A</span></button>' +
+          '<button data-a="fdn" title="' + L.fdn + '" aria-label="' + L.fdn + '"><span style="font-size:13px">A</span><span style="font-size:9px">A</span></button>' +
+          '<span class="sp"></span>' +
+          '<button data-a="tcol" class="on" title="' + L.col + '" aria-label="' + L.col + '"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18c1.5 0 2-1 1.4-2-.6-1 0-2.2 1.3-2.2H17a4 4 0 004-4c0-5-4-9.8-9-9.8z"/></svg></button>' +
+          '<button data-a="tdim" class="on" title="' + L.dim + '" aria-label="' + L.dim + '"><svg viewBox="0 0 24 24"><path d="M3 8h18v8H3zM7 8v4M11 8v3M15 8v4M19 8v3"/></svg></button>' +
+        '<button class="txt" data-a="compact">' + L.compact + '</button><button class="txt" data-a="chg">' + L.chg + '</button><button class="txt" data-a="rearr">' + L.rearr + '</button></div>' +
+        '<p class="hint">' + L.hint + '</p><div class="selbar" data-r="selbar" hidden></div>' +
+        '<div data-r="notice"></div><div class="cv-wrap" data-r="canvas"></div>' +
+      '</main>' +
+      '<aside class="right">' +
+        '<section class="card"><button class="hd">' + L.g + CHEV + '</button><div class="cb" data-r="g"></div></section>' +
+        '<section class="card"><button class="hd">' + L.s + CHEV + '</button><div class="chipsrow" data-r="chips1"></div><div class="cb" data-r="s"></div></section>' +
+        '<section class="card"><button class="hd">' + L.c + CHEV + '</button><div class="chipsrow" data-r="chips2"></div><div class="cb" data-r="c"></div><button class="copy" data-a="copy">' + L.copy + '</button></section>' +
+      '</aside>' +
+      '</div><div class="toast" role="status"></div>';
+    el.appendChild(root);
+
+    function opt(key, label) {
+      var id = 'clo' + key + uid;
+      return '<div class="opt" data-row="' + key + '"><label for="' + id + '">' + label + '</label><span class="sw"><input type="checkbox" id="' + id + '" data-o="' + key + '"><i></i></span></div>';
+    }
+    var $ = function (s) { return root.querySelector(s); };
+    var $$ = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+    var rr = function (n) { return root.querySelector('[data-r="' + n + '"]'); };
+
+    /* ---- state ---- */
+    function normalize(kind) {
+      var a = S[kind], min = kind === 'panels' ? 3 : 2;
+      while (a.length && isBlank(a[a.length - 1])) a.pop();
+      var target = Math.max(min, a.length + 1); while (a.length < target) a.push(blank());
+    }
+    function applyState(st) {
+      if (st.panels) S.panels = st.panels.map(strRow);
+      if (st.stock) S.stock = st.stock.map(strRow);
+      if (st.opts) { for (var k in st.opts) if (k in S.opts) S.opts[k] = (k === 'kerf') ? String(st.opts[k]) : !!st.opts[k]; }
+      if (st.src !== undefined) S.src = st.src;
+    }
+    function persist() {
+      var clean = JSON.parse(JSON.stringify(S));
+      if (storageKey) { try { localStorage.setItem(storageKey, JSON.stringify(clean)); } catch (e) {} }
+      if (options.onChange) { try { options.onChange(clean); } catch (e) {} }
+    }
+
+    /* ---- tables ---- */
+    var SHAPE_ICON = {
+      r: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6.5" width="16" height="11" rx="1"/></svg>',
+      c: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg>',
+      o: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="12" rx="9.5" ry="6"/></svg>'
+    };
+    function shapeName(k) { return k === 'c' ? L.shapeC : k === 'o' ? L.shapeO : L.shapeR; }
+    function actHtml(r) {
+      return isBlank(r) ? '' : '<button class="ic ok' + (r.on ? '' : ' off') + '" data-a="tog" title="' + L.enable + '" aria-label="' + L.enable + '">' + ICON_OK + '</button><button class="ic del" data-a="del" title="' + L.del + '" aria-label="' + L.del + '">' + ICON_DEL + '</button>';
+    }
+    function rowHtml(r, i, kind) {
+      var mat = S.opts.material;
+      return '<tr class="' + (r.on ? '' : 'off') + '" data-i="' + i + '">' +
+        '<td><input data-k="l" inputmode="decimal" aria-label="' + L.len + '" value="' + esc(r.l) + '"></td>' +
+        '<td><input data-k="w" inputmode="decimal" aria-label="' + L.wid + '" value="' + esc(r.w) + '"' + (S.opts.shapes && r.s === 'c' ? ' readonly' : '') + '></td>' +
+        '<td><input data-k="q" inputmode="numeric" aria-label="' + L.qty + '" value="' + esc(r.q) + '"></td>' +
+        (mat ? '<td><input data-k="m" aria-label="' + L.mat + '" value="' + esc(r.m) + '"></td>' : '') +
+        (kind === 'panels' && S.opts.shapes ? '<td class="shp"><button class="ic shape" data-a="shape" title="' + L.shape + ': ' + shapeName(r.s) + '" aria-label="' + L.shape + ': ' + shapeName(r.s) + '">' + SHAPE_ICON[r.s || 'r'] + '</button></td>' : '') +
+        '<td class="act">' + actHtml(r) + '</td></tr>';
+    }
+    function renderTable(kind) {
+      var tb = $('[data-t="' + kind + '"]');
+      tb.querySelector('thead').innerHTML = '<tr><th>' + L.len + '</th><th>' + L.wid + '</th><th>' + L.qty + '</th>' + (S.opts.material ? '<th>' + L.mat + '</th>' : '') + (kind === 'panels' && S.opts.shapes ? '<th></th>' : '') + '<th></th></tr>';
+      tb.querySelector('tbody').innerHTML = S[kind].map(function (r, i) { return rowHtml(r, i, kind); }).join('');
+    }
+    function renderAllInputs() {
+      normalize('panels'); normalize('stock');
+      $('[data-o="kerf"]').value = S.opts.kerf;
+      ['labels', 'one', 'material', 'grain', 'shapes', 'gaps'].forEach(function (k) { $('[data-o="' + k + '"]').checked = !!S.opts[k]; });
+      $('[data-row="gaps"]').hidden = !S.opts.shapes;
+      renderSrc();
+      renderTable('panels'); renderTable('stock');
+    }
+
+    /* ---- rendering ---- */
+    var HUES = [320, 5, 205, 150, 35, 265];
+    function hueFor(it) { return HUES[it.ri % HUES.length]; }
+    var gid = uid;
+    function unplacedNotice() {
+      var m = {}; R.unplaced.forEach(function (u) { var k = '<span class="n">' + fmt(u.w) + '×' + fmt(u.h) + '</span>'; m[k] = (m[k] || 0) + 1; });
+      var stock = R.stock || [];
+      var tooBig = R.unplaced.some(function (u) {
+        return !stock.some(function (st) { return (u.w <= st.W + EPS && u.h <= st.H + EPS) || (!S.opts.grain && u.h <= st.W + EPS && u.w <= st.H + EPS); });
+      });
+      return '<p class="notice">' + L.warn(R.unplaced.length, Object.keys(m).map(function (k) { return k + ' ×' + m[k]; }).join(lang === 'ar' ? '، ' : ', ')) + ' ' + (tooBig ? L.hintBig : S.opts.one ? L.hintOne : S.opts.material ? L.hintMat : L.hintMore) + '</p>';
+    }
+    function draw() {
+      var cv = rr('canvas'), nt = rr('notice');
+      nt.innerHTML = R && R.unplaced.length ? unplacedNotice() : '';
+      if (!R || !R.sheets.length) {
+        view.sel = null; rr('selbar').hidden = true;
+        cv.innerHTML = '<div class="empty" style="direction:' + (lang === 'ar' ? 'rtl' : 'ltr') + '">' + (R && R.nItems > 0 && R.nStock === 0 ? L.empty2 : L.empty1) + '</div>';
+        return;
+      }
+      var maxW = Math.max.apply(null, R.sheets.map(function (s) { return s.W; }));
+      var ml = 4, mr = view.dims ? 46 : 4, mt = 6, mb = view.dims ? 40 : 6;
+      var avail = Math.max(200, cv.clientWidth - 18 - ml - mr);
+      var s = Math.min(avail / maxW, 8) * view.zoom, fs = view.font, html = '';
+      geo = { s: s, ml: ml, mt: mt };
+      R.sheets.forEach(function (sh, si) {
+        var W = sh.W * s, H = sh.H * s, tw = ml + W + mr, th = mt + H + mb, g = '', usedHues = {};
+        g += '<rect x="' + ml + '" y="' + mt + '" width="' + W + '" height="' + H + '" fill="var(--sheet)" style="filter:drop-shadow(2px 2px 2px rgba(0,0,0,.35))"/>';
+        sh.free.forEach(function (f) {
+          var x = ml + f.x * s, y = mt + f.y * s, w = f.w * s, h = f.h * s;
+          g += '<g fill="var(--freefg)" font-size="' + fs + '"><title>' + L.surplus + ' ' + fmt(f.w) + '×' + fmt(f.h) + '</title><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="none" stroke="var(--freeline)" stroke-width="1.2"/>';
+          var ftf = w > fs * String(fmt(f.w)).length * .6 + 8, flf = h > fs * String(fmt(f.h)).length * .6 + 10;
+          var fTop = ftf && (h > fs * 2.2 || !flf);
+          if (fTop) g += '<text x="' + (x + w / 2) + '" y="' + (y + fs + 3) + '" text-anchor="middle">' + fmt(f.w) + '</text>';
+          if (flf && w > fs * 2.2 && (!fTop || h > fs * 2 + 12 + fs * String(fmt(f.h)).length * .6)) g += '<text transform="translate(' + (x + fs + 3) + ' ' + (y + h / 2) + ') rotate(-90)" text-anchor="middle">' + fmt(f.h) + '</text>';
+          else if (flf && !fTop) g += '<text transform="translate(' + (x + w / 2 + fs / 3) + ' ' + (y + h / 2) + ') rotate(-90)" text-anchor="middle">' + fmt(f.h) + '</text>';
+          g += '</g>';
+        });
+        sh.placed.forEach(function (p, pi) {
+          var x = ml + p.x * s, y = mt + p.y * s, w = p.w * s, h = p.h * s;
+          var hu = hueFor(p.it); usedHues[hu] = 1;
+          var fill = view.color ? 'url(#clg' + gid + '-' + hu + ')' : 'var(--stripe)';
+          var shp = p.it && p.it.s, nonRect = shp === 'c' || shp === 'o';
+          var isSel = view.sel && view.sel.si === si && view.sel.pi === pi;
+          var stroke = isSel ? 'stroke="var(--focus)" stroke-width="3"' : p.free ? 'stroke="var(--dimline)" stroke-width="1.6" stroke-dasharray="4 2"' : p.locked ? 'stroke="var(--hd)" stroke-width="2"' : 'stroke="var(--sheet-line)" stroke-width="1"';
+          g += '<g class="pn" data-si="' + si + '" data-pi="' + pi + '" style="touch-action:none"><title>' + L.panel + ' ' + fmt(p.w) + '×' + fmt(p.h) + (p.rot ? ' (' + L.rot + ')' : '') + (nonRect ? ' · ' + (shp === 'c' ? L.shapeC : L.shapeO) : '') + (p.locked ? ' · ' + L.pinned : '') + '</title>' +
+            '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + fill + '"' + (nonRect ? ' fill-opacity=".28"' : '') + ' ' + stroke + '/>' +
+            (nonRect ? '<ellipse cx="' + (x + w / 2) + '" cy="' + (y + h / 2) + '" rx="' + (w / 2) + '" ry="' + (h / 2) + '" fill="' + fill + '" stroke="var(--sheet-line)" stroke-width="1.2"/>' : '') +
+            '<g fill="var(--fg)" font-size="' + fs + '">';
+          var tfit = w > fs * String(fmt(p.w)).length * .6 + 8, lfit = h > fs * String(fmt(p.h)).length * .6 + 10;
+          var pTop = tfit && (h > fs * 2.2 || !lfit);
+          if (pTop) g += '<text x="' + (x + w / 2) + '" y="' + (y + fs + 3) + '" text-anchor="middle">' + fmt(p.w) + '</text>';
+          if (lfit && w > fs * 2.2 && (!pTop || h > fs * 2 + 12 + fs * String(fmt(p.h)).length * .6)) g += '<text transform="translate(' + (x + fs + 3) + ' ' + (y + h / 2) + ') rotate(-90)" text-anchor="middle">' + fmt(p.h) + '</text>';
+          else if (lfit && !pTop) g += '<text transform="translate(' + (x + w / 2 + fs / 3) + ' ' + (y + h / 2) + ') rotate(-90)" text-anchor="middle">' + fmt(p.h) + '</text>';
+          if (S.opts.labels && w > fs * 3 && h > fs * 2.2) g += '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 + fs / 3) + '" text-anchor="middle" font-weight="700" opacity=".75">#' + (pi + 1) + '</text>';
+          g += '</g>';
+          if (p.locked && w > 30 && h > 30) g += '<path transform="translate(' + (x + w - 15) + ' ' + (y + h - 16) + ')" d="M3 7V5a3 3 0 016 0v2h1v6H2V7zM4.5 7h3V5a1.5 1.5 0 00-3 0z" fill="var(--fg)" opacity=".75"/>';
+          g += '</g>';
+        });
+        g += '<rect x="' + ml + '" y="' + mt + '" width="' + W + '" height="' + H + '" fill="none" stroke="var(--sheet-line)" stroke-width="2" pointer-events="none"/>';
+        if (view.dims) {
+          var rx = ml + W + 14, by = mt + H + 14;
+          g += '<g stroke="var(--dimline)" fill="var(--dimline)" font-size="' + (fs + 1) + '">' +
+            '<path d="M' + rx + ' ' + mt + 'V' + (mt + H) + 'M' + (rx - 4) + ' ' + mt + 'h8M' + (rx - 4) + ' ' + (mt + H) + 'h8" fill="none"/>' +
+            '<text stroke="none" transform="translate(' + (rx + 15) + ' ' + (mt + H / 2) + ') rotate(-90)" text-anchor="middle">' + fmt(sh.H) + '</text>' +
+            '<path d="M' + ml + ' ' + by + 'H' + (ml + W) + 'M' + ml + ' ' + (by - 4) + 'v8M' + (ml + W) + ' ' + (by - 4) + 'v8" fill="none"/>' +
+            '<text stroke="none" x="' + (ml + W / 2) + '" y="' + (by + 18) + '" text-anchor="middle">' + fmt(sh.W) + '</text></g>';
+        }
+        html += '<div class="sheetbox">' +
+          (R.sheets.length > 1 ? '<h4 style="direction:' + (lang === 'ar' ? 'rtl' : 'ltr') + '">' + L.sheetOf(si + 1, R.sheets.length) + ' · ' + fmt(sh.H) + '×' + fmt(sh.W) + '</h4>' : '') +
+          '<svg class="cv" width="' + tw + '" height="' + th + '" viewBox="0 0 ' + tw + ' ' + th + '" role="img" aria-label="' + L.sheetTab(si + 1) + '"><defs>' + Object.keys(usedHues).map(function (h) {
+            return '<linearGradient id="clg' + gid + '-' + h + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:hsl(' + h + ' 22% var(--g1))"/><stop offset="1" style="stop-color:hsl(' + h + ' 30% var(--g2))"/></linearGradient>';
+          }).join('') + '</defs>' + g + '</svg></div>';
+      });
+      cv.innerHTML = html;
+      renderSel();
+    }
+    function renderSel() {
+      var bar = rr('selbar'), p = selPanel();
+      if (!p) { view.sel = null; bar.hidden = true; bar.innerHTML = ''; return; }
+      bar.hidden = false;
+      bar.innerHTML = '<b>' + L.panel + ' ' + fmt(p.w) + '×' + fmt(p.h) + (p.free ? ' · ' + L.gapN : '') + '</b><button data-a="rot">' + L.rot90 + '</button>' + (p.free ? '' : '<button data-a="pin">' + (p.locked ? L.unpin : L.pin) + '</button>');
+    }
+    function selPanel() {
+      if (!R || !view.sel) return null;
+      var sh = R.sheets[view.sel.si]; return sh ? sh.placed[view.sel.pi] || null : null;
+    }
+    function cutText(c) {
+      var lab = function (l) { return l.t === 'p' ? fmt(l.w) + '×' + fmt(l.h) : l.t === 's' ? L.surplus + ' ' + fmt(l.w) + '×' + fmt(l.h) : '-'; };
+      return { a: lab(c.la), b: lab(c.lb) };
+    }
+    function stats() {
+      var g = rr('g'), s = rr('s'), c = rr('c'), c1 = rr('chips1'), c2 = rr('chips2');
+      if (!R || !R.sheets.length) { g.innerHTML = s.innerHTML = c.innerHTML = '<div class="empty" style="padding:18px 0">' + L.none + '</div>'; c1.innerHTML = c2.innerHTML = ''; return; }
+      var tot = R.sheets.reduce(function (a, x) { return a + x.W * x.H; }, 0), used = R.sheets.reduce(function (a, x) { return a + x.used; }, 0);
+      var cuts = R.sheets.reduce(function (a, x) { return a + x.cuts.length; }, 0), len = R.sheets.reduce(function (a, x) { return a + x.cutLen; }, 0);
+      var grp = {}; R.sheets.forEach(function (x) { var k = fmt(x.H) + '×' + fmt(x.W); grp[k] = (grp[k] || 0) + 1; });
+      var row = function (a, b, sm, cls) { return '<tr><th' + (cls ? ' class="' + cls + '"' : '') + '>' + a + '</th><td' + (cls ? ' class="' + cls + '"' : '') + '>' + (sm ? '<span class="n">' + b + '</span><small class="n">' + sm + '</small>' : b) + '</td></tr>'; };
+      g.innerHTML = '<table class="kv">' +
+        row(L.usedSheets, Object.keys(grp).map(function (k) { return '<span class="n">' + k + '</span> <small>×' + grp[k] + '</small>'; }).join('، ')) +
+        row(L.usedArea, fmt(Math.round(used)), pct(used, tot) + '%') + row(L.wastedArea, fmt(Math.round(tot - used)), pct(tot - used, tot) + '%') +
+        row(L.totalCuts, cuts) + row(L.totalLen, fmt(len)) + row(L.kerfRow, fmt(R.k)) + row(L.prio, L.prioV) +
+        (R.unplaced.length ? row(L.unplaced, R.unplaced.length, '', 'bad') : '') + '</table>';
+      if (view.sheet >= R.sheets.length) view.sheet = 0;
+      var sh = R.sheets[view.sheet];
+      var chips = R.sheets.length > 1 ? '<div class="chips">' + R.sheets.map(function (_, i) { return '<button data-s="' + i + '" aria-pressed="' + (i === view.sheet) + '">' + L.sheetTab(i + 1) + '</button>'; }).join('') + '</div>' : '';
+      c1.innerHTML = chips; c2.innerHTML = chips;
+      s.innerHTML = '<table class="kv">' + row(L.sheet, dim(sh.H, sh.W)) +
+        row(L.sUsed, fmt(Math.round(sh.used)), pct(sh.used, sh.W * sh.H) + '%') + row(L.sWaste, fmt(Math.round(sh.waste)), pct(sh.waste, sh.W * sh.H) + '%') +
+        row(L.cuts, sh.cuts.length) + row(L.cutLen, fmt(sh.cutLen)) + row(L.panelsN, sh.placed.length) + row(L.wastedN, sh.free.length) + (gapCount(sh) ? row(L.gapN, gapCount(sh)) : '') + '</table>';
+      c.innerHTML = '<table class="cuts"><thead><tr><th>' + L.cNo + '</th><th>' + L.cPanel + '</th><th>' + L.cCut + '</th><th>' + L.cRes + '</th></tr></thead><tbody>' +
+        sh.cuts.map(function (x, i) {
+          var piece = function (l) { return l.t === 'p' ? dim(l.w, l.h) : l.t === 's' ? '<span class="sur">' + L.surplus + ' ' + dim(l.w, l.h) + '</span>' : '-'; };
+          return '<tr><td>' + (i + 1) + '</td><td>' + dim(x.rw, x.rh) + '</td><td>' + (lang === 'en' ? x.axis + '=' : (x.axis === 'x' ? L.vert : L.horiz) + ' ') + '<span class="n">' + fmt(x.pos) + '</span></td>' +
+            '<td class="res">' + piece(x.la) + (lang === 'en' ? ' \\ ' : '<br>') + piece(x.lb) + '</td></tr>';
+        }).join('') + '</tbody></table>' + (gapCount(sh) ? '<p style="margin:8px 0 0;font-size:12px;color:var(--muted)">' + L.gapNote + '<br>' + sh.placed.filter(function (p) { return p.free; }).map(function (p) { return '<span class="n">' + fmt(p.w) + '×' + fmt(p.h) + '</span> (' + fmt(p.x) + ', ' + fmt(p.y) + ')'; }).join(' · ') + '</p>' : '');
+    }
+    function gapCount(sh) { return sh.placed.filter(function (p) { return p.free; }).length; }
+    function summaryText() {
+      if (!R || !R.sheets.length) return '';
+      var out = [];
+      R.sheets.forEach(function (sh, si) {
+        out.push(L.sheetOf(si + 1, R.sheets.length) + ' ' + fmt(sh.H) + '×' + fmt(sh.W));
+        sh.cuts.forEach(function (c, i) {
+          var t = cutText(c);
+          out.push((i + 1) + ') ' + fmt(c.rw) + '×' + fmt(c.rh) + ' — ' + (c.axis === 'x' ? L.vert : L.horiz) + ' ' + fmt(c.pos) + ' → ' + t.a + ' | ' + t.b);
+        });
+        var gp = sh.placed.filter(function (p) { return p.free; });
+        if (gp.length) out.push(L.gapN + ': ' + gp.map(function (p) { return fmt(p.w) + '×' + fmt(p.h) + ' (' + fmt(p.x) + ', ' + fmt(p.y) + ')'; }).join(' · '));
+        out.push('');
+      });
+      if (R.unplaced.length) out.push(L.unplaced + ': ' + R.unplaced.map(function (u) { return fmt(u.w) + '×' + fmt(u.h); }).join(', '));
+      return out.join('\n');
+    }
+    function toast(t) {
+      var e = $('.toast'); e.textContent = t; e.classList.add('show');
+      clearTimeout(toast.t); toast.t = setTimeout(function () { e.classList.remove('show'); }, 1800);
+    }
+    function calculate() {
+      var filled = false;
+      ['panels', 'stock'].forEach(function (kind) {
+        S[kind].forEach(function (r) { if (!String(r.q).trim() && num(r.l) && num(r.w)) { r.q = '1'; filled = true; } });
+      });
+      if (filled) { renderTable('panels'); renderTable('stock'); persist(); }
+      R = solve(S); if (S.opts.gaps && S.opts.shapes) gapFill(S, R); view.sheet = 0; view.sel = null; draw(); stats();
+      if (options.onResult) { try { options.onResult(getResult()); } catch (e) {} }
+      return R;
+    }
+    function getResult() {
+      if (!R) return null;
+      var tot = R.sheets.reduce(function (a, x) { return a + x.W * x.H; }, 0), used = R.sheets.reduce(function (a, x) { return a + x.used; }, 0);
+      return {
+        sheetsUsed: R.sheets.length, totalArea: tot, usedArea: used, wastedArea: tot - used, wastePercent: pct(tot - used, tot),
+        unplaced: R.unplaced.map(function (u) { return { length: u.w, width: u.h }; }),
+        sheets: R.sheets.map(function (sh) {
+          return {
+            length: sh.H, width: sh.W,
+            panels: sh.placed.map(function (p) { return { x: p.x, y: p.y, w: p.w, h: p.h, rotated: p.rot, inGap: !!p.free, shape: p.it && p.it.s === 'c' ? 'circle' : p.it && p.it.s === 'o' ? 'oval' : 'rect' }; }),
+            cuts: sh.cuts.map(function (c) { return { axis: c.axis, position: c.pos, length: c.len, piece: { w: c.rw, h: c.rh }, a: c.la && c.la.t === 'p' ? { w: c.la.w, h: c.la.h } : null, b: c.lb && c.lb.t === 'p' ? { w: c.lb.w, h: c.lb.h } : null }; }),
+            leftovers: sh.free.map(function (f) { return { x: f.x, y: f.y, w: f.w, h: f.h }; })
+          };
+        }),
+        summary: summaryText()
+      };
+    }
+
+    /* ---- events ---- */
+    root.addEventListener('input', function (e) {
+      var inp = e.target.closest('input'); if (!inp) return;
+      if (inp.dataset.o === 'kerf') { S.opts.kerf = inp.value; persist(); return; }
+      if (!inp.dataset.k) return;
+      var tbl = inp.closest('table'), kind = tbl.dataset.t, tr = inp.closest('tr'), i = +tr.dataset.i, r = S[kind][i];
+      r[inp.dataset.k] = inp.value;
+      if (S.opts.shapes && r.s === 'c' && inp.dataset.k === 'l') { r.w = r.l; tr.querySelector('input[data-k="w"]').value = r.l; }
+      if ((inp.dataset.k === 'l' || inp.dataset.k === 'w') && !String(r.q).trim() && num(r.l) && num(r.w)) {
+        r.q = '1'; tr.querySelector('input[data-k="q"]').value = '1';
+      }
+      tr.querySelector('.act').innerHTML = actHtml(r);
+      var a = S[kind], trail = 0;
+      for (var j = a.length - 1; j >= 0 && isBlank(a[j]); j--) trail++;
+      var body = tbl.querySelector('tbody');
+      while (trail < 1) { a.push(blank()); body.insertAdjacentHTML('beforeend', rowHtml(a[a.length - 1], a.length - 1, kind)); trail++; }
+      persist();
+    });
+    root.addEventListener('focusin', function (e) {
+      var inp = e.target; if (inp && inp.matches && inp.matches('.t input[data-k="q"]')) { try { inp.select(); } catch (x) {} }
+    });
+    root.addEventListener('change', function (e) {
+      var inp = e.target.closest('input[type="checkbox"][data-o]'); if (!inp) return;
+      S.opts[inp.dataset.o] = inp.checked;
+      if (inp.dataset.o === 'material') { renderTable('panels'); renderTable('stock'); }
+      if (inp.dataset.o === 'shapes') { renderTable('panels'); $('[data-row="gaps"]').hidden = !S.opts.shapes; persist(); calculate(); return; }
+      if (inp.dataset.o === 'labels' && R) draw();
+      persist();
+    });
+    root.addEventListener('click', function (e) {
+      var hd = e.target.closest('.hd2, .card>.hd');
+      if (hd) { hd.parentElement.classList.toggle('closed'); return; }
+      var ch = e.target.closest('.chips button');
+      if (ch) { view.sheet = +ch.dataset.s; stats(); return; }
+      var b = e.target.closest('button[data-a]'); if (!b) return;
+      var a = b.dataset.a;
+      if (a === 'shape') {
+        var kd = b.closest('table').dataset.t, ix = +b.closest('tr').dataset.i, rw = S[kd][ix];
+        rw.s = rw.s === 'c' ? 'o' : rw.s === 'o' ? 'r' : 'c';
+        if (rw.s === 'c') rw.w = rw.l;
+        renderTable(kd); persist(); return;
+      }
+      if (a === 'tog' || a === 'del') {
+        var kind = b.closest('table').dataset.t, i = +b.closest('tr').dataset.i;
+        if (a === 'tog') S[kind][i].on = !S[kind][i].on; else S[kind].splice(i, 1);
+        normalize(kind); renderTable(kind); persist(); return;
+      }
+      if (a === 'calc') { calculate(); if (root.offsetWidth < 720) { try { root.querySelector('.center').scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (x) {} } return; }
+      if (a === 'save') { persist(); toast(L.saved); return; }
+      if (a === 'example' || a === 'clear') {
+        // ضغطة أولى = تأكيد، التانية خلال 3 ثواني = تنفيذ (عشان ما تتمسحش البيانات بالغلط)
+        if (b.getAttribute('data-armed') !== '1') {
+          b.setAttribute('data-armed', '1'); b.textContent = L.sure;
+          clearTimeout(b._t); b._t = setTimeout(function () { b.removeAttribute('data-armed'); b.textContent = a === 'clear' ? L.clear : L.example; }, 3000);
+          return;
+        }
+        clearTimeout(b._t); b.removeAttribute('data-armed'); b.textContent = a === 'clear' ? L.clear : L.example;
+        if (a === 'example') { S = EXAMPLE(); renderAllInputs(); persist(); calculate(); }
+        else { S.panels = []; S.stock = []; S.src = null; renderAllInputs(); R = null; draw(); stats(); persist(); }
+        return;
+      }
+      if (a === 'rot') { rotateSel(); return; }
+      if (a === 'pin') { pinSel(); return; }
+      if (a === 'rearr') { rearrange(); return; }
+      if (a === 'chg') { changeLayout(); return; }
+      if (a === 'compact') { compactAll(); return; }
+      if (a === 'zin') { view.zoom = Math.min(4, view.zoom * 1.25); draw(); return; }
+      if (a === 'zout') { view.zoom = Math.max(.4, view.zoom / 1.25); draw(); return; }
+      if (a === 'zfit') { view.zoom = 1; draw(); return; }
+      if (a === 'fup') { view.font = Math.min(24, view.font + 1); draw(); return; }
+      if (a === 'fdn') { view.font = Math.max(7, view.font - 1); draw(); return; }
+      if (a === 'tcol') { view.color = !view.color; b.classList.toggle('on', view.color); draw(); return; }
+      if (a === 'tdim') { view.dims = !view.dims; b.classList.toggle('on', view.dims); draw(); return; }
+      if (a === 'copy') {
+        var txt = summaryText(); if (!txt) return;
+        var ok = function () { toast(L.copied); };
+        var fallback = function () {
+          try {
+            var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            var done = document.execCommand && document.execCommand('copy');
+            document.body.removeChild(ta); toast(done ? L.copied : L.copyFail);
+          } catch (x) { toast(L.copyFail); }
+        };
+        try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback(); } catch (x) { fallback(); }
+      }
+    });
+    /* ---- ربط الفاتورة ---- */
+    var dlg = null;
+    function renderSrc() {
+      var box = rr('src'); if (!box) return;
+      box.innerHTML = S.src && S.src.code ? '<div class="src"><span>' + esc(L.invFrom(S.src.code, S.src.name || '')) + '</span><button class="ic del" data-a="srcx" title="' + L.invClose + '" aria-label="' + L.invClose + '">' + ICON_DEL + '</button></div>' : '';
+    }
+    function groupInvoice(inv) {
+      var map = {}, order = [], ready = [];
+      (inv && inv.items || []).forEach(function (it) {
+        if (!it) return;
+        var name = String(it.group || it.name || it.type || '—');
+        var sh = it.s || it.shape; sh = (sh === 'c' || sh === 'circle') ? 'c' : (sh === 'o' || sh === 'oval') ? 'o' : 'r';
+        var l = num(it.l != null ? it.l : it.length), w = num(it.w != null ? it.w : it.width);
+        if (sh === 'c' && l && !w) w = l;
+        var q = qtyOf(it.q != null ? it.q : it.qty);
+        if (!l || !w) { ready.push({ name: String(it.name || name), q: q || 1 }); return; }
+        if (!q) return;
+        if (!map[name]) { map[name] = { name: name, items: [], idx: {} }; order.push(map[name]); }
+        var key = l + 'x' + w + sh, g = map[name];
+        if (g.idx[key] != null) g.items[g.idx[key]].q += q;
+        else { g.idx[key] = g.items.length; g.items.push({ l: l, w: w, q: q, s: sh, sel: true }); }
+      });
+      order.forEach(function (g) { g.pcs = g.items.reduce(function (a, it) { return a + it.q; }, 0); });
+      order.sort(function (a, b) { return b.pcs - a.pcs; });
+      return { groups: order, ready: ready };
+    }
+    function stockForGroup(g) {
+      if (!g || !options.stockFor) return null;
+      try { var st = options.stockFor(g.name); return Array.isArray(st) && st.length ? st : null; } catch (e) { return null; }
+    }
+    function openInvoice(inv) {
+      var gr = groupInvoice(inv);
+      dlg = { inv: inv || {}, groups: gr.groups, ready: gr.ready, gi: 0, mode: 'replace', useStock: true };
+      dlg.stock = stockForGroup(dlg.groups[0]);
+      renderDlg();
+      var f = root.querySelector('.ov .gh, .ov .btn'); if (f) { try { f.focus(); } catch (x) {} }
+    }
+    function closeDlg() { dlg = null; renderDlg(); var q = rr('invq'); if (q) { try { q.focus(); } catch (x) {} } }
+    function dlgCount() {
+      var g = dlg && dlg.groups[dlg.gi]; if (!g) return 0;
+      return g.items.reduce(function (a, it) { return a + (it.sel ? it.q : 0); }, 0);
+    }
+    function renderDlg() {
+      var ov = root.querySelector('.ov');
+      if (!dlg) { if (ov) ov.parentNode.removeChild(ov); return; }
+      if (!ov) { ov = document.createElement('div'); ov.className = 'ov'; root.appendChild(ov); }
+      var inv = dlg.inv, g = dlg.groups[dlg.gi], code = inv.code == null ? '' : String(inv.code);
+      var sub = [inv.customer, inv.date].filter(function (x) { return x; }).map(esc).join(' · ');
+      var h = '<div class="dlg" role="dialog" aria-modal="true" aria-label="' + esc(L.invTitle(code)) + '">' +
+        '<div class="dh"><div><b>' + esc(L.invTitle(code)) + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</div>' +
+        '<button class="ic x" data-a="dlgx" title="' + L.invClose + '" aria-label="' + L.invClose + '">' + ICON_DEL + '</button></div><div class="db">';
+      if (!dlg.groups.length) h += '<p class="dq">' + L.invNoCut + '</p>';
+      else {
+        h += '<p class="dq">' + L.invPick + '</p><div class="grps">';
+        dlg.groups.forEach(function (gr, i) {
+          var on = i === dlg.gi;
+          h += '<div class="grp' + (on ? ' on' : '') + '"><button class="gh" data-a="dlgg" data-g="' + i + '" aria-pressed="' + on + '"><i class="rd"></i><span class="gn">' + esc(gr.name) + '</span><span class="gm">' + L.invPieces(gr.pcs, gr.items.length) + '</span></button>';
+          if (on) {
+            var allSel = gr.items.every(function (it) { return it.sel; });
+            h += '<div class="its">' + (gr.items.length > 1 ? '<label class="it all"><input type="checkbox" data-dlg="all"' + (allSel ? ' checked' : '') + '>' + L.all + '</label>' : '');
+            gr.items.forEach(function (it, j) {
+              h += '<label class="it"><input type="checkbox" data-dlg="it" data-j="' + j + '"' + (it.sel ? ' checked' : '') + '><span class="n">' + fmt(it.l) + ' × ' + fmt(it.w) + '</span><span class="iq">×' + it.q + '</span>' + (it.s !== 'r' ? '<span class="shp">' + shapeName(it.s) + '</span>' : '') + '</label>';
+            });
+            h += '</div>';
+          }
+          h += '</div>';
+        });
+        h += '</div>';
+      }
+      if (dlg.ready.length) h += '<p class="rdy">' + L.invReady + ' ' + dlg.ready.map(function (r) { return esc(r.name) + ' ×' + r.q; }).join(lang === 'ar' ? '، ' : ', ') + '</p>';
+      if (g) {
+        var hasRows = S.panels.some(function (r) { return !isBlank(r); }), nm = 'clmode' + gid;
+        h += '<div class="dopts">';
+        if (hasRows) h += '<label><input type="radio" name="' + nm + '" data-dlg="mode" value="replace"' + (dlg.mode === 'replace' ? ' checked' : '') + '>' + L.invReplace + '</label>' +
+          '<label><input type="radio" name="' + nm + '" data-dlg="mode" value="append"' + (dlg.mode === 'append' ? ' checked' : '') + '>' + L.invAppend + '</label>';
+        if (dlg.stock) h += '<label><input type="checkbox" data-dlg="stock"' + (dlg.useStock ? ' checked' : '') + '>' + esc(L.invStock(dlg.stock.map(function (x) { return fmt(num(x.l)) + '×' + fmt(num(x.w)) + (x.q ? ' ×' + x.q : ''); }).join(lang === 'ar' ? '، ' : ', '))) + '</label>';
+        h += '</div>';
+      }
+      var n = dlgCount();
+      h += '</div><div class="df">' + (g ? '<button class="btn go" data-a="dlgok"' + (n ? '' : ' disabled') + '>' + L.invDo(n) + '</button>' : '') +
+        '<button class="btn" data-a="dlgx">' + (g ? L.invCancel : L.invClose) + '</button></div></div>';
+      ov.innerHTML = h;
+    }
+    function importDlg() {
+      var g = dlg && dlg.groups[dlg.gi]; if (!g) return;
+      var items = g.items.filter(function (it) { return it.sel; }); if (!items.length) return;
+      var rows = items.map(function (it) { return { l: String(it.l), w: String(it.w), q: String(it.q), on: true, m: g.name, s: it.s }; });
+      if (items.some(function (it) { return it.s !== 'r'; })) S.opts.shapes = true;
+      var keep = dlg.mode === 'append' ? S.panels.filter(function (r) { return !isBlank(r); }) : [];
+      S.panels = keep.concat(rows);
+      if (dlg.useStock && dlg.stock) S.stock = dlg.stock.map(function (x) { return strRow({ l: x.l, w: x.w, q: x.q == null ? '' : x.q }); });
+      S.src = { code: String(dlg.inv.code == null ? '' : dlg.inv.code), name: g.name };
+      var n = dlgCount();
+      dlg = null; renderDlg(); renderAllInputs(); persist(); calculate(); toast(L.invDone(n));
+      if (root.offsetWidth < 720) { try { root.querySelector('.center').scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (x) {} }
+    }
+    function doSearch() {
+      var inp = rr('invq'), msg = rr('invmsg'); if (!inp || !options.findInvoice) return;
+      var code = normNum(inp.value); if (!code) { inp.focus(); return; }
+      msg.textContent = L.invBusy; msg.className = 'invmsg';
+      var done = function (inv) {
+        if (!inv) { msg.textContent = L.invNone; msg.className = 'invmsg bad'; return; }
+        msg.textContent = ''; if (inv.code == null) inv.code = code; openInvoice(inv);
+      };
+      var fail = function () { msg.textContent = L.invErr; msg.className = 'invmsg bad'; };
+      try { var r = options.findInvoice(code); if (r && typeof r.then === 'function') r.then(done, fail); else done(r); } catch (e) { fail(); }
+    }
+    root.addEventListener('submit', function (e) { if (e.target.matches && e.target.matches('[data-r="invf"]')) { e.preventDefault(); doSearch(); } });
+    root.addEventListener('keydown', function (e) { if (dlg && (e.key === 'Escape' || e.key === 'Esc')) { e.preventDefault(); closeDlg(); } });
+    root.addEventListener('change', function (e) {
+      var t = e.target; if (!dlg || !t.dataset || !t.dataset.dlg) return;
+      var g = dlg.groups[dlg.gi];
+      if (t.dataset.dlg === 'it') g.items[+t.dataset.j].sel = t.checked;
+      else if (t.dataset.dlg === 'all') g.items.forEach(function (it) { it.sel = t.checked; });
+      else if (t.dataset.dlg === 'mode') dlg.mode = t.value;
+      else if (t.dataset.dlg === 'stock') dlg.useStock = t.checked;
+      renderDlg();
+      var sel = '.ov [data-dlg="' + t.dataset.dlg + '"]' + (t.dataset.j != null ? '[data-j="' + t.dataset.j + '"]' : '') + (t.type === 'radio' ? '[value="' + t.value + '"]' : '');
+      var again = root.querySelector(sel); if (again) { try { again.focus(); } catch (x) {} }
+    });
+    root.addEventListener('click', function (e) {
+      if (dlg && e.target.classList && e.target.classList.contains('ov')) { closeDlg(); return; }
+      var b = e.target.closest && e.target.closest('button[data-a]'); if (!b) return;
+      var a = b.dataset.a;
+      if (a === 'dlgx') closeDlg();
+      else if (a === 'dlgok') importDlg();
+      else if (a === 'dlgg') { dlg.gi = +b.dataset.g; dlg.stock = stockForGroup(dlg.groups[dlg.gi]); renderDlg(); var f = root.querySelector('.ov .grp.on .gh'); if (f) { try { f.focus(); } catch (x) {} } }
+      else if (a === 'srcx') { S.src = null; renderSrc(); persist(); }
+    });
+    function notify() { if (options.onResult) { try { options.onResult(getResult()); } catch (e) {} } }
+    function fits(sh, others, x, y, w, h) {
+      var k = R.k;
+      if (w > sh.W + EPS || h > sh.H + EPS || x < -EPS || y < -EPS || x + w > sh.W + EPS || y + h > sh.H + EPS) return false;
+      for (var i = 0; i < others.length; i++) {
+        var q = others[i];
+        if (x < q.x + q.w + k - EPS && q.x < x + w + k - EPS && y < q.y + q.h + k - EPS && q.y < y + h + k - EPS) return false;
+      }
+      return derive({ W: sh.W, H: sh.H, placed: others.filter(function (q) { return !q.free; }).concat([{ x: x, y: y, w: w, h: h }]) }, k);
+    }
+    function snap(sh, others, x, y, w, h) {
+      var th = 10 / geo.s, k = R.k, cx = [0, sh.W - w], cy = [0, sh.H - h];
+      others.forEach(function (q) {
+        cx.push(q.x + q.w + k, q.x - w - k, q.x, q.x + q.w - w);
+        cy.push(q.y + q.h + k, q.y - h - k, q.y, q.y + q.h - h);
+      });
+      var bx = x, by = y, dx = th, dy = th;
+      var gx = false, gy = false;
+      cx.forEach(function (c) { var d = Math.abs(c - x); if (d < dx) { dx = d; bx = c; gx = true; } });
+      cy.forEach(function (c) { var d = Math.abs(c - y); if (d < dy) { dy = d; by = c; gy = true; } });
+      var qq = quantum(sh.W, sh.H);
+      if (!gx) bx = roundQ(x, qq); if (!gy) by = roundQ(y, qq);
+      return { x: Math.max(0, Math.min(sh.W - w, bx)), y: Math.max(0, Math.min(sh.H - h, by)) };
+    }
+    function clearGhost() {
+      $$('svg.cv rect.ghost').forEach(function (r) { r.parentNode.removeChild(r); });
+    }
+    root.addEventListener('pointerdown', function (e) {
+      var g = e.target.closest && e.target.closest('g.pn');
+      if (!g || !R || (e.button && e.button > 0)) return;
+      var si = +g.dataset.si, pi = +g.dataset.pi, p = R.sheets[si].placed[pi];
+      var rect = g.ownerSVGElement.getBoundingClientRect();
+      drag = { si: si, pi: pi, p: p, g: g, sx: e.clientX, sy: e.clientY, moved: false, ti: -1, x: 0, y: 0, ok: false,
+        offX: (e.clientX - rect.left - geo.ml) / geo.s - p.x, offY: (e.clientY - rect.top - geo.mt) / geo.s - p.y };
+      try { g.setPointerCapture(e.pointerId); } catch (x) {}
+      e.preventDefault();
+    });
+    // على الموبايل: اللمسة اللي بتبدأ على قطعة ما تعملش scroll للصفحة، عشان السحب يشتغل
+    // (اللمسة على أي مكان تاني بتعمل scroll عادي)
+    var onTouch = function (e) { if (drag || (e.target.closest && e.target.closest('g.pn'))) e.preventDefault(); };
+    root.addEventListener('touchstart', onTouch, { passive: false });
+    root.addEventListener('touchmove', onTouch, { passive: false });
+    var onMove = function (e) {
+      if (!drag) return;
+      if (!drag.moved && Math.abs(e.clientX - drag.sx) + Math.abs(e.clientY - drag.sy) < 5) return;
+      drag.moved = true; drag.g.setAttribute('opacity', '.35');
+      var svgs = $$('svg.cv'), ti = -1, rect = null;
+      svgs.forEach(function (sv, i) {
+        var r = sv.getBoundingClientRect();
+        if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) { ti = i; rect = r; }
+      });
+      clearGhost(); drag.ti = ti; drag.ok = false;
+      if (ti < 0) return;
+      var sh = R.sheets[ti], p = drag.p, w = p.w, h = p.h;
+      var others = sh.placed.filter(function (q) { return q !== p; });
+      var x = (e.clientX - rect.left - geo.ml) / geo.s - drag.offX, y = (e.clientY - rect.top - geo.mt) / geo.s - drag.offY;
+      x = Math.max(0, Math.min(sh.W - w, x)); y = Math.max(0, Math.min(sh.H - h, y));
+      var sp = snap(sh, others, x, y, w, h); drag.x = sp.x; drag.y = sp.y;
+      var matBad = S.opts.material && sh.m && p.it && p.it.m && sh.m !== p.it.m;
+      drag.gap = false;
+      drag.ok = !matBad && fits(sh, others, sp.x, sp.y, w, h);
+      if (!drag.ok && !matBad && !isRoundIt(p.it)) {
+        // مكان مش بقص مستقيم: ينفع لو في فراغ حول دائرة/بيضاوي
+        var qg = quantum(sh.W, sh.H, 1), gxp = Math.max(0, Math.min(sh.W - w, roundQ(x, qg))), gyp = Math.max(0, Math.min(sh.H - h, roundQ(y, qg)));
+        if (gapSpotOk(sh, others, gxp, gyp, w, h, R.k)) { drag.ok = true; drag.gap = true; drag.x = gxp; drag.y = gyp; sp = { x: gxp, y: gyp }; }
+      }
+      var gh = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      gh.setAttribute('class', 'ghost'); gh.setAttribute('pointer-events', 'none');
+      gh.setAttribute('x', geo.ml + sp.x * geo.s); gh.setAttribute('y', geo.mt + sp.y * geo.s);
+      gh.setAttribute('width', w * geo.s); gh.setAttribute('height', h * geo.s);
+      gh.setAttribute('fill', drag.ok ? 'var(--ok)' : 'var(--bad)'); gh.setAttribute('fill-opacity', '.25');
+      gh.setAttribute('stroke', drag.ok ? 'var(--ok)' : 'var(--bad)'); gh.setAttribute('stroke-width', '2'); gh.setAttribute('stroke-dasharray', '5 3');
+      svgs[ti].appendChild(gh);
+      svgs.forEach(function (sv) { sv.classList.add('dragging'); });
+    };
+    function endDrag(e, cancel) {
+      if (!drag) return;
+      var d = drag; drag = null; clearGhost();
+      if (!d.moved) {
+        if (cancel) return;
+        view.sel = (view.sel && view.sel.si === d.si && view.sel.pi === d.pi) ? null : { si: d.si, pi: d.pi };
+        draw(); return;
+      }
+      if (!cancel && d.ok && d.ti >= 0) {
+        var from = R.sheets[d.si], to = R.sheets[d.ti], p = d.p;
+        from.placed.splice(from.placed.indexOf(p), 1);
+        p.x = d.x; p.y = d.y; p.free = !!d.gap; p.locked = !d.gap; to.placed.push(p);
+        [from, to].forEach(function (sh) { derive(sh, R.k); finalize({ sheets: [sh] }); });
+        R.sheets = R.sheets.filter(function (sh) { return sh.placed.length; });
+        var ni = R.sheets.indexOf(to);
+        view.sel = { si: ni, pi: R.sheets[ni].placed.indexOf(p) };
+        draw(); stats(); persist(); notify();
+      } else {
+        draw();
+        if (!cancel) toast(L.cantDrop);
+      }
+    }
+    // على مستوى الصفحة كلها: لو الإصبع/الماوس اتساب بره الـ widget السحب يخلص برضه
+    var onUp = function (e) { endDrag(e, false); }, onCancel = function (e) { endDrag(e, true); };
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp);
+    document.addEventListener('pointercancel', onCancel);
+    function rotateSel() {
+      var p = selPanel(); if (!p) return;
+      var sh = R.sheets[view.sel.si];
+      var others = sh.placed.filter(function (q) { return q !== p; });
+      if (S.opts.grain && !(p.it && p.it.s === 'c')) { toast(L.cantRot); return; }
+      var okNormal = fits(sh, others, p.x, p.y, p.h, p.w);
+      var okGap = !okNormal && p.free && gapSpotOk(sh, others, p.x, p.y, p.h, p.w, R.k);
+      if (!okNormal && !okGap) { toast(L.cantRot); return; }
+      var t = p.w; p.w = p.h; p.h = t; p.rot = !p.rot;
+      if (okNormal) { p.free = false; p.locked = true; }
+      derive(sh, R.k); finalize({ sheets: [sh] });
+      draw(); stats(); notify();
+    }
+    function pinSel() { var p = selPanel(); if (!p) return; p.locked = !p.locked; draw(); }
+    function compactAll() {
+      if (!R || !R.sheets.length) return;
+      var any = false, t0 = now();
+      R.sheets.forEach(function (sh) {
+        var moved = true, guard = 0;
+        while (moved && guard++ < 60 && now() - t0 < 1500) {
+          moved = false;
+          sh.placed.slice().sort(function (a, b) { return a.x - b.x || a.y - b.y; }).forEach(function (p) {
+            if (p.locked || p.free) return;
+            ['x', 'y'].forEach(function (ax) {
+              var len = ax === 'x' ? 'w' : 'h', others = sh.placed.filter(function (q) { return q !== p; });
+              var cands = [0].concat(others.map(function (q) { return q[ax] + q[len] + R.k; }))
+                .filter(function (c) { return c < p[ax] - EPS; }).sort(function (a, b) { return a - b; });
+              for (var i = 0; i < cands.length; i++) {
+                var nx = ax === 'x' ? cands[i] : p.x, ny = ax === 'y' ? cands[i] : p.y;
+                if (fits(sh, others, nx, ny, p.w, p.h)) { p.x = nx; p.y = ny; moved = true; any = true; break; }
+              }
+            });
+          });
+        }
+        derive(sh, R.k); finalize({ sheets: [sh] });
+      });
+      view.sel = null; draw(); stats();
+      toast(any ? L.compacted : L.alreadyCompact);
+      if (any) { persist(); notify(); }
+    }
+    function changeLayout() {
+      if (!R || !R.sheets.length || !R.items) return;
+      if (!R.alts) {
+        var col = []; bestPack(S, R.items, R.stock, R.k, null, col);
+        col.sort(function (a, b) { return cmp(a.score, b.score); });
+        var top = col[0], variants = [], seen = {};
+        var sig = function (c, fx, fy) {
+          return c.sheets.map(function (sh) {
+            return sh.placed.map(function (p) {
+              var x = fx ? sh.W - p.x - p.w : p.x, y = fy ? sh.H - p.y - p.h : p.y;
+              return [x, y, p.w, p.h].map(function (v) { return Math.round(v * 100); }).join(',');
+            }).sort().join(';');
+          }).join('|');
+        };
+        [[0, 0], [0, 1], [1, 0], [1, 1]].forEach(function (f) {
+          col.forEach(function (c) {
+            if (variants.length >= 30 || c.score[0] !== top.score[0] || c.score[1] !== top.score[1] || c.score[3] > top.score[3] + 1) return;
+            var sg = sig(c, f[0], f[1]); if (seen[sg]) return; seen[sg] = 1;
+            variants.push({ c: c, fx: f[0], fy: f[1] });
+          });
+        });
+        R.alts = { list: variants, idx: 0 };
+      }
+      var A = R.alts, n = A.list.length;
+      if (n < 2) { toast(L.noAlt); return; }
+      A.idx = (A.idx + 1) % n;
+      var v = A.list[A.idx];
+      var sheets = v.c.sheets.map(function (sh) {
+        var t = { W: sh.W, H: sh.H, m: sh.m, ri: sh.ri, si: sh.si, free: [], cuts: [], placed: sh.placed.map(function (p) {
+          return { x: v.fx ? sh.W - p.x - p.w : p.x, y: v.fy ? sh.H - p.y - p.h : p.y, w: p.w, h: p.h, it: p.it, rot: p.rot };
+        }) };
+        derive(t, R.k); return t;
+      });
+      var nr = { sheets: sheets, unplaced: v.c.unplaced, k: R.k, nItems: R.nItems, nStock: R.nStock, stock: R.stock, items: R.items, alts: A };
+      finalize(nr);
+      if (S.opts.gaps && S.opts.shapes) gapFill(S, nr);
+      R = nr; view.sel = null; view.sheet = 0; draw(); stats(); toast(L.layoutN(A.idx + 1, n)); notify();
+    }
+    function rearrange() {
+      if (!R || !R.sheets.length) return;
+      var any = R.sheets.some(function (sh) { return sh.placed.some(function (p) { return p.locked; }); });
+      if (!any) { toast(L.needPin); return; }
+      var nr = repack(S, R);
+      if (!nr) { toast(L.cantPack); return; }
+      if (S.opts.gaps && S.opts.shapes) gapFill(S, nr);
+      R = nr; view.sel = null; view.sheet = 0; draw(); stats(); toast(L.rearranged); notify();
+    }
+    var rt, onResize = function () { clearTimeout(rt); rt = setTimeout(function () { draw(); }, 120); };
+    window.addEventListener('resize', onResize);
+    // لو الـ widget اتفتح وهو مستخبي (تاب تاني في التطبيق) يترسم صح أول ما يظهر
+    var ro = null, lastW = -1;
+    if (global.ResizeObserver) {
+      ro = new ResizeObserver(function () { var w = root.clientWidth; if (w && Math.abs(w - lastW) > 1) { lastW = w; onResize(); } });
+      lastW = root.clientWidth; ro.observe(root);
+    }
+
+    renderAllInputs();
+    R = solve(S); if (S.opts.gaps && S.opts.shapes) gapFill(S, R); stats();
+    draw();
+
+    return {
+      calculate: calculate,
+      getResult: getResult,
+      getState: function () { return JSON.parse(JSON.stringify(S)); },
+      openInvoice: function (inv) { openInvoice(inv); },
+      setState: function (st, run) { applyState(st || {}); renderAllInputs(); persist(); if (run) { calculate(); } },
+      destroy: function () { window.removeEventListener('resize', onResize); document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', onUp); document.removeEventListener('pointercancel', onCancel); if (ro) ro.disconnect(); clearTimeout(rt); el.innerHTML = ''; }
+    };
+  }
+  var uid = 0;
+  var _mount = mount;
+  mount = function (el, o) { uid++; return _mount(el, o); };
+
+  global.CutlistPlanner = { mount: function (el, o) { return mount(el, o); } };
+})(window);
+
+</script>
+<script>
+/* ===== CutList: ربط مخطط التقطيع بالفواتير ===== */
+(function () {
+  var host = document.getElementById('clHost');
+  if (!host || !window.CutlistPlanner) return;
+  // زرار الحاسبة العايم بيتخبى في صفحة CutList عشان ما يغطيش أزرار الرسم
+  try { var st0 = document.createElement('style'); st0.textContent = 'body:has(#t-cl:not(.hide)) #calcFab{display:none!important}'; document.head.appendChild(st0); } catch (e) {}
+  var SHEETS_KEY = 'cutlistSheets';   // مقاسات الشيتات اللي اتعلّمت لكل صنف
+  var sheetsMap = function () { try { return JSON.parse(localStorage.getItem(SHEETS_KEY)) || {}; } catch (e) { return {}; } };
+  var invList = function () { try { return (S && S.invoices) || []; } catch (e) { return []; } };
+  var dateOf = function (ts) { try { return dshort(ts); } catch (e) { return ''; } };
+
+  // فاتورة التطبيق → شكل CutList: الطول = h ، العرض = w (سم) ، العدد = c. البنود المرتجعة مش بتتحسب.
+  function toCut(r) {
+    return {
+      code: r.code != null ? r.code : ('#' + (r.no || '')),
+      customer: r.cname || '',
+      date: dateOf(r.ts),
+      items: (r.rows || []).filter(function (x) { return !x.rt && (+x.c || 0) > 0; }).map(function (x) {
+        var cut = x.t !== 'rd' && +x.w > 0 && +x.h > 0;
+        return { name: x.n || 'بدون اسم', l: cut ? +x.h : 0, w: cut ? +x.w : 0, q: +x.c || 0 };
+      })
+    };
+  }
+  function findByCode(code) {
+    var n = String(code).trim(), l = invList();
+    var r = l.find(function (x) { return x.type === 'inv' && String(x.code) === n; }) ||
+            l.find(function (x) { return x.type === 'inv' && (x.oc || []).some(function (y) { return String(y) === n; }); });
+    return r ? toCut(r) : null;
+  }
+
+  var cl = window.cutlist = CutlistPlanner.mount(host, {
+    lang: 'ar',
+    storageKey: 'cutlistState',
+    findInvoice: findByCode,
+    stockFor: function (name) { var m = sheetsMap()[name]; return m && m.length ? m : null; },
+    searchHint: 'اكتب كود الفاتورة عشان تنقل مقاسات البنود المقطعة',
+    onResult: function () {
+      // أول ما تحسب لصنف جاي من فاتورة، الشيتات اللي استخدمتها تتحفظ للصنف ده وتتقترح المرة الجاية
+      try {
+        var st = cl && cl.getState(); if (!st || !st.src || !st.src.name) return;
+        var rows = st.stock.filter(function (r) { return r.on !== false && +toEn(r.l) > 0 && +toEn(r.w) > 0; })
+          .map(function (r) { return { l: +toEn(r.l), w: +toEn(r.w), q: r.q === '' ? 1 : +toEn(r.q) || 1 }; });
+        if (!rows.length) return;
+        var m = sheetsMap(); m[st.src.name] = rows; localStorage.setItem(SHEETS_KEY, JSON.stringify(m));
+      } catch (e) {}
+    }
+  });
+
+  // زرار «📐 تقطيع» في شاشة الفاتورة المحفوظة: يفتح CutList ويعرض أصناف الفاتورة على طول
+  var btn = document.getElementById('rescut');
+  if (btn) btn.onclick = function () {
+    var r = (typeof curRec !== 'undefined') ? curRec : null; if (!r) return;
+    document.getElementById('res').classList.add('hide');
+    var tab = document.querySelector('#bnav button[data-t="cl"]'); if (tab) tab.click();
+    cl.openInvoice(toCut(r));
+  };
+})();
+</script>
+<!-- ===== CutList: نهاية ===== -->
 </body>
 </html>
 
