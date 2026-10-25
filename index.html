@@ -312,6 +312,7 @@ section:not(.hide)>:nth-child(2){animation-delay:.04s}section:not(.hide)>:nth-ch
 @media (prefers-reduced-motion:reduce){section:not(.hide),section:not(.hide)>*{animation:none!important}.bottom-nav .nav-ind{transition:none}}
 
 /* مقترحات الفاتورة + الإجمالي/المتبقي */
+#qs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}#qs::-webkit-scrollbar{display:none}#qs button{white-space:nowrap;padding:6px 14px;font-size:calc(var(--fs) + .5px)}#qs button.other{opacity:.72}
 .qs button small.sz{opacity:.8;margin-inline-start:3px}.qs button small.pr{margin-inline-start:6px;padding-inline-start:6px;border-inline-start:1px solid currentColor;font-weight:700;opacity:.9}
 .tcell.tg1{background:var(--accLight)}.tcell.tg1 b{color:var(--acc)}
 .tcell.trm.dr{background:var(--drB)}.tcell.trm.dr b,.tcell.trm.dr label{color:var(--drI)}
@@ -1165,10 +1166,14 @@ $('lessBtn').onclick=()=>{if(['nylon','disc','discWhy','dp','pfWhy','refund','no
   ['r_nylon','r_disc','r_dp','r_ref'].forEach(i=>$(i).classList.add('hide'));$('discWhy').classList.add('hide');if(!lastC&&!$('prev').value)$('r_prev').classList.add('hide');$('note').classList.add('hide');$('retBox').classList.add('hide');$('retPane').classList.add('hide');$('moreBtn').classList.remove('hide');calc()};
 $('moreBtn').onclick=()=>{['r_nylon','r_disc','r_dp','r_ref'].forEach(i=>$(i).classList.remove('hide'));$('discWhy').classList.remove('hide');if(!lastC)$('r_prev').classList.remove('hide');$('note').classList.remove('hide');$('retBox').classList.remove('hide');$('moreBtn').classList.add('hide');calc()};
 let lastC=null,invCat='d';
+function custUsage(c){const m={};if(!c)return m;const names=[];
+  S.invoices.forEach(r=>{if(r.cid!==c.id||r.type==='pay'||r.id===editId)return;(r.rows||[]).forEach(x=>{if(x.n)names.push(nm(x.n))})});
+  S.items.forEach(it=>{const n0=nm(it.name);let n=0;for(const x of names)if(x===n0||x.startsWith(n0+' '))n++;m[it.id]=n});return m}
 function drawQS(){const w=$('qwrap'),q=$('qs'),ab=$('addbar');if(!$('cust').value.trim()){w.classList.add('hide');ab.classList.remove('hide');return}
-  const u=usageCat(invCat),l=S.items.filter(it=>it.type===(invCat==='rdy'?'rd':'mq')).sort((a,b)=>(u[b.id]||0)-(u[a.id]||0)||a.name.localeCompare(b.name,'ar'));
+  const u=usageCat(invCat),cu=custUsage(lastC),l=S.items.filter(it=>it.type===(invCat==='rdy'?'rd':'mq')).sort((a,b)=>(cu[b.id]||0)-(cu[a.id]||0)||(u[b.id]||0)-(u[a.id]||0)||a.name.localeCompare(b.name,'ar'));
   if(!l.length){w.classList.add('hide');ab.classList.remove('hide');return}
-  w.classList.remove('hide');ab.classList.add('hide');renderFit(q,l.map(it=>({k:it.id,h:`<button class="alt b-blue" data-q="${it.id}">${esc(it.name)}${szOf(it)?` <small class="num sz">(${esc(szOf(it))})</small>`:''}${priceOf(it,invCat)?` <small class="num pr">${priceOf(it,invCat)}</small>`:''}</button>`})),{k:'__add',h:'<button class="alt b-amber" data-add="mq">+ إضافة</button>'})}
+  w.classList.remove('hide');ab.classList.add('hide');
+  q.innerHTML=l.map(it=>`<button class="alt b-blue${lastC&&!cu[it.id]&&l.some(x=>cu[x.id])?' other':''}" data-q="${it.id}">${esc(it.name)}${szOf(it)?` <small class="num sz">(${esc(szOf(it))})</small>`:''}${priceOf(it,invCat)?` <small class="num pr">${priceOf(it,invCat)}</small>`:''}</button>`).join('')+'<button class="alt b-amber" data-add="mq">+ إضافة</button>';q.scrollLeft=0}
 $('qs').onclick=e=>{const b=e.target.closest('button[data-q]');if(!b)return;const it=S.items.find(x=>x.id===b.dataset.q);if(!it)return;
   const rd=it.type==='rd',d=addRow(it.type);setVals(d,rd?{n:it.h&&it.w?`${it.name} ${it.w}×${it.h}`:it.name,p:it.p||''}:{n:it.name,w:it.w||'',h:it.h||'',p:priceOf(it,invCat)||''});calc();const e0=['w','h','c','p'].map(k=>d.querySelector('input.'+k)).filter(Boolean).find(i=>!i.value)||d.querySelector('input.c');if(e0)e0.focus()};
 function renderFit(box,items,last){const mk=l=>l.map(x=>x.h).join('');
@@ -1351,7 +1356,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='34';
+const APP_VER='35';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
