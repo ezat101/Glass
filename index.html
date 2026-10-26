@@ -4,6 +4,27 @@
 <meta charset="utf-8">
 <script>try{if(localStorage.getItem('lkOn')==='1')document.documentElement.classList.add('locked')}catch(e){}try{var z=localStorage.getItem('fz');if(z==='x'||z==='s'||z==='l'||z==='xl')document.documentElement.classList.add('fz-'+z)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+/* شبكة أمان: لو البرنامج وقع وهو بيفتح، تظهر رسالة فيها زرار ينزّل نسخة من البيانات (مستقلة عن باقي الكود) */
+(function(){var shown=false,KS=['items','customers','invoices','cats','quotes'];window.__bootOK=false;
+function exportAll(){var out={app:'ElTabakha',v:1,at:Date.now(),emergency:1};
+  try{KS.forEach(function(k){var v=localStorage.getItem(k);if(v)try{out[k]=JSON.parse(v)}catch(e){}})}catch(e){}
+  var fin=function(){if(!out.customers)out.customers=[];if(!out.invoices)out.invoices=[];var d=new Date(),a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([JSON.stringify(out)],{type:'application/json'}));a.download='نسخة-طوارئ-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json';document.body.appendChild(a);a.click();a.remove()};
+  try{var q=indexedDB.open('tabakha-data');q.onupgradeneeded=function(){if(!q.result.objectStoreNames.contains('kv'))q.result.createObjectStore('kv')};
+    q.onerror=fin;q.onsuccess=function(){var db=q.result;if(!db.objectStoreNames.contains('kv')){fin();return}var st=db.transaction('kv','readonly').objectStore('kv'),n=KS.length;
+      KS.forEach(function(k){var r=st.get(k);r.onsuccess=function(){if(Array.isArray(r.result))out[k]=r.result;if(--n===0)fin()};r.onerror=function(){if(--n===0)fin()}})}}catch(e){fin()}}
+function show(why){if(shown||window.__bootOK)return;shown=true;var go=function(){var d=document.createElement('div'),B='display:block;width:260px;margin:4px auto;padding:11px;border-radius:10px;font:600 15px Tahoma,Arial,sans-serif;cursor:pointer;border:0';
+  d.setAttribute('style','position:fixed;inset:0;z-index:2147483647;background:#0f172a;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;font-family:Tahoma,Arial,sans-serif;text-align:center;direction:rtl');
+  d.innerHTML='<div style="font-size:42px">⚠️</div><b style="font-size:18px">البرنامج مش قادر يفتح دلوقتي</b><div style="font-size:14px;opacity:.85;max-width:420px;line-height:1.8">بياناتك لسه محفوظة على الجهاز. نزّل نسخة منها الأول، وبعدين جرّب تفتح تاني. لو المشكلة فضلت، صوّر الشاشة دي وابعتها.</div>'+
+    '<button id="__beDl" style="'+B+';background:#16a34a;color:#fff">📥 نزّل نسخة من بياناتك</button><button id="__beRe" style="'+B+';background:#334155;color:#fff">🔄 حاول تاني</button><button id="__beGo" style="'+B+';background:none;color:#94a3b8;text-decoration:underline">كمّل على أي حال</button>'+
+    '<div style="font-size:11px;opacity:.55;direction:ltr;max-width:90vw;word-break:break-all;margin-top:6px">'+String(why).replace(/</g,'&lt;').slice(0,300)+'</div>';
+  document.body.appendChild(d);document.getElementById('__beDl').onclick=exportAll;document.getElementById('__beRe').onclick=function(){location.reload()};document.getElementById('__beGo').onclick=function(){d.remove()}};
+  if(document.body)go();else addEventListener('DOMContentLoaded',go)}
+window.__bootFail=show;window.__exportAll=exportAll;
+addEventListener('error',function(e){var f=(e&&e.filename)||'',base=location.href.split('#')[0].split('?')[0];if(e&&e.message==='Script error.')return;if(f&&f.indexOf(base)!==0&&f.indexOf(location.origin+'/')!==0)return;show((e&&e.message)+' @'+(e&&e.lineno))});
+setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
+</script>
 <title>ElTabakha Glass</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0f766e">
@@ -193,7 +214,7 @@ section:not(.hide){animation:fadeIn .18s ease-out}
 .sumg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
 .sumg>div{background:var(--tot);border-radius:8px;padding:6px 8px}.sumg label{display:block}.sumg b{font-size:15px}
 .lock{position:fixed;inset:0;z-index:100;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px}
-.locked #lock{display:flex}
+.locked #lock{display:flex}#instOv{z-index:120}#instOv.on{display:flex}
 #cust,#hq,.row .n{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 8px center;padding-left:24px}
 details.card summary{font-weight:700;cursor:pointer}
 details.card textarea{direction:rtl;text-align:right;font-size:14px;width:100%;margin-bottom:4px}
@@ -278,6 +299,8 @@ a.ab.tel{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}[data-theme="dark
 .stp textarea{direction:rtl;text-align:right;width:100%}
 .stp details.card>summary{padding:2px 0}
 .stor{font-weight:700;margin:4px 0 2px}#fbStat{font-size:calc(var(--fs) + .5px)!important}
+.reccode{font-size:28px;font-weight:800;letter-spacing:4px;text-align:center;direction:ltr;padding:8px;border:2px dashed var(--acc);border-radius:10px;margin-bottom:6px;user-select:all}
+.smr{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:calc(var(--fs) + .5px)}.sbar{height:8px;border-radius:99px;background:color-mix(in srgb,var(--mute) 22%,transparent);overflow:hidden;margin:4px 0 2px}.sbar i{display:block;height:100%;border-radius:99px}
 /* مفاتيح تشغيل بدل المربعات الصغيرة */
 #t-st label.opt{flex-direction:row-reverse;justify-content:space-between;gap:12px;padding:9px 0;margin:0;border-bottom:1px solid color-mix(in srgb,var(--line) 50%,transparent);font-size:calc(var(--fs) + 1px);cursor:pointer}
 #t-st label.opt:last-child{border-bottom:0}
@@ -450,9 +473,11 @@ label{font-size:calc(var(--fs) - 2px)}
   <button id="hdrSet" class="hdr-set" data-t="st" aria-label="إعدادات">⚙️</button>
 </div>
 
+<div id="instOv" class="lock"><div style="font-size:42px">📱</div><b style="font-size:18px">البرنامج اتفتح في مكان تاني</b><div class="mute" style="max-width:320px;text-align:center;line-height:1.8">عشان البيانات متتلخبطش، البرنامج بيشتغل من مكان واحد بس على نفس الجهاز. كل اللي عملته هنا اتحفظ.</div><button class="main" id="instGo" style="width:240px">استخدمه هنا</button></div>
 <div id="lock" class="lock"><div style="font-size:42px">🔒</div><b style="font-size:18px">ElTabakha Glass</b><div class="mute">اكتب الرقم السري</div>
   <input id="lkIn" type="password" inputmode="numeric" maxlength="6" autocomplete="off" style="max-width:200px;text-align:center;font-size:20px;letter-spacing:6px;height:44px">
-  <div class="btns" style="width:200px"><button class="main" id="lkGo">فتح</button><button class="alt b-out hide" id="lkBioBtn">👆 بصمة</button></div><div class="info" id="lkErr" style="color:var(--danger)"></div></div>
+  <div class="btns" style="width:200px"><button class="main" id="lkGo">فتح</button><button class="alt b-out hide" id="lkBioBtn">👆 بصمة</button></div><div class="info" id="lkErr" style="color:var(--danger)"></div><button class="lnk" id="lkForgot">نسيت الرقم السري؟</button>
+  <div id="lkRec" class="hide" style="width:270px;flex-direction:column;gap:6px;display:flex"><button class="alt" id="lkRecG">🔑 افتح بحساب Google المربوط</button><div id="lkRecC" class="ro" style="gap:6px"><input id="lkRecIn" inputmode="numeric" autocomplete="off" placeholder="كود الاسترجاع" style="flex:1;text-align:center;direction:ltr;letter-spacing:2px"><button class="main" id="lkRecGo" style="flex:none">فتح</button></div><div class="info" id="lkRecMsg" style="text-align:center"></div></div></div>
 <div id="remL" class="res-ov hide" style="z-index:66"><div class="card res-in"><div class="ro" style="color:var(--ink)"><b>🔔 محتاجين تذكير</b><button class="del" id="remLX" aria-label="إغلاق">×</button></div>
   <div class="mute" style="margin:4px 0 6px">البرنامج بيجهز رسالة الواتساب وانت بتدوس إرسال. بعد التذكير العميل بيختفي من هنا لحد ما المدة تعدّي تاني.</div><div id="remLList"></div><button class="lnk" id="remLSet">⚙ مدة التنبيه من الإعدادات</button></div></div>
 <div id="bulk" class="res-ov hide"><div class="card res-in"><div class="ro" style="color:var(--ink)"><b>📨 تذكير المديونين</b><button class="del" id="bulkX" aria-label="إغلاق">×</button></div><div class="mute" id="bulkInfo" style="margin:4px 0 6px"></div><div id="bulkList"></div></div></div>
@@ -627,7 +652,8 @@ label{font-size:calc(var(--fs) - 2px)}
 <div class="stp hide" data-sp="inv"><div class="sth"><button type="button" class="lnk" data-stback="1" aria-label="رجوع للإعدادات">→</button><b>🧾 خيارات الفاتورة والطباعة</b></div>
 <div class="card"><b>بعد حفظ الفاتورة</b>
   <label class="opt"><input type="checkbox" id="editInv"> تعديل الفاتورة بعد حفظها</label>
-  <label class="opt"><input type="checkbox" id="dupInv"> تكرار فاتورة قديمة لنفس العميل</label></div>
+  <label class="opt"><input type="checkbox" id="dupInv"> تكرار فاتورة قديمة لنفس العميل</label>
+  <label class="opt"><input type="checkbox" id="saveImgOn"> زرار «حفظ كصورة» في شريط الحفظ (بينزّل الصورة في التنزيلات)</label></div>
 <div class="card"><b>🖨 الطباعة والـ PDF</b>
   <label class="opt"><input type="checkbox" id="pdfOn"> زرار PDF والطباعة تحت الفاتورة</label>
   <div id="paperBox"><label style="margin-top:6px">مقاس الورق</label><select id="paperSel"><option value="a4">A4 عادي</option><option value="t80">ورق حراري 80 مم</option><option value="t58">ورق حراري 58 مم</option></select></div></div>
@@ -685,9 +711,11 @@ label{font-size:calc(var(--fs) - 2px)}
     <div class="info" id="lkMsg"></div>
     <label class="opt" style="margin-top:8px"><input type="checkbox" id="editLk"> اطلب الرقم السري قبل تعديل أو حذف فاتورة قديمة</label>
     <div id="editLkBox" class="hide"><select id="editLkD"><option value="0">أي فاتورة</option><option value="1">أقدم من يوم</option><option value="7">أقدم من 7 أيام</option></select></div>
-    <div class="info" id="editLkMsg"></div></div>
+    <div class="info" id="editLkMsg"></div>
+    <div id="lkRecSet" class="hide"><button type="button" class="alt" id="lkRecMake" style="width:100%;margin-top:10px"></button><div id="lkRecShow" class="hide" style="margin-top:6px"></div></div></div>
 </div>
 <div class="stp hide" data-sp="data"><div class="sth"><button type="button" class="lnk" data-stback="1" aria-label="رجوع للإعدادات">→</button><b>💾 الحفظ والنسخ</b></div>
+<div class="card"><b>📦 مساحة التخزين</b><div id="stMeter"></div></div>
 <div class="card"><b>☁️ الحفظ والمزامنة</b><div id="stor" class="stor"></div>
     <div id="fbStat" style="margin:4px 0 8px;font-size:14px">غير مربوطة.</div>
     <div class="btns" style="margin:0"><button class="main" id="fbGoogle">دخول بحساب Google</button><button class="alt b-red" id="fbOff">فصل</button></div>
@@ -763,7 +791,24 @@ const dEnd=a=>{const d=new Date(a);d.setDate(d.getDate()+1);return d.getTime()};
 function stamp(t){const d=new Date(t);let h=d.getHours();const ap=h>=12?'م':'ص';h=h%12||12;return `${d.getFullYear()}/${two(d.getMonth()+1)}/${two(d.getDate())}  ${h}:${two(d.getMinutes())} ${ap}`}
 const dshort=t=>{const d=new Date(t);return `${d.getFullYear()}/${two(d.getMonth()+1)}/${two(d.getDate())}`};
 function lget(k){try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}}
-let lsWarned=0;function lset(k,x){try{localStorage.setItem(k,JSON.stringify(x))}catch(e){if(Date.now()-lsWarned>30000){lsWarned=Date.now();try{toast('⚠ تعذر الحفظ على الجهاز (المساحة ممتلئة). احفظ نسخة احتياطية فوراً.')}catch(_){}}}}
+/* ===== مكان الحفظ: الفواتير والعملاء والأصناف في IndexedDB (مساحة كبيرة)، والإعدادات الصغيرة في localStorage ===== */
+const BIG=['items','customers','invoices','cats','quotes'],BIGS=new Set(BIG),IDBN='tabakha-data';
+let dataMode='ls',dataReady=false,ddb=null,instOff=false,pend={},pendQ=false,lsWarned=0;
+const lsWarn=()=>{if(Date.now()-lsWarned>30000){lsWarned=Date.now();try{toast('⚠ تعذر الحفظ على الجهاز (المساحة ممتلئة). احفظ نسخة احتياطية فوراً.')}catch(_){}}};
+function lset(k,x){if(instOff)return;
+  if(BIGS.has(k)){if(!dataReady)return;/* قبل ما البيانات تتحمل منكتبش حاجة عشان ميتمسحش الموجود */
+    if(dataMode==='idb'){pend[k]=x;if(!pendQ){pendQ=true;Promise.resolve().then(flushIDB)}return}
+    try{if(localStorage.getItem('idbMig'))localStorage.setItem('lsDirty','1')}catch(e){}}
+  try{localStorage.setItem(k,JSON.stringify(x))}catch(e){lsWarn()}}
+function ddbOpen(ver){return new Promise((res,rej)=>{let q;try{q=ver?indexedDB.open(IDBN,ver):indexedDB.open(IDBN)}catch(e){rej(e);return}
+  q.onupgradeneeded=()=>{if(!q.result.objectStoreNames.contains('kv'))q.result.createObjectStore('kv')};q.onblocked=()=>rej(new Error('blocked'));q.onerror=()=>rej(q.error);
+  q.onsuccess=()=>{const d=q.result;if(d.objectStoreNames.contains('kv')){d.onversionchange=()=>d.close();res(d);return}const v=d.version+1;d.close();ddbOpen(v).then(res,rej)}})}
+function kvGet(keys){return new Promise((res,rej)=>{const t=ddb.transaction('kv','readonly'),st=t.objectStore('kv'),o={};let n=keys.length;if(!n){res(o);return}
+  keys.forEach(k=>{const r=st.get(k);r.onsuccess=()=>{o[k]=r.result;if(--n===0)res(o)};r.onerror=()=>rej(r.error)})})}
+function kvPut(obj){return new Promise((res,rej)=>{const t=ddb.transaction('kv','readwrite'),st=t.objectStore('kv');Object.entries(obj).forEach(([k,v])=>st.put(v,k));
+  t.oncomplete=()=>res();t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error||new Error('abort'))})}
+function flushIDB(){pendQ=false;const o=pend;pend={};if(!ddb||!Object.keys(o).length)return Promise.resolve();
+  return kvPut(o).catch(e=>{Object.keys(o).forEach(k=>{if(!(k in pend))pend[k]=o[k]});lsWarn()})}
 const lsv=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}};
 const nm=t=>String(t==null?'':t).toLowerCase().replace(/[\u064B-\u065F\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');
 /* بحث صوتي: حرف لاتيني يطابق نظيره العربي (m = م) عن طريق هيكل الحروف الساكنة */
@@ -823,7 +868,33 @@ function fixDupCodes(){const seen=new Set(),fix=[];
   fix.forEach(([r,k])=>{const old=+r[k];r[k]=nextCode();r.oc=(r.oc||[]).concat(old);r.u=t;noteCode(r);pushDoc('invoices',r);msg.push(old+' ← '+r[k]+' ('+r.cname+')')});
   DV++;lset('invoices',S.invoices);setTimeout(()=>{try{toast('كود اتكرر على جهازين واتصلح: '+msg.join('، '))}catch(e){}},800);return fix.length}
 function syncNames(){const l=S.invoices.filter(r=>{const c=getC(r.cid);return c&&c.name&&r.cname!==c.name});if(!l.length)return;DV++;const n=Date.now();l.forEach(r=>{r.cname=getC(r.cid).name;r.u=n;pushDoc('invoices',r)});lset('invoices',S.invoices)}
-function loadLocal(){DV++;S.items=lget('items');S.customers=lget('customers');S.invoices=lget('invoices');S.cats=lget('cats').filter(c=>c&&c.id&&c.name);S.quotes=lget('quotes').filter(q=>q&&q.id);migrate()}
+function loadFrom(get){DV++;const A=k=>{const v=get(k);return Array.isArray(v)?v:[]};S.items=A('items');S.customers=A('customers');S.invoices=A('invoices');S.cats=A('cats').filter(c=>c&&c.id&&c.name);S.quotes=A('quotes').filter(q=>q&&q.id);dataReady=true;migrate()}
+function loadLocal(){loadFrom(lget)}
+let migNote='';
+const lsBigBytes=()=>{let n=0;try{BIG.forEach(k=>{const v=localStorage.getItem(k);if(v)n+=v.length*2})}catch(e){}return n};
+const lsBytes=()=>{let n=0;try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);n+=(k.length+(localStorage.getItem(k)||'').length)*2}}catch(e){}return n};
+/* أول ما البرنامج يفتح: يقرا من IndexedDB. أول مرة بس بينقل البيانات من المكان القديم ويتأكد إن العدد مطابق قبل ما يعتمد على الجديد */
+async function dataInit(){
+  if(!window.indexedDB){loadLocal();return}
+  try{ddb=await tmo(ddbOpen(),7000)}catch(e){ddb=null}
+  const migAt=+lsv('idbMig','0');
+  if(!ddb){if(migAt&&!lsBigBytes())throw new Error('idb-open');dataMode='ls';loadLocal();if(migAt)setTimeout(()=>toast('⚠ مكان الحفظ الجديد مش بيفتح دلوقتي، والبرنامج شغال من النسخة القديمة. قفل البرنامج وافتحه تاني'),1500);return}
+  let got=await kvGet([...BIG,'mig']);
+  /* اتنقلت قبل كده بس المكان الجديد فاضي = المتصفح مسحه: منبدأش فاضي من غير ما نقول */
+  const lost=!got.mig&&migAt>0;
+  if(!got.mig){const src={};BIG.forEach(k=>src[k]=lget(k));
+    try{await kvPut({...src,premig:{at:Date.now(),...src}});const chk=await kvGet(BIG);
+      if(BIG.some(k=>!Array.isArray(chk[k])||chk[k].length!==src[k].length))throw new Error('verify');
+      await kvPut({mig:Date.now()});try{localStorage.setItem('idbMig',String(Date.now()))}catch(e){}got=chk;
+      if(lost)migNote=src.invoices.length?'⚠ المتصفح مسح مكان الحفظ، ورجعنا لآخر نسخة قديمة على الجهاز ('+src.invoices.length+' فاتورة). لو المزامنة شغالة الباقي هيرجع لوحده':'⚠ المتصفح مسح بيانات البرنامج من الجهاز. لو المزامنة شغالة هترجع لوحدها، أو استرجع نسخة احتياطية من الإعدادات';
+      else if(src.invoices.length||src.customers.length)migNote='✓ اتنقلت بياناتك للمكان الجديد: '+src.invoices.length+' فاتورة/دفعة · '+src.customers.length+' عميل'}
+    catch(e){ddb=null;dataMode='ls';loadLocal();return}}
+  else if(lsv('lsDirty','')==='1'){/* البرنامج اشتغل مرة من المكان القديم: ندمج اللي اتعمل فيه (الأحدث يكسب) */
+    const up={};BIG.forEach(k=>{const m=new Map((got[k]||[]).map(x=>[x.id,x]));let ch=false;lget(k).forEach(x=>{const o=m.get(x.id);if(x&&x.id&&(!o||(x.u||0)>(o.u||0))){m.set(x.id,x);ch=true}});if(ch){got[k]=[...m.values()];up[k]=got[k]}});
+    if(Object.keys(up).length)await kvPut(up);try{localStorage.removeItem('lsDirty')}catch(e){}}
+  dataMode='idb';loadFrom(k=>got[k]);
+  /* النسخة القديمة بتفضل احتياطي 30 يوم، إلا لو المكان القديم قرب يتملي فبنفضيه (في نسخة كاملة متشالة في IndexedDB) */
+  try{if(lsBigBytes()&&(Date.now()-(+lsv('idbMig','0')||Date.now())>30*864e5||lsBytes()>0.6*5*1024*1024))BIG.forEach(k=>localStorage.removeItem(k))}catch(e){}}
 const tmo=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);
 function mergeK(k,remote,full){const m=new Map(S[k].map(x=>[x.id,x])),up=[],took=[],rid=new Set(remote.map(r=>r.id));
   remote.forEach(r=>{const l=m.get(r.id);if(!l||(r.u||0)>(l.u||0)){m.set(r.id,r);took.push(r)}else if((l.u||0)>(r.u||0))up.push(l)});
@@ -876,7 +947,7 @@ function undel(k,o){lset('pdel',lget('pdel').filter(x=>!(x.k===k&&x.id===o.id)))
 let tm;const dirty=new Map();
 function touch(k,o){dirty.set(k+o.id,[k,o]);clearTimeout(tm);tm=setTimeout(flushTouch,500)}
 function flushTouch(){clearTimeout(tm);dirty.forEach(([k,o])=>put(k,o));dirty.clear()}
-addEventListener('pagehide',flushTouch);document.addEventListener('visibilitychange',()=>{if(document.hidden)flushTouch()});
+addEventListener('pagehide',()=>{flushTouch();flushIDB()});document.addEventListener('visibilitychange',()=>{if(document.hidden)flushTouch()});
 
 /* ---------- التبويبات (Bottom Nav) ---------- */
 let kbH=0;
@@ -1592,7 +1663,7 @@ async function fbStart(cfg,email,pass,google){
       try{localStorage.setItem('fbOn','1');localStorage.removeItem('fbCfg')}catch(_){}await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());return false}throw e}}
   else if(email&&pass)user=(await auth.signInWithEmailAndPassword(email,pass)).user;
   else user=await new Promise(r=>{const u=auth.onAuthStateChanged(x=>{u();r(x)})});
-  if(!user)throw new Error('no-user');
+  if(!user)throw new Error('no-user');try{localStorage.setItem('fbUid',user.uid)}catch(e){}
   const base=firebase.firestore().collection('users').doc(user.uid);
   const FV=firebase.firestore.FieldValue,TS=firebase.firestore.Timestamp,clean=o=>{if(o)delete o.su;return o};
   const rdSn=sn=>({docs:sn.docs.map(x=>{const o=x.data(),t=o.su;delete o.su;return{data:()=>o,su:t&&t.toMillis?t.toMillis():0}})});
@@ -1606,7 +1677,7 @@ const fbErr=e=>{const c=(e&&e.code)||'',t=c?' ('+c.replace('auth/','')+')':'';if
 const typing=el=>{const a=document.activeElement;return!!(a&&el.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))};
 function refreshAll(){DV++;syncNames();if(!typing($('t-cu')))drawCusts();if(!typing($('t-it')))drawItems();if(!typing($('t-dash')))drawDash();if(!typing($('t-new')))custInput();autoBan();drawTrash();try{qtBtn()}catch(e){}}
 let syncing=null;
-function syncNow(){if(syncing)return syncing;
+function syncNow(){if(!dataReady||instOff)return Promise.resolve(false);if(syncing)return syncing;
   syncing=(async()=>{try{const ok=await loadCloud();lastSync=Date.now();if(ok){reflowAll();refreshAll();autoBackupMaybe()}return ok}finally{syncing=null}})();return syncing}
 async function fbBoot(){const cfg=fbCfg();if(!cfg){await syncNow();return}
   fbStat('جاري الاتصال بالسحابة...');
@@ -1620,15 +1691,15 @@ $('fbGoogle').onclick=()=>fbLogin(null,null,true);
 $('fbConnect').onclick=()=>{const em=$('fbEmail').value.trim(),pw=$('fbPass').value;if(!em||!pw){fbStat('اكتب الإيميل وكلمة السر.');return}fbLogin(em,pw,false)};
 $('fbMore').onclick=e=>{e.preventDefault();$('fbMail').classList.toggle('hide')};
 $('fbOff').onclick=async()=>{try{if(window.firebase&&firebase.auth)await firebase.auth().signOut()}catch(e){}try{['fbCfg','fbOn','fullAt','syncCur'].forEach(k=>localStorage.removeItem(k))}catch(e){}FBDB=null;db=null;fbStat('تم الفصل. بياناتك باقية على الجهاز.');$('stor').textContent='الحفظ: على هذا الجهاز فقط.'};
-addEventListener('online',()=>{if(fbCfg())fbBoot()});
+addEventListener('online',()=>{if(fbCfg()&&dataReady&&!instOff)fbBoot()});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Date.now()-lastSync>30000)syncNow()});
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='52';
+const APP_VER='53';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
-try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
 
 try{$('autoWa').checked=localStorage.getItem('autoWa')==='1'}catch(e){}
 $('autoWa').onchange=()=>{try{localStorage.setItem('autoWa',$('autoWa').checked?'1':'0')}catch(e){}};
@@ -1669,7 +1740,7 @@ $('animChk').checked=pget('anim',animDef());$('animChk').onchange=()=>{pset('ani
 const DEFPRE='تحويل محفظة=1\nتحويل انستا=0';
 const pfPresets=()=>lsv('pfPre',DEFPRE).split('\n').map(l=>{const i=l.lastIndexOf('=');return i<0?null:{n:l.slice(0,i).trim(),p:nv(l.slice(i+1))}}).filter(x=>x&&x.n);
 const preHtml=c=>pfPresets().map((x,i)=>`<button class="alt" data-pre="${i}">${esc(x.n)} ${fq(rateFor(c,x))}%</button>`).join('');
-function applyFeatures(){cbStatus();$('pdfRow').classList.toggle('hide',!pget('pdfOn',true));$('paperBox').classList.toggle('hide',!pget('pdfOn',true));$('dayClose').classList.toggle('hide',!pget('dayCl',true));$('monRep').classList.toggle('hide',!pget('monCl',true));$('pfPre').innerHTML=preHtml();calc();bkBan();autoBan();drawDash()}
+function applyFeatures(){cbStatus();$('saveImg').classList.toggle('hide',!pget('saveImgOn',false));$('pdfRow').classList.toggle('hide',!pget('pdfOn',true));$('paperBox').classList.toggle('hide',!pget('pdfOn',true));$('dayClose').classList.toggle('hide',!pget('dayCl',true));$('monRep').classList.toggle('hide',!pget('monCl',true));$('pfPre').innerHTML=preHtml();calc();bkBan();autoBan();drawDash()}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)autoBan()});
 
 /* رسائل الواتساب */
@@ -1688,15 +1759,38 @@ $('logoFile').onchange=e=>{const fl=e.target.files[0];e.target.value='';if(!fl)r
       try{localStorage.setItem('logo',c.toDataURL('image/png'));$('logoMsg').textContent='تم حفظ اللوجو ✓'}catch(err){$('logoMsg').textContent='الصورة كبيرة، جرّب صورة أصغر'}loadLogo()};
     im.onerror=()=>{$('logoMsg').textContent='الملف مش صورة صالحة'};im.src=rd.result};rd.readAsDataURL(fl)};
 $('logoDel').onclick=e=>{if(!ok2(e.target))return;try{localStorage.removeItem('logo')}catch(e){}$('logoMsg').textContent='تم حذف اللوجو';loadLogo()};
+
+/* ===== البرنامج مفتوح في مكانين على نفس الجهاز: الأحدث يشتغل، والأقدم يحفظ اللي عنده ويقف ===== */
+const INST=uid(),INST_AT=Date.now();let instBC=null;
+function instInit(){return new Promise(res=>{let done=false,busy=false;const fin=()=>{if(!done){done=true;res()}};
+  const post=m=>{m.id=INST;m.at=INST_AT;try{if(instBC)instBC.postMessage(m);else localStorage.setItem('instMsg',JSON.stringify({...m,n:Math.random()}))}catch(e){}};
+  const on=d=>{if(!d||d.id===INST)return;
+    if(d.t==='hello'&&!instOff&&(d.at>INST_AT||(d.at===INST_AT&&d.id>INST))){post({t:'busy',to:d.id});instStop().then(()=>post({t:'bye',to:d.id}))}
+    else if(d.to===INST){if(d.t==='busy')busy=true;else if(d.t==='bye')fin()}};
+  try{if('BroadcastChannel' in window){instBC=new BroadcastChannel('tabakha-inst');instBC.onmessage=e=>on(e.data)}}catch(e){instBC=null}
+  if(!instBC)addEventListener('storage',e=>{if(e.key==='instMsg'&&e.newValue)try{on(JSON.parse(e.newValue))}catch(_){}});
+  post({t:'hello'});setTimeout(()=>{if(!busy)fin()},150);setTimeout(fin,2500)})}
+async function instStop(){if(instOff)return;try{flushTouch()}catch(e){}try{await flushIDB()}catch(e){}instOff=true;$('instOv').classList.add('on')}
+$('instGo').onclick=()=>location.reload();
+/* ===== مساحة التخزين ===== */
+async function storStat(){let u=0,q=0;try{const e=await navigator.storage.estimate();u=e.usage||0;q=e.quota||0}catch(e){}return{u,q,ls:lsBytes(),lsCap:5*1024*1024}}
+const mb=b=>b>=1073741824?(b/1073741824).toFixed(1)+' جيجا':(b/1048576).toFixed(b<10485760?1:0)+' ميجا';
+const sbar=p=>`<div class="sbar"><i style="width:${Math.max(1,Math.min(100,p)).toFixed(1)}%;background:${p>=80?'var(--danger)':p>=60?'#f59e0b':'var(--acc)'}"></i></div>`;
+async function storDraw(){const x=await storStat(),el=$('stMeter'),lsP=x.ls/x.lsCap*100,qP=x.q?x.u/x.q*100:0;
+  el.innerHTML=(dataMode==='idb'?`<div class="smr"><span>📦 الفواتير والعملاء</span><b class="num">${mb(x.u)}${x.q?' من '+mb(x.q):''}</b></div>${x.q?sbar(qP):''}`:'<div class="info" style="color:var(--danger)">⚠ الفواتير لسه محفوظة في المكان القديم الصغير (5 ميجا)</div>')+
+    `<div class="smr"><span>⚙️ الإعدادات واللوجو</span><b class="num">${mb(x.ls)} من 5 ميجا</b></div>${sbar(lsP)}
+    <div class="mute" style="margin-top:4px">${S.invoices.length} فاتورة ودفعة · ${S.customers.length} عميل · ${S.items.length} صنف</div>`}
+async function storCheck(){try{const x=await storStat(),top=Math.max(x.ls/x.lsCap,x.q?x.u/x.q:0,dataMode==='idb'?0:x.ls/x.lsCap),k=dkey(Date.now());
+  if(top<0.8||lsv('storWarn','')===k)return;svk('storWarn',k);toast('⚠ مساحة الحفظ مستخدم منها '+Math.round(top*100)+'%','عرض',()=>{$('hdrSet').click();stGo('data')})}catch(e){}}
 /* ========== الإعدادات: قايمة رئيسية وصفحة لكل قسم ========== */
 let stCur='';
 function stGo(k){stCur=k||'';$('stHome').classList.toggle('hide',!!stCur);document.querySelectorAll('#t-st .stp').forEach(p=>p.classList.toggle('hide',p.dataset.sp!==stCur));
-  try{if(stCur==='des'&&window.invDesOpen)invDesOpen();else if(stCur==='msg'){loadMsgUI();msgPrev()}else if(stCur==='pay')pmDraw();else if(stCur==='notes')ntDraw();else if(stCur==='shop'){loadMsgUI();shopTxtLoad()}else if(stCur==='look')fzMark();else if(stCur==='rem')remUI();else if(!stCur)stSum()}catch(e){}
+  try{if(stCur==='des'&&window.invDesOpen)invDesOpen();else if(stCur==='msg'){loadMsgUI();msgPrev()}else if(stCur==='pay')pmDraw();else if(stCur==='notes')ntDraw();else if(stCur==='shop'){loadMsgUI();shopTxtLoad()}else if(stCur==='look')fzMark();else if(stCur==='rem')remUI();else if(stCur==='data')storDraw();else if(!stCur)stSum()}catch(e){}
   window.scrollTo(0,0)}
 function stSum(){const W_=(k,t)=>{const e=$('ss_'+k);if(e)e.textContent=t};let ps=[];try{ps=pfPresets()}catch(e){}
   W_('shop',shopN());W_('des',(pget('fancyInv',true)?'التصميم الملون':'تصميم بسيط')+' · '+PAPERS[paperKey()].n);
   const n=liveNotes().length;W_('notes',n?n+(n>1?' ملاحظات':' ملاحظة'):'مفيش ملاحظات');
-  W_('inv',[pget('editInv',true)&&'تعديل',pget('dupInv',true)&&'تكرار',pget('pdfOn',true)&&'PDF وطباعة'].filter(Boolean).join(' · ')||'—');
+  W_('inv',[pget('editInv',true)&&'تعديل',pget('dupInv',true)&&'تكرار',pget('pdfOn',true)&&'PDF وطباعة',pget('saveImgOn',false)&&'حفظ كصورة'].filter(Boolean).join(' · ')||'—');
   W_('pay',ps.length?ps.map(x=>x.n+' '+fq(x.p)+'%').join(' · '):'مفيش طرق دفع');
   W_('msg','فاتورة · دفعة · تذكير'+($('autoWa').checked?' · إرسال تلقائي':''));
   W_('rem',pget('remOn',true)?'بعد '+dz(Math.round(+lsv('remDays','7'))||7)+' من غير دفع':'مقفول');
@@ -1763,6 +1857,7 @@ function msgPrev(){const now=Date.now();
 ['tplInv','tplPay','tplRem','shopN','custW','docW'].forEach(id=>$(id).addEventListener('input',msgPrev));
 /* حجم الخط: زراير بدل القايمة */
 function fzMark(){const v=$('fzSel').value;document.querySelectorAll('#fzSeg button').forEach(b=>b.classList.toggle('on',b.dataset.z===v))}
+$('saveImgOn').checked=pget('saveImgOn',false);$('saveImgOn').onchange=()=>{pset('saveImgOn',$('saveImgOn').checked);applyFeatures()};
 $('fzSeg').onclick=e=>{const b=e.target.closest('[data-z]');if(!b)return;$('fzSel').value=b.dataset.z;$('fzSel').onchange();fzMark()};fzMark();
 $('stClOpen').onclick=()=>{drawCl();$('clOv').classList.remove('hide')};
 
@@ -2011,27 +2106,48 @@ const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').
 const unb64=t=>Uint8Array.from(atob(t.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
 let bioOK=false,lkFails=0,lkWait=0,hiddenAt=0;
 async function bioAvail(){try{return!!(window.PublicKeyCredential&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())}catch(e){return false}}
-function lkUI(){const on=lkGet('lkOn')==='1';$('lkChk').checked=on||!$('lkSet').classList.contains('hide');$('lkBioBox').classList.toggle('hide',!(on&&bioOK));$('lkBio').checked=!!lkGet('lkBio')}
+function lkUI(){const on=lkGet('lkOn')==='1';$('lkRecSet').classList.toggle('hide',!on);$('lkRecMake').textContent=lkGet('lkRecHash')?'🔑 اعمل كود استرجاع جديد (القديم هيبطل)':'🔑 اعمل كود استرجاع (لو نسيت الرقم السري)';if(!on)$('lkRecShow').classList.add('hide');$('lkChk').checked=on||!$('lkSet').classList.contains('hide');$('lkBioBox').classList.toggle('hide',!(on&&bioOK));$('lkBio').checked=!!lkGet('lkBio')}
 function lockNow(){document.documentElement.classList.add('locked');$('lkIn').value='';$('lkErr').textContent='';$('lkBioBtn').classList.toggle('hide',!(lkGet('lkBio')&&bioOK))}
 function unlock(){document.documentElement.classList.remove('locked');lkFails=0}
-async function tryPin(){if(Date.now()<lkWait){$('lkErr').textContent='استني شوية وحاولي تاني';return}
+async function tryPin(){if(Date.now()<lkWait){$('lkErr').textContent='استنى شوية وحاول تاني';return}
   if(await sha(lkGet('lkSalt')+$('lkIn').value)===lkGet('lkHash')){unlock();return}
-  $('lkIn').value='';if(++lkFails>=5){lkWait=Date.now()+30000;lkFails=0;$('lkErr').textContent='محاولات كتير، استني 30 ثانية'}else $('lkErr').textContent='الرقم غلط'}
+  $('lkIn').value='';if(++lkFails>=5){lkWait=Date.now()+30000;lkFails=0;$('lkErr').textContent='محاولات كتير، استنى 30 ثانية'}else $('lkErr').textContent='الرقم غلط'}
 async function tryBio(){try{await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:unb64(lkGet('lkBio')),transports:['internal']}],userVerification:'required',timeout:60000}});unlock()}catch(e){$('lkErr').textContent='اكتب الرقم السري'}}
 $('lkGo').onclick=tryPin;$('lkBioBtn').onclick=tryBio;
+/* نسيت الرقم السري: بحساب Google المربوط بالمزامنة، أو بكود استرجاع اتعمل وقت ضبط القفل */
+function lkRecover(){['lkOn','lkHash','lkSalt','lkBio','lkRecHash'].forEach(k=>lkSet(k,null));unlock();$('lkRec').classList.add('hide');lkUI();
+  setTimeout(()=>toast('اتفتح ✓ والرقم السري اتلغى. اعمل رقم جديد من الإعدادات','الإعدادات',()=>{$('hdrSet').click();stGo('lock')}),300)}
+$('lkForgot').onclick=()=>{const g=!!fbCfg(),c=!!lkGet('lkRecHash');$('lkRec').classList.remove('hide');$('lkRecG').classList.toggle('hide',!g);$('lkRecC').classList.toggle('hide',!c);
+  $('lkRecMsg').textContent=!g&&!c?'مفيش طريقة استرجاع متفعّلة على الجهاز ده: لا حساب Google مربوط ولا كود استرجاع.':''};
+$('lkRecGo').onclick=async()=>{const v=toEn($('lkRecIn').value).replace(/\D/g,'');if(v&&await sha(lkGet('lkSalt')+'#'+v)===lkGet('lkRecHash'))lkRecover();else{$('lkRecIn').value='';$('lkRecMsg').textContent='الكود غلط'}};
+$('lkRecG').onclick=async()=>{const m=$('lkRecMsg');m.textContent='جاري الاتصال بجوجل…';let app=null;
+  try{if(!window.firebase){const b='https://www.gstatic.com/firebasejs/10.12.2/';await loadScript(b+'firebase-app-compat.js');await loadScript(b+'firebase-auth-compat.js')}
+    let prev=lsv('fbUid','');if(!prev){if(!firebase.apps.length)firebase.initializeApp(FBCFG);prev=await new Promise(r=>{const u=firebase.auth().onAuthStateChanged(x=>{u();r(x?x.uid:'')})})}
+    if(!prev){m.textContent='مش لاقي الحساب المربوط على الجهاز ده';return}
+    /* تطبيق منفصل للتأكد بس، عشان دخول المزامنة الأصلي ميتأثرش */
+    app=firebase.initializeApp(FBCFG,'lkcheck'+Date.now());const r=await app.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    if(r&&r.user&&r.user.uid===prev)lkRecover();else m.textContent='ده مش الحساب المربوط بالبرنامج'}
+  catch(e){const c=(e&&e.code)||'';m.textContent=/popup|operation-not-supported|web-storage/.test(c)?'جوجل مش راضي يفتح هنا. جرّب كود الاسترجاع، أو افتح البرنامج من المتصفح':/network/.test(c)?'مفيش نت':'تعذر الدخول'+(c?' ('+c.replace('auth/','')+')':'')}
+  finally{if(app)try{await app.auth().signOut();await app.delete()}catch(_){}}};
+async function lkRecMake(){const a=new Uint32Array(1);crypto.getRandomValues(a);const code=String(a[0]%100000000).padStart(8,'0');
+  lkSet('lkRecHash',await sha(lkGet('lkSalt')+'#'+code));const f=code.slice(0,4)+' '+code.slice(4);
+  $('lkRecShow').innerHTML=`<div class="reccode num">${f}</div><div class="mute" style="line-height:1.7">اكتب الكود ده في ورقة وشيله في مكان آمن. لو نسيت الرقم السري، اكتبه في شاشة القفل ← «نسيت الرقم السري؟». الكود بيظهر مرة واحدة بس.</div><button type="button" class="alt" id="lkRecCopy" style="width:100%;margin-top:6px">نسخ الكود</button>`;
+  $('lkRecShow').classList.remove('hide');$('lkRecCopy').onclick=async()=>{try{await navigator.clipboard.writeText(code);$('lkRecCopy').textContent='اتنسخ ✓'}catch(e){}};lkUI()}
+$('lkRecMake').onclick=e=>{if(lkGet('lkRecHash')&&!ok2(e.target))return;lkRecMake()};
+
 $('lkIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryPin()});$('lkIn').addEventListener('input',async()=>{const v=$('lkIn').value;if(v.length>=6){tryPin();return}if(v.length>=4&&Date.now()>=lkWait&&await sha(lkGet('lkSalt')+v)===lkGet('lkHash'))unlock()});
 $('lkChk').onchange=async()=>{const on=lkGet('lkOn')==='1',m=$('lkMsg');m.textContent='';
   if($('lkChk').checked){if(!on)$('lkSet').classList.remove('hide');return}
   if(!on){$('lkSet').classList.add('hide');return}
   $('lkChk').checked=true;$('lkOff').classList.remove('hide');$('lkOffIn').value='';$('lkOffIn').focus()};
 $('lkOffGo').onclick=async()=>{const m=$('lkMsg');
-  if(await sha(lkGet('lkSalt')+$('lkOffIn').value)===lkGet('lkHash')){['lkOn','lkHash','lkSalt','lkBio'].forEach(k=>lkSet(k,null));$('lkOff').classList.add('hide');lkUI();m.textContent='اتلغى القفل ✓'}
+  if(await sha(lkGet('lkSalt')+$('lkOffIn').value)===lkGet('lkHash')){['lkOn','lkHash','lkSalt','lkBio','lkRecHash'].forEach(k=>lkSet(k,null));$('lkOff').classList.add('hide');lkUI();m.textContent='اتلغى القفل ✓'}
   else{$('lkOffIn').value='';m.textContent='الرقم غلط'}};
 $('lkSave').onclick=async()=>{const a=$('lkP1').value,b=$('lkP2').value,m=$('lkMsg');
   if(!/^\d{4,6}$/.test(a)){m.textContent='الرقم السري لازم يكون من 4 لـ 6 أرقام';return}
   if(a!==b){m.textContent='الرقمين مش متطابقين';return}
-  const salt=uid();lkSet('lkSalt',salt);lkSet('lkHash',await sha(salt+a));lkSet('lkOn','1');
-  $('lkP1').value=$('lkP2').value='';$('lkSet').classList.add('hide');m.textContent='تم تفعيل القفل ✓';lkUI()};
+  const salt=uid();lkSet('lkSalt',salt);lkSet('lkHash',await sha(salt+a));lkSet('lkOn','1');lkSet('lkRecHash',null);
+  $('lkP1').value=$('lkP2').value='';$('lkSet').classList.add('hide');m.textContent='تم تفعيل القفل ✓';lkUI();lkRecMake()};
 $('lkBio').onchange=async()=>{const m=$('lkMsg');m.textContent='';
   if(!$('lkBio').checked){lkSet('lkBio',null);return}
   try{const cr=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:'ElTabakha Glass'},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'owner',displayName:'صاحب المحل'},pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'discouraged'},timeout:60000}});
@@ -2047,9 +2163,9 @@ let pinOkAt=0,pinWait=0,pinFail=0,pinRes=null;
 const lkReady=()=>lkGet('lkOn')==='1'&&!!lkGet('lkHash');
 function askPin(why){return new Promise(res=>{if(pinRes)pinRes(false);pinRes=res;$('pinWhy').textContent=why||'اكتب الرقم السري';$('pinIn').value='';$('pinErr').textContent='';$('pinOv').classList.remove('hide');setTimeout(()=>$('pinIn').focus(),50)})}
 const pinDone=v=>{$('pinOv').classList.add('hide');const r=pinRes;pinRes=null;if(r)r(v)};
-async function pinTry(){if(Date.now()<pinWait){$('pinErr').textContent='استني شوية وحاول تاني';return}
+async function pinTry(){if(Date.now()<pinWait){$('pinErr').textContent='استنى شوية وحاول تاني';return}
   if(await sha(lkGet('lkSalt')+$('pinIn').value)===lkGet('lkHash')){pinOkAt=Date.now();pinFail=0;pinDone(true)}
-  else{$('pinIn').value='';if(++pinFail>=5){pinWait=Date.now()+30000;pinFail=0;$('pinErr').textContent='محاولات كتير، استني 30 ثانية'}else $('pinErr').textContent='الرقم غلط'}}
+  else{$('pinIn').value='';if(++pinFail>=5){pinWait=Date.now()+30000;pinFail=0;$('pinErr').textContent='محاولات كتير، استنى 30 ثانية'}else $('pinErr').textContent='الرقم غلط'}}
 $('pinOk').onclick=pinTry;$('pinNo').onclick=()=>pinDone(false);$('pinIn').addEventListener('keydown',e=>{if(e.key==='Enter')pinTry()});$('pinOv').addEventListener('click',e=>{if(e.target===$('pinOv'))pinDone(false)});
 async function guard(r,why){if(!pget('editLk',false)||!lkReady())return true;const d=+lsv('editLkD','1');if(d>0&&r&&r.ts>Date.now()-d*864e5)return true;if(Date.now()-pinOkAt<12e4)return true;return askPin(why)}
 (()=>{const c=$('editLk'),b=$('editLkBox'),sel=$('editLkD'),m=$('editLkMsg');const sync=()=>{c.checked=pget('editLk',false);b.classList.toggle('hide',!c.checked);sel.value=lsv('editLkD','1')};
@@ -2059,7 +2175,7 @@ async function guard(r,why){if(!pget('editLk',false)||!lkReady())return true;con
 const idb=()=>new Promise((res,rej)=>{const q=indexedDB.open('tabakha-bk',1);q.onupgradeneeded=()=>q.result.createObjectStore('snaps',{keyPath:'day'});q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)});
 const idbDo=async(mode,fn)=>{const db=await idb();return new Promise((res,rej)=>{const tx=db.transaction('snaps',mode),r=fn(tx.objectStore('snaps'));tx.oncomplete=()=>{db.close();res(r&&r.result)};tx.onerror=()=>rej(tx.error)})};
 const bkData=()=>({app:'ElTabakha',v:1,at:Date.now(),items:S.items,customers:S.customers,invoices:S.invoices,cats:S.cats,quotes:S.quotes});
-async function snapMaybe(){if(!pget('snapOn',true)||!window.indexedDB||S.invoices.length+S.customers.length===0)return;const day=dayKey(Date.now());
+async function snapMaybe(){if(!dataReady||!pget('snapOn',true)||!window.indexedDB||S.invoices.length+S.customers.length===0)return;const day=dayKey(Date.now());
   try{if(await idbDo('readonly',st=>st.get(day)))return;
     await idbDo('readwrite',st=>st.put({day,at:Date.now(),n:S.invoices.length,c:S.customers.length,json:JSON.stringify(bkData())}));
     const ks=(await idbDo('readonly',st=>st.getAllKeys())).sort();while(ks.length>14){const k=ks.shift();await idbDo('readwrite',st=>st.delete(k))}}catch(e){}}
@@ -2074,7 +2190,10 @@ $('bkShare').onclick=async()=>{const name='نسخة-ElTabakha-'+dshort(Date.now(
   $('bkSave').click()};
 setTimeout(snapMaybe,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)snapMaybe()});
 /* ---------- بداية ---------- */
-loadLocal();if(!fbCfg()){reflowAll();syncNames()}setTimeout(remToast,1800);drawDash();drawCusts();drawItems();calc();bkInfo();applyFeatures();lockInit();drawTrash();loadMsgUI();loadLogo();paperLabels();drawRecent();fixBar();document.body.classList.add('onNew');
+lockInit();loadMsgUI();loadLogo();paperLabels();fixBar();document.body.classList.add('onNew');
+(async()=>{try{await instInit();await dataInit()}catch(e){if(window.__bootFail)window.__bootFail('storage: '+(e&&e.message||e));return}
+  if(!fbCfg()){reflowAll();syncNames()}drawDash();drawCusts();drawItems();calc();bkInfo();applyFeatures();drawTrash();drawRecent();qtBtn();
+  window.__bootOK=true;fbBoot();setTimeout(remToast,1800);setTimeout(storCheck,2500);if(migNote)setTimeout(()=>toast(migNote),700)})();
 /* ---------- زرار الرجوع في الموبايل ---------- */
 const OVS=['res','rem','remL','bulk','calcModal','clOv','pinOv','qtOv'],OVX={res:'resx',rem:'remX',remL:'remLX',bulk:'bulkX',calcModal:'calcClose',clOv:'clX',pinOv:'pinNo',qtOv:'qtX'};
 let NS=[],navIgnore=false,exitArm=false,exitT=0,navOK=false;
@@ -2100,7 +2219,6 @@ window.addEventListener('popstate',e=>{
 try{history.replaceState({base:1},'');history.pushState({d:0},'');navOK=true}catch(e){}
 new MutationObserver(()=>syncNav()).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
 const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncNav();return r};
-fbBoot();
 </script>
 <!-- ===== CutList: مخطط التقطيع ===== -->
 <script id="cutlist-widget">
