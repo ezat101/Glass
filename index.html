@@ -267,7 +267,6 @@ a.ab.wa{background:#16a34a;border-color:#16a34a;color:#fff}
 a.ab.tel{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}[data-theme="dark"] a.ab.tel{background:#1e3a5f;border-color:#3b6aa5;color:#bfdbfe}
 .dbpay{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
 .ucm{color:#d97706}.ucn{color:#d97706;font-weight:700}
-.lpw{margin-top:3px}.lpb{background:none;border:1px dashed #b45309;color:#b45309;border-radius:99px;padding:1px 9px;font-size:calc(var(--fs) - 1px);cursor:pointer;font-family:inherit}[data-theme="dark"] .lpb{color:#fcd34d;border-color:#fcd34d}
 .dbpay .tg{margin-bottom:6px}.dbpay .addbar{flex-wrap:wrap;margin:4px 0 0}
 /* ===== الفاتورة: شريط الدفع (دفع كامل + طرق الدفع) ===== */
 .pbar{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:6px}
@@ -1336,7 +1335,7 @@ const szOf=it=>it.h&&it.w?it.w+'×'+it.h:'';
 function placeDD(){if(dd.style.display==='none'||!ddInp)return;const r=ddInp.getBoundingClientRect(),vh=window.visualViewport?visualViewport.height:innerHeight,h=Math.min(dd.scrollHeight,220);
   let top=r.bottom+2;if(top+h>vh-4&&r.top-h-2>4)top=r.top-h-2;
   dd.style.top=top+'px';dd.style.right=Math.max(4,innerWidth-r.right)+'px';dd.style.width=Math.max(230,r.width)+'px'}
-function showDD(inp,tr){const q=inp.value.trim(),t=tr.dataset.t;const l=S.items.filter(it=>qm(it.name,q)),cu=custUsage(lastC);{const u=usageCat(invCat);l.sort((a,b)=>(cu[b.id]||0)-(cu[a.id]||0)||(u[b.id]||0)-(u[a.id]||0))}
+function showDD(inp,tr){const q=inp.value.trim(),t=tr.dataset.t;const l=S.items.filter(it=>qm(it.name,q)),cu=custUsage(lastC);{const u=usageCat(invCat);const pt=invCat==='rdy'?'rd':'mq';l.sort((a,b)=>(cu[b.id]||0)-(cu[a.id]||0)||((b.type===pt)-(a.type===pt))||(u[b.id]||0)-(u[a.id]||0))}
   if(!l.length){dd.style.display='none';return}ddInp=inp;ddRow=tr;
   dd.innerHTML=l.map(it=>`<div data-k="${it.id}"><span style="flex:1">${cu[it.id]?'<b class="ucm">★</b> ':''}${esc(it.name)}${cu[it.id]?` <small class="num ucn">×${cu[it.id]}</small>`:''}</span><small class="num">${szOf(it)?'('+esc(szOf(it))+')':''}</small><small>${it.type==='rd'?'جاهز':'مقطع'}</small><b class="num">${priceOf(it,invCat)||''}</b></div>`).join('');
   dd.style.display='block';placeDD()}
@@ -1375,7 +1374,7 @@ function addRow(t,rt,src){const rd=t==='rd',one=rd,d=document.createElement('div
   d.innerHTML=one?`<div class="r1 one"><input class="n" placeholder="اسم الصنف" autocomplete="off"><input class="c" type="text" inputmode="decimal" placeholder="العدد"><input class="p" type="text" inputmode="decimal" placeholder="السعر"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button class="del" aria-label="حذف">×</button><span class="qq hide"></span><b class="val hide"></b></div>`:`<div class="rg c5"><input class="n" placeholder="بحث" autocomplete="off" aria-label="اسم الصنف"><input class="w" type="text" inputmode="decimal" placeholder="عرض" aria-label="العرض"><input class="h" type="text" inputmode="decimal" placeholder="طول" aria-label="الطول"><input class="c" type="text" inputmode="decimal" placeholder="عدد" aria-label="العدد"><input class="p" type="text" inputmode="decimal" placeholder="سعر" aria-label="السعر"></div><div class="bz c5 hide"><span></span><input class="bw" type="text" inputmode="decimal" placeholder="حساب" aria-label="عرض اللوح للحساب"><input class="bh" type="text" inputmode="decimal" placeholder="حساب" aria-label="طول اللوح للحساب"></div><div class="ro rf"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button type="button" class="bt" title="مقاس مختلف للحساب (عرض وطول اللوح)">📐 حساب</button><span style="flex:1"></span><span>القيمة: <b class="val num">0</b></span><button class="del" aria-label="حذف">×</button><span class="qq"></span></div>`;
   d.querySelector('.del').onclick=()=>delRow(d);d.querySelector('.cp').onclick=()=>{const d2=addRow(t);setVals(d2,getVals(d));d.after(d2);calc()};swipeDel(d);d.querySelectorAll('input').forEach(i=>i.oninput=calc);
   {const bt=d.querySelector('.bt');if(bt){const bz=d.querySelector('.bz'),bw=d.querySelector('.bw'),bh=d.querySelector('.bh');
-    bt.onclick=()=>{const op=bz.classList.contains('hide');if(op){bz.classList.remove('hide');bt.textContent='إخفاء';bt.classList.add('on');bw.focus()}else{bw.value='';bh.value='';bz.classList.add('hide');bt.textContent='📐 حساب';bt.classList.remove('on');calc()}}}}
+    bt.onclick=()=>{const op=bz.classList.contains('hide');if(op){bz.classList.remove('hide');bt.textContent='إخفاء';bt.classList.add('on');bw.focus()}else{bz.classList.add('hide');const has=!!(bw.value.trim()||bh.value.trim());bt.textContent=has?'📐 حساب ✓':'📐 حساب';bt.classList.toggle('on',has);calc()}}}}
   const n=d.querySelector('.n');n.onfocus=()=>showDD(n,d);n.addEventListener('click',()=>showDD(n,d));n.addEventListener('input',()=>showDD(n,d));$('rows').appendChild(d);if(rt)markRt(d,src);return d}
 function markRt(d,src){d.dataset.rt='1';if(src)d.dataset.src=src;if(d.querySelector('.rtb'))return;const b=document.createElement('span');b.className='rtb';b.textContent='↩ مرتجع'+(src?' من فاتورة '+src:'');d.insertBefore(b,d.firstChild)}
 let TOT={},editId=null,_pw='',dpOpen=false,qtFrom=null,fullK=null,lastSaved=null,dbFull=false;
@@ -1393,7 +1392,7 @@ function calc(){let sub=0,tq=0;const rows=[];
   const paidRaw=nv($('paid').value),pfv=rd2(paidRaw*pf/100),paid=rd2(paidRaw-pfv-refund);
   $('tqw').textContent=tq>0?' ('+fq(tq)+' م²)':'';$('sub').textContent=f(sub);$('grand').textContent=f(total);$('rest').textContent=f(total-paid);{const pr=$('rest').parentNode;pr.classList.toggle('dr',total-paid>0);pr.classList.toggle('ok',total-paid<=0&&(total!==0||paid!==0))}
   $('r_sub').classList.toggle('hide',['r_nylon','r_disc','r_prev','r_ref'].every(i=>$(i).classList.contains('hide')));
-  drawPayBar(total,prev,refund,pf,pfv,paidRaw);drawLastPrices();$('saveQt').classList.toggle('hide',!rows.length||!!editId);
+  drawPayBar(total,prev,refund,pf,pfv,paidRaw);$('saveQt').classList.toggle('hide',!rows.length||!!editId);
   $('dpAmt').textContent=pfv?' = '+f(pfv):'';TOT={rows,sub,tq:rd2(tq),prev,pf,pfv,pfWhy:$('pfWhy').value.trim(),paidRaw,refund,total,paid,rest:rd2(total-paid)};
   const pay=!rows.length&&paid>0;$('save').textContent=(editId?'حفظ التعديل':pay?'تسجيل دفعة':'حفظ الفاتورة')+(rows.length?' · '+f(total):pay?' · '+f(paid):'');$('saveImg').textContent=pay?'دفعة كصورة':'حفظ كصورة'}
 ['nylon','disc','dp','prev','paid','refund','discWhy','pfWhy'].forEach(i=>$(i).oninput=calc);
@@ -1426,27 +1425,16 @@ $('pfStep').onclick=e=>{const b=e.target.closest('[data-st]');if(!b)return;const
 $('pfStepIn').oninput=e=>{const v=toEn(e.target.value).replace(/[^\d.]/g,'').replace(/\.(?=.*\.)/g,'');if(v!==e.target.value)e.target.value=v;$('dp').value=v;calc()};
 ['focus','click'].forEach(k=>$('pfStepIn').addEventListener(k,e=>{setTimeout(()=>{try{e.target.select()}catch(_){}},0)}));
 $('r_dp').addEventListener('focusin',()=>{dpOpen=true});
-/* آخر سعر اتباع بيه الصنف للعميل ده (بيظهر تحت البند لو السعر الحالي مختلف) */
-let lpCache={k:'',m:null};
-function lastPrices(c){const k=c.id+'|'+DV+'|'+(editId||'');if(lpCache.k===k)return lpCache.m;const m=new Map();
-  ledger(c).filter(r=>r.type==='inv'&&r.id!==editId).sort((a,b)=>b.ts-a.ts).forEach(r=>(r.rows||[]).forEach(x=>{if(x.rt||x.cols||!(+x.p>0))return;const key=nkey(x.n)+'|'+(x.t||'');if(!m.has(key))m.set(key,{p:+x.p,ts:r.ts})}));
-  lpCache={k,m};return m}
-function drawLastPrices(){const c=invCust(),m=c?lastPrices(c):null;
-  document.querySelectorAll('#rows .row').forEach(d=>{let w=d.querySelector('.lpw');const n=((d.querySelector('.n')||{}).value||'').trim(),cur=nv((d.querySelector('.p')||{}).value),hit=m&&n&&!d.dataset.rt?m.get(nkey(n)+'|'+d.dataset.t):null;
-    const h=hit&&Math.abs(hit.p-cur)>0.004?`<button type="button" class="lpb" data-lp="${hit.p}">↺ آخر سعر للعميل ${f(hit.p)} · ${dshort(hit.ts)}</button>`:'';
-    if(!w){if(!h)return;w=document.createElement('div');w.className='lpw';d.appendChild(w)}if(w.dataset.h!==h){w.innerHTML=h;w.dataset.h=h}})}
-$('rows').addEventListener('click',e=>{const b=e.target.closest('[data-lp]');if(!b)return;const p=b.closest('.row').querySelector('.p');if(p){p.value=b.dataset.lp;calc()}});
-
 $('t-new').addEventListener('click',e=>{const x=e.target.dataset.x;if(x){const r=$(x);r.classList.remove('hide');const i=r.querySelector('input');if(i&&!i.readOnly)i.focus();return}const t=e.target.dataset.add;if(t){addRow(t).querySelector('.n').focus();calc()}});
 $('t-new').addEventListener('click',e=>{const t=e.target.dataset.ret;if(!t)return;
   if(t==='free'){const d=addRow('mq',1);d.querySelector('.n').focus();calc();return}
   const pn=$('retPane');pn.classList.toggle('hide');if(!pn.classList.contains('hide')){$('retRes').innerHTML='';$('retNo').focus()}});
-(()=>{['hq','dbq','cq','iq','retNo'].forEach(id=>{const i=$(id);if(!i)return;const w=document.createElement('span');w.className='xw';if(i.style.flex)w.style.flex=i.style.flex;i.parentNode.insertBefore(w,i);w.appendChild(i);
+(()=>{['cust','hq','dbq','cq','iq','retNo'].forEach(id=>{const i=$(id);if(!i)return;const w=document.createElement('span');w.className='xw';if(i.style.flex)w.style.flex=i.style.flex;i.parentNode.insertBefore(w,i);w.appendChild(i);
   const b=document.createElement('button');b.type='button';b.className='xclr';b.textContent='×';b.setAttribute('aria-label','مسح');w.appendChild(b);
   const up=()=>w.classList.toggle('has',!!i.value);i.addEventListener('input',up);up();
   i.addEventListener('focus',()=>{setTimeout(()=>{try{i.select()}catch(e){}},0)});
   b.addEventListener('mousedown',e=>e.preventDefault());
-  b.onclick=()=>{i.value='';up();i.dispatchEvent(new Event('input',{bubbles:true}));i.focus()}})})();
+  b.onclick=()=>{if(i.readOnly)return;i.value='';up();i.dispatchEvent(new Event('input',{bubbles:true}));i.focus()}})})();
 let retInv=null;
 const rkey=x=>nkey(x.n||'')+'|'+(+x.w||0)+'|'+(+x.h||0);
 /* المتاح للإرجاع لكل بند = العدد الأصلي - اللي اترجع قبل كده (في فواتير محفوظة أو في الفاتورة الحالية) */
@@ -1708,7 +1696,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='55';
+const APP_VER='56';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
