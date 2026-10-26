@@ -286,6 +286,10 @@ a.ab.tel{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}[data-theme="dark
 .abl{display:flex;align-items:center;gap:6px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}.abl::-webkit-scrollbar{display:none}
 .abl .ab{flex:none;padding:3px 10px;border-radius:99px}.abl .lnk{flex:none;margin-inline-start:auto;padding:0 4px}
 /* ===== الإعدادات: قايمة رئيسية + صفحة لكل قسم ===== */
+.stiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 4px}
+.stile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:12px 6px;min-height:96px;border-radius:14px;border:1px solid color-mix(in srgb,var(--line) 75%,transparent);background:color-mix(in srgb,var(--card) 82%,transparent);box-shadow:var(--shadow);cursor:pointer;font:inherit;color:var(--ink);transition:transform .15s}
+.stile:active{transform:scale(.96)}.stile .ti{font-size:28px;line-height:1.1}.stile b{font-size:calc(var(--fs) + 3px)}.stile small{color:var(--mute);font-size:calc(var(--fs) - 1px);text-align:center}
+#t-cu .sth,#t-it .sth{margin-bottom:6px}
 .sgh{font-size:calc(var(--fs) - 1px);color:var(--mute);font-weight:700;margin:12px 8px 4px}.sgh:first-child{margin-top:2px}
 .sgl{background:color-mix(in srgb,var(--card) 82%,transparent);border:1px solid color-mix(in srgb,var(--line) 75%,transparent);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
 .sti{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:0;border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent);background:none;color:var(--ink);font:inherit;text-align:right;cursor:pointer}
@@ -522,7 +526,7 @@ label{font-size:calc(var(--fs) - 2px)}
   <div class="card">
     <input id="hq" placeholder="ابحث بالاسم أو الكود" inputmode="search">
     <div class="seg s" id="hPer" style="margin:6px 0 4px"><button data-p="all" class="on">الكل</button><button data-p="d">اليوم</button><button data-p="w">7 أيام</button><button data-p="m">30 يوم</button></div>
-    <div class="seg s" id="hTy" style="margin:0 0 4px"><button data-y="all" class="on">الكل</button><button data-y="inv">فواتير</button><button data-y="pay">دفعات</button><button data-y="paid">مدفوع</button><button data-y="ret">مرتجع</button><button data-y="due">متبقي</button></div>
+    <div class="seg s" id="hTy" style="margin:0 0 4px"><button data-y="all" class="on">الكل</button><button data-y="inv">فواتير</button><button data-y="paid">مدفوع</button><button data-y="ret">مرتجع</button><button data-y="due">متبقي</button></div>
     <div class="mute hide" id="hBrk" style="font-weight:700;margin:2px 0"></div>
     <div class="ro"><span class="mute" id="hTot"></span><span style="display:flex;gap:6px"><button class="ab hide" id="clBtn">🗂 الإقفالات</button><button class="ab hide" id="dayClose">🧾 إقفال</button><button class="ab hide" id="monRep">📊 تقرير</button></span></div>
   </div>
@@ -579,6 +583,7 @@ label{font-size:calc(var(--fs) - 2px)}
 
 <section id="t-cu" class="hide">
   <div id="cuMain">
+    <div class="sth"><button type="button" class="lnk" data-goset="1" aria-label="رجوع للإعدادات">→</button><b>👥 العملاء</b></div>
     <div class="rowc"><input id="cq" placeholder="ابحث باسم العميل"><button class="main" data-m="add">+ عميل</button></div>
     <div id="cuAdd" class="card hide">
       <div class="ro" style="gap:6px;margin:0"><input id="nc_name" placeholder="اسم العميل (مطلوب)" style="flex:1"><select id="nc_cat" class="catsel" aria-label="الفئة"></select></div>
@@ -597,6 +602,7 @@ label{font-size:calc(var(--fs) - 2px)}
 </section>
 
 <section id="t-it" class="hide">
+  <div class="sth"><button type="button" class="lnk" data-goset="1" aria-label="رجوع للإعدادات">→</button><b>📦 الأصناف</b></div>
   <div class="seg s" style="max-width:220px" id="seg"><button data-it="rd">جاهز</button><button data-it="mq" class="on">مقطع</button></div>
   <div class="ro" id="catBar" style="gap:6px;margin:6px 0"><span class="mute">سعر فئة:</span><select id="icat" class="catsel" style="max-width:150px"></select><button class="lnk" id="catMgrBtn" style="flex:none">إدارة الفئات</button></div>
   <div id="catMgr" class="card hide"></div>
@@ -607,6 +613,7 @@ label{font-size:calc(var(--fs) - 2px)}
 
 <section id="t-st" class="hide">
 <div id="stHome">
+  <div class="stiles"><button type="button" class="stile" data-go="cu"><span class="ti">👥</span><b>العملاء</b><small id="ssCu"></small></button><button type="button" class="stile" data-go="it"><span class="ti">📦</span><b>الأصناف</b><small id="ssIt"></small></button></div>
   <div class="sgh">الفاتورة</div>
   <div class="sgl"><button type="button" class="sti" data-sp="shop"><span class="si">🏪</span><span class="stt"><b>بيانات المحل</b><small id="ss_shop"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="des"><span class="si">🎨</span><span class="stt"><b>تصميم الفاتورة</b><small id="ss_des"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="notes"><span class="si">📝</span><span class="stt"><b>ملاحظات الفاتورة</b><small id="ss_notes"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="inv"><span class="si">🧾</span><span class="stt"><b>خيارات الفاتورة والطباعة</b><small id="ss_inv"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="pay"><span class="si">💳</span><span class="stt"><b>طرق الدفع</b><small id="ss_pay"></small></span><span class="sa">‹</span></button></div>
   <div class="sgh">الرسائل والتقارير</div>
@@ -770,8 +777,8 @@ label{font-size:calc(var(--fs) - 2px)}
   <button data-t="new" class="on"><span class="nav-icon">🧾</span><span class="nav-label">فاتورة</span></button>
   <button data-t="dash"><span class="nav-icon">📒</span><span class="nav-label">سجل</span></button>
   <button data-t="cl"><span class="nav-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" style="display:block;margin:0 auto" aria-hidden="true"><rect x="3" y="3" width="8" height="7" rx="1.2"/><rect x="13" y="3" width="8" height="11" rx="1.2"/><rect x="3" y="12" width="8" height="9" rx="1.2"/><rect x="13" y="16" width="8" height="5" rx="1.2"/></svg></span><span class="nav-label">CutList</span></button>
-  <button data-t="it"><span class="nav-icon">📦</span><span class="nav-label">الأصناف</span></button>
-  <button data-t="cu"><span class="nav-icon">👥</span><span class="nav-label">العملاء</span></button>
+  <button data-t="it" class="hide"><span class="nav-icon">📦</span><span class="nav-label">الأصناف</span></button>
+  <button data-t="cu" class="hide"><span class="nav-icon">👥</span><span class="nav-label">العملاء</span></button>
 </nav>
 
 <div id="dd"></div>
@@ -962,13 +969,15 @@ document.addEventListener('focusin',()=>setTimeout(kbFix,300));document.addEvent
 window.addEventListener('resize',fixBar);
 let curTab='new',tabHist=[],navNoHist=false;
 const navClick=e=>{const b=e.target.closest('button[data-t]');if(!b)return;const t=b.dataset.t;if(!navNoHist&&t!==curTab)tabHist.push(curTab);curTab=t;
-  document.querySelectorAll('#bnav button,#hdrSet').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('#bnav button,#hdrSet').forEach(x=>x.classList.toggle('on',x===b));if(t==='cu'||t==='it')$('hdrSet').classList.add('on');
   ['dash','new','cl','cu','it','st'].forEach(k=>$('t-'+k).classList.toggle('hide',k!==t));
   $('saveBar').classList.toggle('hide',t!=='new');document.body.classList.toggle('onNew',t==='new');fixBar();
   if(t==='new'){drawRecent();drawQS()}if(t==='st')stGo('');if(t==='dash')drawDash();if(t==='cu')drawCusts();if(t==='new'&&lastC&&!editId){$('prev').value=balOf(lastC)||'';calc()}};
 $('bnav').onclick=navClick;$('hdrSet').onclick=navClick;
+/* العملاء والأصناف بقوا جوه الإعدادات: زرار الإعدادات يفضل متعلّم وانت فيهم */
+document.addEventListener('click',e=>{if(e.target.closest('[data-goset]')){$('hdrSet').click();window.scrollTo(0,0)}});
 (function(){const nav=$('bnav'),ind=document.createElement('span');ind.className='nav-ind';nav.prepend(ind);let first=true;
-function place(){const b=nav.querySelector('button.on');if(!b){nav.classList.remove('ready');return}if(!b.offsetWidth)return;
+function place(){const b=nav.querySelector('button.on');if(!b||!b.offsetWidth){nav.classList.remove('ready');return}
  if(first){ind.style.transition='none'}
  ind.style.width=(b.offsetWidth-6)+'px';ind.style.transform='translateX('+(b.offsetLeft+3)+'px)';nav.classList.add('ready');
  if(first){void ind.offsetWidth;ind.style.transition='';first=false}}
@@ -1696,7 +1705,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='53';
+const APP_VER='54';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
@@ -1787,7 +1796,7 @@ let stCur='';
 function stGo(k){stCur=k||'';$('stHome').classList.toggle('hide',!!stCur);document.querySelectorAll('#t-st .stp').forEach(p=>p.classList.toggle('hide',p.dataset.sp!==stCur));
   try{if(stCur==='des'&&window.invDesOpen)invDesOpen();else if(stCur==='msg'){loadMsgUI();msgPrev()}else if(stCur==='pay')pmDraw();else if(stCur==='notes')ntDraw();else if(stCur==='shop'){loadMsgUI();shopTxtLoad()}else if(stCur==='look')fzMark();else if(stCur==='rem')remUI();else if(stCur==='data')storDraw();else if(!stCur)stSum()}catch(e){}
   window.scrollTo(0,0)}
-function stSum(){const W_=(k,t)=>{const e=$('ss_'+k);if(e)e.textContent=t};let ps=[];try{ps=pfPresets()}catch(e){}
+function stSum(){const W_=(k,t)=>{const e=$('ss_'+k);if(e)e.textContent=t};{const d=debtAll();$('ssCu').textContent=S.customers.length+' عميل'+(d>0?' · عليهم '+f(d):'');$('ssIt').textContent=S.items.length+' صنف'}let ps=[];try{ps=pfPresets()}catch(e){}
   W_('shop',shopN());W_('des',(pget('fancyInv',true)?'التصميم الملون':'تصميم بسيط')+' · '+PAPERS[paperKey()].n);
   const n=liveNotes().length;W_('notes',n?n+(n>1?' ملاحظات':' ملاحظة'):'مفيش ملاحظات');
   W_('inv',[pget('editInv',true)&&'تعديل',pget('dupInv',true)&&'تكرار',pget('pdfOn',true)&&'PDF وطباعة',pget('saveImgOn',false)&&'حفظ كصورة'].filter(Boolean).join(' · ')||'—');
@@ -1798,7 +1807,7 @@ function stSum(){const W_=(k,t)=>{const e=$('ss_'+k);if(e)e.textContent=t};let p
   W_('look',(document.documentElement.getAttribute('data-theme')==='dark'?'ليلي':'نهاري')+' · خط '+({x:'أصغر',s:'صغير',m:'وسط',l:'كبير',xl:'أكبر'}[lsv('fz','m')||'m']||'وسط'));
   W_('lock',lsv('lkOn','')==='1'?'مقفول برقم سري':'من غير قفل');
   W_('data',$('stor').textContent.replace(/^الحفظ:\s*/,'').replace(/\.$/,''))}
-$('t-st').addEventListener('click',e=>{const b=e.target.closest('.sti');if(b){stGo(b.dataset.sp);return}if(e.target.closest('[data-stback]'))stGo('')});
+$('t-st').addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){document.querySelector('#bnav button[data-t="'+g.dataset.go+'"]').click();window.scrollTo(0,0);return}const b=e.target.closest('.sti');if(b){stGo(b.dataset.sp);return}if(e.target.closest('[data-stback]'))stGo('')});
 /* بيانات المحل: السطور الثابتة */
 function shopTxtLoad(){const d=invd();$('stTop').value=d.topText||'';$('stHead').value=d.headText||'';$('stFoot').value=d.footText||''}
 ['stTop','stHead','stFoot'].forEach(id=>$(id).oninput=()=>{try{localStorage.setItem('shopTxt',JSON.stringify({top:$('stTop').value,head:$('stHead').value,foot:$('stFoot').value}))}catch(e){}});
