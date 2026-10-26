@@ -1336,10 +1336,14 @@ function placeDD(){if(dd.style.display==='none'||!ddInp)return;const r=ddInp.get
   let top=r.bottom+2;if(top+h>vh-4&&r.top-h-2>4)top=r.top-h-2;
   dd.style.top=top+'px';dd.style.right=Math.max(4,innerWidth-r.right)+'px';dd.style.width=Math.max(230,r.width)+'px'}
 function showDD(inp,tr){const q=inp.value.trim(),t=tr.dataset.t;const l=S.items.filter(it=>qm(it.name,q)),cu=custUsage(lastC);{const u=usageCat(invCat);const pt=invCat==='rdy'?'rd':'mq';l.sort((a,b)=>(cu[b.id]||0)-(cu[a.id]||0)||((b.type===pt)-(a.type===pt))||(u[b.id]||0)-(u[a.id]||0))}
-  if(!l.length){dd.style.display='none';return}ddInp=inp;ddRow=tr;
-  dd.innerHTML=l.map(it=>`<div data-k="${it.id}"><span style="flex:1">${cu[it.id]?'<b class="ucm">★</b> ':''}${esc(it.name)}${cu[it.id]?` <small class="num ucn">×${cu[it.id]}</small>`:''}</span><small class="num">${szOf(it)?'('+esc(szOf(it))+')':''}</small><small>${it.type==='rd'?'جاهز':'مقطع'}</small><b class="num">${priceOf(it,invCat)||''}</b></div>`).join('');
+  const gh=custHist(lastC).ghosts.map((g,i)=>({g,i})).filter(x=>qm(x.g.n,q));
+  if(!l.length&&!gh.length){dd.style.display='none';return}ddInp=inp;ddRow=tr;
+  dd.innerHTML=gh.map(x=>`<div data-g="${x.i}"><span style="flex:1"><b class="ucm">★</b> ${esc(x.g.n)} <small class="num ucn">×${x.g.c}</small></span><small>${x.g.t==='rd'?'جاهز':'مقطع'}</small><b class="num">${x.g.p||''}</b></div>`).join('')+l.map(it=>`<div data-k="${it.id}"><span style="flex:1">${cu[it.id]?'<b class="ucm">★</b> ':''}${esc(it.name)}${cu[it.id]?` <small class="num ucn">×${cu[it.id]}</small>`:''}</span><small class="num">${szOf(it)?'('+esc(szOf(it))+')':''}</small><small>${it.type==='rd'?'جاهز':'مقطع'}</small><b class="num">${priceOf(it,invCat)||''}</b></div>`).join('');
   dd.style.display='block';placeDD()}
-dd.addEventListener('mousedown',e=>{e.preventDefault();const cd=e.target.closest('div[data-c]');if(cd){const c=getC(cd.dataset.c);if(c&&ddInp){ddInp.value=c.name;ddInp.dispatchEvent(new Event('input',{bubbles:true}))}dd.style.display='none';return}const d=e.target.closest('div[data-k]');if(!d)return;const it=S.items.find(x=>x.id===d.dataset.k),rd=it.type==='rd';
+dd.addEventListener('mousedown',e=>{e.preventDefault();const cd=e.target.closest('div[data-c]');if(cd){const c=getC(cd.dataset.c);if(c&&ddInp){ddInp.value=c.name;ddInp.dispatchEvent(new Event('input',{bubbles:true}))}dd.style.display='none';return}const gd=e.target.closest('div[data-g]');if(gd){const g=custHist(lastC).ghosts[+gd.dataset.g];if(!g||!ddInp)return;const gt=g.t==='rd'?'rd':'mq';
+    if(gt!==ddRow.dataset.t){const nd=addRow(gt,ddRow.dataset.rt,ddRow.dataset.src);ddRow.after(nd);ddRow.remove();ddRow=nd;ddInp=nd.querySelector('.n')}
+    ddInp.value=gt==='rd'?(g.full||g.n):g.n;const pi=ddRow.querySelector('.p');if(pi)pi.value=g.p||'';dd.style.display='none';calc();const e1=[...ddRow.querySelectorAll('input.w,input.h,input.c,input.p')].find(i=>!i.value);if(e1)e1.focus();return}
+  const d=e.target.closest('div[data-k]');if(!d)return;const it=S.items.find(x=>x.id===d.dataset.k),rd=it.type==='rd';
   if(it.type!==ddRow.dataset.t){const nd=addRow(it.type,ddRow.dataset.rt,ddRow.dataset.src);ddRow.after(nd);ddRow.remove();ddRow=nd;ddInp=nd.querySelector('.n')}
   ddInp.value=rd&&it.h&&it.w?`${it.name} ${it.w}×${it.h}`:it.name;
   const s=(c,v)=>{const x=ddRow.querySelector(c);if(x)x.value=v||''};s('.p',priceOf(it,invCat));s('.w',it.w);s('.h',it.h);
@@ -1463,15 +1467,26 @@ $('lessBtn').onclick=()=>{if(['nylon','disc','discWhy','refund','note'].some(i=>
 $('moreBtn').onclick=()=>{['r_nylon','r_disc','r_ref'].forEach(i=>$(i).classList.remove('hide'));$('discWhy').classList.remove('hide');if(!lastC)$('r_prev').classList.remove('hide');$('note').classList.remove('hide');$('retBox').classList.remove('hide');$('moreBtn').classList.add('hide');calc()};
 let lastC=null,invCat='d';
 let cuCache={k:'',m:{}};
-function custUsage(c){if(!c)return{};const k=c.id+'|'+DV+'|'+(editId||'');if(cuCache.k===k)return cuCache.m;const m={};const names=[];
-  S.invoices.forEach(r=>{if(r.cid!==c.id||r.type==='pay'||r.id===editId)return;(r.rows||[]).forEach(x=>{if(x.n)names.push(nm(x.n))})});
-  S.items.forEach(it=>{const n0=nm(it.name);let n=0;for(const x of names)if(x===n0||x.startsWith(n0+' '))n++;m[it.id]=n});cuCache={k,m};return m}
+const szRe=/\s*\d+(?:\.\d+)?\s*[×x*]\s*\d+(?:\.\d+)?\s*$/;
+function custHist(c){if(!c)return{items:{},ghosts:[]};const k=c.id+'|'+DV+'|'+(editId||'');if(cuCache.k===k)return cuCache.m;
+  const its=S.items.map(it=>({it,n:nkey(it.name)})).filter(x=>x.n),m={},gm=new Map();S.items.forEach(it=>m[it.id]=0);
+  S.invoices.filter(r=>r.cid===c.id&&r.type!=='pay'&&r.id!==editId).sort((a,b)=>a.ts-b.ts).forEach(r=>(r.rows||[]).forEach(x=>{
+    if(!x.n||x.rt||x.cols)return;const key=nkey(String(x.n).replace(szRe,'')),full=nkey(x.n);if(!key)return;
+    let best=null;for(const y of its){if((key===y.n||full===y.n||key.startsWith(y.n+' ')||full.startsWith(y.n+' '))&&(!best||y.n.length>best.n.length))best=y}
+    if(best){m[best.it.id]++;return}
+    const g=gm.get((x.t||'')+'|'+key)||{n:String(x.n).replace(szRe,'').trim(),t:x.t||'mq',c:0};g.c++;g.p=+x.p||g.p||0;g.w=x.w;g.h=x.h;g.full=x.n;gm.set((x.t||'')+'|'+key,g)}));
+  const v={items:m,ghosts:[...gm.values()].sort((a,b)=>b.c-a.c)};cuCache={k,m:v};return v}
+function custUsage(c){return custHist(c).items}
 function drawQS(){const w=$('qwrap'),q=$('qs'),ab=$('addbar');if(!$('cust').value.trim()){w.classList.add('hide');ab.classList.remove('hide');return}
-  const u=usageCat(invCat),cu=custUsage(lastC),ty=invCat==='rdy'?'rd':'mq',mine=S.items.filter(it=>cu[it.id]).sort((a,b)=>cu[b.id]-cu[a.id]||a.name.localeCompare(b.name,'ar')),
-    l=mine.concat(S.items.filter(it=>!cu[it.id]&&it.type===ty).sort((a,b)=>(u[b.id]||0)-(u[a.id]||0)||a.name.localeCompare(b.name,'ar')));
-  if(!l.length){w.classList.add('hide');ab.classList.remove('hide');return}
+  const u=usageCat(invCat),H=custHist(lastC),cu=H.items,ty=invCat==='rdy'?'rd':'mq',
+    mine=S.items.filter(it=>cu[it.id]).map(it=>({it,c:cu[it.id]})).concat(H.ghosts.map((g,i)=>({g,i,c:g.c}))).sort((a,b)=>b.c-a.c||(a.it?a.it.name:a.g.n).localeCompare(b.it?b.it.name:b.g.n,'ar')),
+    rest=S.items.filter(it=>!cu[it.id]&&it.type===ty).sort((a,b)=>(u[b.id]||0)-(u[a.id]||0)||a.name.localeCompare(b.name,'ar'));
+  if(!mine.length&&!rest.length){w.classList.add('hide');ab.classList.remove('hide');return}
   w.classList.remove('hide');ab.classList.add('hide');
-  q.innerHTML=l.map(it=>`<button class="alt b-blue${lastC&&!cu[it.id]&&l.some(x=>cu[x.id])?' other':''}" data-q="${it.id}">${esc(it.name)}${szOf(it)?` <small class="num sz">(${esc(szOf(it))})</small>`:''}${priceOf(it,invCat)?` <small class="num pr">${priceOf(it,invCat)}</small>`:''}</button>`).join('');q.scrollLeft=0}
+  const mk=(it,oth)=>`<button class="alt b-blue${oth?' other':''}" data-q="${it.id}">${esc(it.name)}${szOf(it)?` <small class="num sz">(${esc(szOf(it))})</small>`:''}${priceOf(it,invCat)?` <small class="num pr">${priceOf(it,invCat)}</small>`:''}</button>`;
+  q.innerHTML=mine.map(x=>x.it?mk(x.it,0):`<button class="alt b-blue" data-g="${x.i}">${esc(x.g.n)}${x.g.p?` <small class="num pr">${x.g.p}</small>`:''}</button>`).join('')+rest.map(it=>mk(it,mine.length>0)).join('');q.scrollLeft=0}
+$('qs').addEventListener('click',e=>{const b=e.target.closest('button[data-g]');if(!b)return;const g=custHist(lastC).ghosts[+b.dataset.g];if(!g)return;
+  const d=addRow(g.t==='rd'?'rd':'mq');setVals(d,g.t==='rd'?{n:g.full||g.n,p:g.p||''}:{n:g.n,p:g.p||''});calc();const e0=['w','h','c','p'].map(k=>d.querySelector('input.'+k)).filter(Boolean).find(i=>!i.value)||d.querySelector('input.c');if(e0)e0.focus()});
 $('qs').onclick=e=>{const b=e.target.closest('button[data-q]');if(!b)return;const it=S.items.find(x=>x.id===b.dataset.q);if(!it)return;
   const rd=it.type==='rd',d=addRow(it.type);setVals(d,rd?{n:it.h&&it.w?`${it.name} ${it.w}×${it.h}`:it.name,p:it.p||''}:{n:it.name,w:it.w||'',h:it.h||'',p:priceOf(it,invCat)||''});calc();const e0=['w','h','c','p'].map(k=>d.querySelector('input.'+k)).filter(Boolean).find(i=>!i.value)||d.querySelector('input.c');if(e0)e0.focus()};
 function renderFit(box,items,last){const mk=l=>l.map(x=>x.h).join('');
@@ -1696,7 +1711,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='56';
+const APP_VER='57';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
