@@ -266,6 +266,7 @@ button.arm,.lnk.arm{background:var(--danger)!important;border-color:var(--danger
 a.ab.wa{background:#16a34a;border-color:#16a34a;color:#fff}
 a.ab.tel{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}[data-theme="dark"] a.ab.tel{background:#1e3a5f;border-color:#3b6aa5;color:#bfdbfe}
 .dbpay{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+.ucm{color:#d97706}.ucn{color:#d97706;font-weight:700}
 .lpw{margin-top:3px}.lpb{background:none;border:1px dashed #b45309;color:#b45309;border-radius:99px;padding:1px 9px;font-size:calc(var(--fs) - 1px);cursor:pointer;font-family:inherit}[data-theme="dark"] .lpb{color:#fcd34d;border-color:#fcd34d}
 .dbpay .tg{margin-bottom:6px}.dbpay .addbar{flex-wrap:wrap;margin:4px 0 0}
 /* ===== الفاتورة: شريط الدفع (دفع كامل + طرق الدفع) ===== */
@@ -1335,9 +1336,9 @@ const szOf=it=>it.h&&it.w?it.w+'×'+it.h:'';
 function placeDD(){if(dd.style.display==='none'||!ddInp)return;const r=ddInp.getBoundingClientRect(),vh=window.visualViewport?visualViewport.height:innerHeight,h=Math.min(dd.scrollHeight,220);
   let top=r.bottom+2;if(top+h>vh-4&&r.top-h-2>4)top=r.top-h-2;
   dd.style.top=top+'px';dd.style.right=Math.max(4,innerWidth-r.right)+'px';dd.style.width=Math.max(230,r.width)+'px'}
-function showDD(inp,tr){const q=inp.value.trim(),t=tr.dataset.t;const l=S.items.filter(it=>qm(it.name,q));{const u=usageCat(invCat);l.sort((a,b)=>(u[b.id]||0)-(u[a.id]||0))}
+function showDD(inp,tr){const q=inp.value.trim(),t=tr.dataset.t;const l=S.items.filter(it=>qm(it.name,q)),cu=custUsage(lastC);{const u=usageCat(invCat);l.sort((a,b)=>(cu[b.id]||0)-(cu[a.id]||0)||(u[b.id]||0)-(u[a.id]||0))}
   if(!l.length){dd.style.display='none';return}ddInp=inp;ddRow=tr;
-  dd.innerHTML=l.map(it=>`<div data-k="${it.id}"><span style="flex:1">${esc(it.name)}</span><small class="num">${szOf(it)?'('+esc(szOf(it))+')':''}</small><small>${it.type==='rd'?'جاهز':'مقطع'}</small><b class="num">${priceOf(it,invCat)||''}</b></div>`).join('');
+  dd.innerHTML=l.map(it=>`<div data-k="${it.id}"><span style="flex:1">${cu[it.id]?'<b class="ucm">★</b> ':''}${esc(it.name)}${cu[it.id]?` <small class="num ucn">×${cu[it.id]}</small>`:''}</span><small class="num">${szOf(it)?'('+esc(szOf(it))+')':''}</small><small>${it.type==='rd'?'جاهز':'مقطع'}</small><b class="num">${priceOf(it,invCat)||''}</b></div>`).join('');
   dd.style.display='block';placeDD()}
 dd.addEventListener('mousedown',e=>{e.preventDefault();const cd=e.target.closest('div[data-c]');if(cd){const c=getC(cd.dataset.c);if(c&&ddInp){ddInp.value=c.name;ddInp.dispatchEvent(new Event('input',{bubbles:true}))}dd.style.display='none';return}const d=e.target.closest('div[data-k]');if(!d)return;const it=S.items.find(x=>x.id===d.dataset.k),rd=it.type==='rd';
   if(it.type!==ddRow.dataset.t){const nd=addRow(it.type,ddRow.dataset.rt,ddRow.dataset.src);ddRow.after(nd);ddRow.remove();ddRow=nd;ddInp=nd.querySelector('.n')}
@@ -1473,11 +1474,13 @@ $('lessBtn').onclick=()=>{if(['nylon','disc','discWhy','refund','note'].some(i=>
   ['r_nylon','r_disc','r_ref'].forEach(i=>$(i).classList.add('hide'));$('discWhy').classList.add('hide');if(!lastC&&!$('prev').value)$('r_prev').classList.add('hide');$('note').classList.add('hide');$('retBox').classList.add('hide');$('retPane').classList.add('hide');$('moreBtn').classList.remove('hide');calc()};
 $('moreBtn').onclick=()=>{['r_nylon','r_disc','r_ref'].forEach(i=>$(i).classList.remove('hide'));$('discWhy').classList.remove('hide');if(!lastC)$('r_prev').classList.remove('hide');$('note').classList.remove('hide');$('retBox').classList.remove('hide');$('moreBtn').classList.add('hide');calc()};
 let lastC=null,invCat='d';
-function custUsage(c){const m={};if(!c)return m;const names=[];
+let cuCache={k:'',m:{}};
+function custUsage(c){if(!c)return{};const k=c.id+'|'+DV+'|'+(editId||'');if(cuCache.k===k)return cuCache.m;const m={};const names=[];
   S.invoices.forEach(r=>{if(r.cid!==c.id||r.type==='pay'||r.id===editId)return;(r.rows||[]).forEach(x=>{if(x.n)names.push(nm(x.n))})});
-  S.items.forEach(it=>{const n0=nm(it.name);let n=0;for(const x of names)if(x===n0||x.startsWith(n0+' '))n++;m[it.id]=n});return m}
+  S.items.forEach(it=>{const n0=nm(it.name);let n=0;for(const x of names)if(x===n0||x.startsWith(n0+' '))n++;m[it.id]=n});cuCache={k,m};return m}
 function drawQS(){const w=$('qwrap'),q=$('qs'),ab=$('addbar');if(!$('cust').value.trim()){w.classList.add('hide');ab.classList.remove('hide');return}
-  const u=usageCat(invCat),cu=custUsage(lastC),l=S.items.filter(it=>it.type===(invCat==='rdy'?'rd':'mq')).sort((a,b)=>(cu[b.id]||0)-(cu[a.id]||0)||(u[b.id]||0)-(u[a.id]||0)||a.name.localeCompare(b.name,'ar'));
+  const u=usageCat(invCat),cu=custUsage(lastC),ty=invCat==='rdy'?'rd':'mq',mine=S.items.filter(it=>cu[it.id]).sort((a,b)=>cu[b.id]-cu[a.id]||a.name.localeCompare(b.name,'ar')),
+    l=mine.concat(S.items.filter(it=>!cu[it.id]&&it.type===ty).sort((a,b)=>(u[b.id]||0)-(u[a.id]||0)||a.name.localeCompare(b.name,'ar')));
   if(!l.length){w.classList.add('hide');ab.classList.remove('hide');return}
   w.classList.remove('hide');ab.classList.add('hide');
   q.innerHTML=l.map(it=>`<button class="alt b-blue${lastC&&!cu[it.id]&&l.some(x=>cu[x.id])?' other':''}" data-q="${it.id}">${esc(it.name)}${szOf(it)?` <small class="num sz">(${esc(szOf(it))})</small>`:''}${priceOf(it,invCat)?` <small class="num pr">${priceOf(it,invCat)}</small>`:''}</button>`).join('');q.scrollLeft=0}
@@ -1705,7 +1708,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='54';
+const APP_VER='55';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
