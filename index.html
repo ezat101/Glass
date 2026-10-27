@@ -1155,9 +1155,9 @@ function sheet(o){lastSpec=o;const D=invd();
     const sX=w=>D.sumAl==='l'?P:D.sumAl==='r'?W-P-w:(W-w)/2;
     const secS=()=>{const its=D.sItems?o.items:null;
       if(its&&its.length){T('ملخص الأصناف',W-P,y+8,'right','bold '+(D.tt||14)+'px '+F);y+=D.tt?D.tt+6:20;
-        const side=D.sideSum!==0&&its.length<=5&&(IW-tw-12)>=IW*.35,st={th:['الصنف','العدد','الأمتار','السعر','القيمة'],w:[.34,.1,.16,.16,.24],rows:its.map(r=>r.slice(0,5)),col:its.map(r=>r[5])};
-        const sh=tbl(st,W-P,side?IW-tw-12:IW,{fs:D.items,bold:i=>i===0||i===4,colr:i=>i===4?PL.val:null});
-        if(side){const th2=totals(P,tw,vw);y+=Math.max(sh,th2)+GP}else{y+=sh+GP;y+=totals(sX(tw),tw,vw)+GP}}
+        const SS=D.sideSum==null?1:+D.sideSum,fS=SS===2,twS=fS?Math.min(tw,IW*.45):tw,vwS=fS?Math.min(vw,twS*.5):vw,side=SS!==0&&(fS||(its.length<=5&&(IW-tw-12)>=IW*.35)),st={th:['الصنف','العدد','الأمتار','السعر','القيمة'],w:[.34,.1,.16,.16,.24],rows:its.map(r=>r.slice(0,5)),col:its.map(r=>r[5])};
+        const sh=tbl(st,W-P,side?IW-twS-12:IW,{fs:D.items,bold:i=>i===0||i===4,colr:i=>i===4?PL.val:null});
+        if(side){const th2=totals(P,twS,vwS);y+=Math.max(sh,th2)+GP}else{y+=sh+GP;y+=totals(sX(tw),tw,vw)+GP}}
       else if(o.sum&&o.sum.length){const w=Math.min(IW,Math.max(IW*Math.max(.5,D.sumW/100),vw+130));y+=totals(sX(w),w,vw)+GP}};
     const secN=()=>{
       if(o.note){y+=2;wrap('ملاحظة: '+o.note,IW,nf+'px '+F).forEach(s=>{T(s,W-P,y+11,'right',nf+'px '+F);y+=nlh})}
@@ -1786,7 +1786,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='64';
+const APP_VER='65';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
@@ -3894,10 +3894,11 @@ const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncN
     E('idFont').querySelector('select').value=cfg.fam;
     const ck=(k,l)=>row(l,'<input type="checkbox" data-b="'+k+'"'+(cfg[k]?' checked':'')+'>'),
       NAMES={tables:'جدول البنود',summary:'ملخص الأصناف والإجماليات',notes:'الملاحظات'};
-    E('idCont').innerHTML=ck('sDate','إظهار التاريخ')+ck('sSub','إظهار سطر الكود ورقم الإذن')+ck('sItems','إظهار «ملخص الأصناف»')+ck('hPrev','إخفاء صف «رصيد سابق»')+ck('hLine','خط تحت هيدر الجدول')+ck('sideSum','ملخص الأصناف جنب الإجماليات (لو الأصناف قليلة)')+
+    E('idCont').innerHTML=ck('sDate','إظهار التاريخ')+ck('sSub','إظهار سطر الكود ورقم الإذن')+ck('sItems','إظهار «ملخص الأصناف»')+ck('hPrev','إخفاء صف «رصيد سابق»')+ck('hLine','خط تحت هيدر الجدول')+row('مكان ملخص الأصناف','<select data-f="sideSum" style="flex:1.6"><option value="1">تلقائي (جنب الإجماليات لو الأصناف قليلة)</option><option value="2">جنب الإجماليات دايماً</option><option value="0">فوق الإجماليات (بعرض كامل)</option></select>')+
       '<div class="idr"><span>إخفاء أعمدة من جدول البنود</span></div>'+ck('hSize','عمود المقاس')+ck('hCnt','عمود العدد')+ck('hQty','عمود الكمية')+ck('hPrice','عمود السعر')+
       row('وضوح ألوان الصفوف','<input type="range" data-n="tint" min="0" max="45" value="'+cfg.tint+'"><span class="v">'+cfg.tint+'</span>')+
       '<div class="idr"><span>ترتيب الأقسام (من فوق لتحت)</span></div>'+cfg.order.map((k,i)=>'<div class="idr"><span>'+(i+1)+' · '+NAMES[k]+'</span><button class="alt" data-o="'+k+'" data-d="-1"'+(i?'':' disabled')+'>↑</button><button class="alt" data-o="'+k+'" data-d="1"'+(i<cfg.order.length-1?'':' disabled')+'>↓</button></div>').join('');
+    E('idCont').querySelector('select[data-f="sideSum"]').value=String(cfg.sideSum==null?1:cfg.sideSum);
     E('idTot').innerHTML=row('ارتفاع كل مربع','<input type="range" data-n="sumH" min="24" max="64" value="'+cfg.sumH+'"><span class="v">'+cfg.sumH+'</span>')+
       row('عرض مربع الإجماليات','<input type="range" data-n="sumW" min="30" max="100" step="2" value="'+cfg.sumW+'"><span class="v">'+cfg.sumW+'</span>')+
       row('خط الإجمالي والمتبقي والمدفوع','<input type="range" data-n="sumBig" min="11" max="28" value="'+cfg.sumBig+'"><span class="v">'+cfg.sumBig+'</span>')+
