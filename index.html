@@ -716,6 +716,7 @@ button.b-cu{background:var(--field);border-color:var(--fieldB);color:var(--ink)}
 </div>
 <div class="stp hide" data-sp="inv"><div class="sth"><button type="button" class="lnk" data-stback="1" aria-label="رجوع للإعدادات">→</button><b>🧾 خيارات الفاتورة والطباعة</b></div>
 <div class="card"><b>بعد حفظ الفاتورة</b>
+  <label class="opt"><input type="checkbox" id="ceilSz"> تقريب العرض والطول لأعلى رقم صحيح عند حساب المتر (42.2 و42.5 يتحسبوا 43)</label>
   <label class="opt"><input type="checkbox" id="editInv"> تعديل الفاتورة بعد حفظها</label>
   <label class="opt"><input type="checkbox" id="dupInv"> تكرار فاتورة قديمة لنفس العميل</label>
   <label class="opt"><input type="checkbox" id="saveImgOn"> زرار «حفظ كصورة» في شريط الحفظ (بينزّل الصورة في التنزيلات)</label></div>
@@ -1469,12 +1470,12 @@ function markRt(d,src){d.dataset.rt='1';if(src)d.dataset.src=src;if(d.querySelec
 let TOT={},editId=null,_pw='',dpOpen=false,qtFrom=null,fullK=null,lastSaved=null,dbFull=false;
 /* المبلغ اللي لو اتدفع بعد خصم النسبة يغطي t بالظبط */
 function grossFor(t,pf){t=rd2(t);if(!(pf>0)||pf>=100)return t;let g=rd2(t/(1-pf/100));for(let i=0;i<4&&rd2(g-rd2(g*pf/100))<t;i++)g=rd2(g+.01);return g}
-function calc(){let sub=0,tq=0;const rows=[];/* رقم الصنف بيتحفظ مع البند لو اسمه لسه زي اسم الصنف بالظبط (اتختار من القايمة أو اتكتب زيه) */
+function calc(){let sub=0,tq=0;const rows=[];const CZ=pget('ceilSz',true),cz=v=>CZ&&v>0?Math.ceil(v-1e-9):v;/* رقم الصنف بيتحفظ مع البند لو اسمه لسه زي اسم الصنف بالظبط (اتختار من القايمة أو اتكتب زيه) */
   let exM=null;const itKeys=it=>{const k=nkey(it.name);return k?[k].concat(it.type==='rd'&&it.w&&it.h?[nkey(it.name+' '+it.w+'×'+it.h)]:[]):[]},itemOf=(d,t,n)=>{const k=nkey(n);if(!k||d.dataset.rt)return null;const a=d.dataset.iid&&S.items.find(x=>x.id===d.dataset.iid);if(a&&a.type===t&&itKeys(a).includes(k))return a.id;if(!exM){exM=new Map();S.items.forEach(it=>itKeys(it).forEach(x=>{if(!exM.has(it.type+'|'+x))exM.set(it.type+'|'+x,it.id)}))}return exM.get(t+'|'+k)||null};
   document.querySelectorAll('#rows .row').forEach(d=>{const g=c=>d.querySelector(c),gv=c=>nv(g(c)&&g(c).value),rd=d.dataset.t==='rd';
-    const w=gv('.w'),h=gv('.h'),c=gv('.c'),p=gv('.p'),bw=gv('.bw'),bh=gv('.bh'),ew=bw>0?bw:w,eh=bh>0?bh:h,area=!rd&&ew>0&&eh>0;
+    const w=gv('.w'),h=gv('.h'),c=gv('.c'),p=gv('.p'),bw=gv('.bw'),bh=gv('.bh'),ew=cz(bw>0?bw:w),eh=cz(bh>0?bh:h),area=!rd&&ew>0&&eh>0;
     const sg=d.dataset.rt?-1:1,q=area?rd2(ew*eh/10000*c):0,v=rd2((area?q:c)*p)*sg;
-    g('.qq').textContent=area?'الكمية: '+fq(q)+' م²'+(bw>0||bh>0?' (محسوبة: عرض '+(bw>0?bw:w)+' · طول '+(bh>0?bh:h)+')':''):'';g('.val').textContent=f(v);
+    g('.qq').textContent=area?'الكمية: '+fq(q)+' م²'+(bw>0||bh>0||ew!==w||eh!==h?' (محسوبة: عرض '+ew+' · طول '+eh+')':''):'';g('.val').textContent=f(v);
     if(c>0){const o={t:d.dataset.t,n:g('.n').value,w,h,c,q,p,v};{const ii=itemOf(d,o.t,o.n);if(ii)o.i=ii}if(bw>0)o.bw=bw;if(bh>0)o.bh=bh;if(sg<0){o.rt=1;if(d.dataset.src)o.src=d.dataset.src}rows.push(o);sub+=v;tq+=q*sg}});
   sub=rd2(sub);const prev=nv($('prev').value),pf=Math.min(100,Math.max(0,nv($('dp').value))),refund=nv($('refund').value),total=rd2(sub+nv($('nylon').value)-nv($('disc').value)+prev);
   /* "دفع كامل": المدفوع بيفضل ماشي مع الإجمالي والنسبة لحد ما تكتب مبلغ بإيدك */
@@ -1791,7 +1792,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='68';
+const APP_VER='69';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
@@ -1831,7 +1832,7 @@ $('themeChk').onchange=()=>setTheme($('themeChk').checked);
 (function(){let p='teal';try{p=localStorage.getItem('pal')||'teal'}catch(e){}setPal(p);
 document.querySelectorAll('#pals button').forEach(b=>b.onclick=()=>setPal(b.dataset.p));$('palCustom').value=getCC();$('palCustom').oninput=()=>{try{localStorage.setItem('cc',$('palCustom').value)}catch(e){}setPal('custom')};
 $('animChk').checked=pget('anim',animDef());$('animChk').onchange=()=>{pset('anim',$('animChk').checked);applyAnim()};applyAnim();perfWatch()})();
-[['editInv','editInv'],['dupInv','dupInv'],['dayCl','dayCl'],['weekCl','weekCl'],['monCl','monCl'],['bulkRemChk','bulkRem'],['trashOn','trashOn'],['bkAl','bkAl'],['snapOn','snapOn'],['autoBk','autoBk'],['logoOn','logoOn'],['fancyInv','fancyInv'],['pdfOn','pdfOn']].forEach(([id,k])=>{$(id).checked=pget(k,true);$(id).onchange=()=>{pset(k,$(id).checked);applyFeatures();drawCusts()}});
+[['editInv','editInv'],['dupInv','dupInv'],['dayCl','dayCl'],['weekCl','weekCl'],['monCl','monCl'],['bulkRemChk','bulkRem'],['trashOn','trashOn'],['bkAl','bkAl'],['snapOn','snapOn'],['autoBk','autoBk'],['logoOn','logoOn'],['fancyInv','fancyInv'],['pdfOn','pdfOn'],['ceilSz','ceilSz']].forEach(([id,k])=>{$(id).checked=pget(k,true);$(id).onchange=()=>{pset(k,$(id).checked);applyFeatures();drawCusts();if(k==='ceilSz')calc()}});
 const DEFPRE='تحويل محفظة=1\nتحويل انستا=0';
 const pfPresets=()=>lsv('pfPre',DEFPRE).split('\n').map(l=>{const i=l.lastIndexOf('=');return i<0?null:{n:l.slice(0,i).trim(),p:nv(l.slice(i+1))}}).filter(x=>x&&x.n);
 const preHtml=c=>pfPresets().map((x,i)=>`<button class="alt" data-pre="${i}">${esc(x.n)} ${fq(rateFor(c,x))}%</button>`).join('');
