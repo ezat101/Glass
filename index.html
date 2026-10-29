@@ -1103,7 +1103,7 @@ setTimeout(()=>{try{syncNav()}catch(e){}},0);
 let lastSpec=null,curSpec=null;const logoImg=new Image();
 const logoOK=()=>pget('logoOn',true)&&logoImg.complete&&logoImg.naturalWidth>0;
 /* ---------- تصميم الفاتورة (قابل للتعديل من الإعدادات) ---------- */
-const INV_G={bg:'#f7f3ea',marble:0,head:'#14233a',hfg:'#e5c675',ink:'#14233a',grid:'#d9cfb4',edge:'#b08d3c',totBg:'#14233a',totFg:'#e5c675',remBg:'#b08d3c',remFg:'#3a2a05',paidBg:'#ece7d4',paidFg:'#3d4a2c',sumA:'#efe8d4',sumB:'#f8f4ea',acc:['#b08d3c','#14233a','#8a7440','#5b6b82'],w:700,m:20,r:10,pad:10,fam:'sans',shop:18,title:22,sub:14,date:13,meta:15,th:14,tbl:15,sum:14,items:13,bold:0,sDate:1,sSub:1,sItems:1,hPrev:0,hSize:0,hCnt:0,hQty:0,hPrice:0,tint:17,sumH:30,sumW:40,sumBig:15,order:['tables','summary','notes'],topText:'',headText:'',footText:'',redNote:'',redColor:'#c0261b',xs:14,xal:'c',logoH:64,sumPos:'l',sumFit:1,shopC:'',sumV:0,hLine:1,sideSum:1,hdh:30,gw:1,ew:1.2,gap:10,tt:14,muteC:'#555555',retC:'#b42318',fTot:0,fRem:0,fPaid:0,hTot:0,hRem:0,hPaid:0,paidB:0,fTop:0,fHead:0,fFoot:0,fNote:0,rowCol:0,cw:null,ca:null};
+const INV_G={bg:'#f7f3ea',marble:0,head:'#14233a',hfg:'#e5c675',ink:'#14233a',grid:'#d9cfb4',edge:'#b08d3c',totBg:'#14233a',totFg:'#e5c675',remBg:'#b08d3c',remFg:'#3a2a05',paidBg:'#ece7d4',paidFg:'#3d4a2c',sumA:'#efe8d4',sumB:'#f8f4ea',acc:['#b08d3c','#14233a','#8a7440','#5b6b82'],w:700,m:20,r:10,pad:10,fam:'sans',shop:18,title:22,sub:14,date:13,meta:15,th:14,tbl:15,sum:14,items:13,bold:0,sDate:1,sSub:1,sItems:1,hPrev:0,hSize:0,hCnt:0,hQty:0,hPrice:0,tint:17,sumH:30,sumW:40,sumBig:15,order:['tables','summary','notes'],topText:'',headText:'',footText:'',redNote:'',redColor:'#c0261b',xs:14,xal:'c',logoH:64,sumPos:'l',sumFit:1,shopC:'',sumV:0,hLine:1,sideSum:1,hdh:30,gw:1,ew:1.2,gap:10,tt:14,muteC:'#555555',retC:'#b42318',fTot:0,fRem:0,fPaid:0,hTot:0,hRem:0,hPaid:0,paidB:0,fTop:0,fHead:0,fFoot:0,fNote:0,rowCol:0,cw:null,ca:null,mtPos:'l',mtH:0,mtF:0,mtHide:0};
 const INV_M={...INV_G,bg:'#eceef2',marble:1,head:'#1b2a41',hfg:'#e8cc86',ink:'#1b2a41',grid:'#cfd4dc',edge:'#c9a24d',totBg:'#1b2a41',totFg:'#e8cc86',remBg:'#d3b25e',remFg:'#1b2a41',paidBg:'#e4e8ee',paidFg:'#2f4a3a',sumA:'#e6e9ef',sumB:'#f4f5f8',acc:['#c9a24d','#1b2a41','#a8873a','#60708a']};
 const INV_T={...INV_G,bg:'#ffffff',head:'#1f3a4d',hfg:'#ffffff',ink:'#111111',grid:'#c9d6d3',edge:'#6b7f7b',totBg:'#1f3a4d',totFg:'#ffffff',remBg:'#d4a537',remFg:'#3a2a05',paidBg:'#e3f1ea',paidFg:'#2e6b4f',sumA:'#e3eef0',sumB:'#f1f5f7',acc:['#4f9aa5','#d4a537','#8b6bb5','#d98282','#86b06a','#6d8fc2']};
 const INV_B={...INV_G,bg:'#ffffff',marble:0,head:'#eeeeee',hfg:'#000000',ink:'#000000',grid:'#444444',edge:'#444444',totBg:'#e2f1ef',totFg:'#000000',remBg:'#e2f1ef',remFg:'#000000',paidBg:'#ffffff',paidFg:'#000000',sumA:'#ffffff',sumB:'#ffffff',acc:['#ffffff'],tint:0,r:0,shop:17,title:24,sub:14,date:13,meta:15,th:14,tbl:15,sum:15,sumBig:15,sumH:30,sumW:100,sumV:32,shopC:'#0f766e',xs:15,xal:'r',pad:10,hdh:30,gw:1,ew:1,gap:10,tt:14,muteC:'#555555',retC:'#b42318'};
@@ -1125,6 +1125,8 @@ const INV_FAM={sans:'Tahoma, Arial, "Noto Naskh Arabic", sans-serif',naskh:'"Not
 function invd(){let st=null;try{st=JSON.parse(localStorage.getItem('invdesign')||'null')}catch(e){}
   if(st&&typeof st==='object'&&!st.mob){st=toMob(st);try{localStorage.setItem('invdesign',JSON.stringify(st))}catch(e){}}
   if(!st){let o='';try{o=localStorage.getItem('invpal')}catch(e){}st=o==='m'?INV_M:o==='g'?INV_G:INV_MOB}
+  /* v89: رجّع ترتيب الملخص/الإجماليات للوضع الأساسي مرة واحدة (إعدادات قديمة كانت بتنزّل الإجماليات تحت الملخص) */
+  try{if(st&&typeof st==='object'&&localStorage.getItem('invfix89')!=='1'){localStorage.setItem('invfix89','1');if(st.sideSum!=null||st.sumPos!=null){delete st.sideSum;delete st.sumPos;localStorage.setItem('invdesign',JSON.stringify(st))}}}catch(e){}
   const c={...INV_G,...st};c.w=390;/* v81: عرض الصورة دايماً بعرض التليفون مهما كان القالب */if(!Array.isArray(c.acc)||!c.acc.length)c.acc=INV_G.acc;if(!Array.isArray(c.order)||['tables','summary','notes'].some(k=>!c.order.includes(k)))c.order=INV_G.order.slice();c.famCss=INV_FAM[c.fam]||INV_FAM.sans;
   /* السطور الثابتة (واتساب/عنوان/إنستا) بقت من بيانات المحل، فالقوالب مش بتغيّرها */
   let sx=null;try{sx=JSON.parse(localStorage.getItem('shopTxt')||'null')}catch(e){}
@@ -1210,7 +1212,7 @@ function sheet(o){lastSpec=o;const D=invd();
       if(D.hLine!==0){x.beginPath();x.moveTo(X,y+hdh);x.lineTo(xr0,y+hdh);x.stroke()}
       yy=y+hdh;rh.forEach((g,k)=>{yy+=g;if(k<rh.length-1){x.beginPath();x.moveTo(X,yy);x.lineTo(xr0,yy);x.stroke()}});x.restore();
       let xr=xr0;tb.th.forEach((t,i)=>{T(t,AX(xr,cw[i],i),y+hdh/2,AL(i),'bold '+(opt.fs?fs-1:D.th)+'px '+F,PL.hfg);xr-=cw[i]});
-      yy=y+hdh;tb.rows.forEach((r,k)=>{let xr=xr0;r.forEach((c,i)=>{const bold=opt.bold&&opt.bold(i),col=tb.red&&tb.red[k]?(D.retC||'#b42318'):(opt.colr&&opt.colr(i))||PL.ink;const zz=D.mob&&AL(i)==='center'&&tb.th[i]==='المقاس'&&/^\s*[\d.]+\s*\/\s*[\d.]+\s*$/.test(String(c));if(zz){const q=String(c).split('/').map(v=>v.trim()),xc=xr-cw[i]/2,off=5+(cw[i]-10)/4,ff=(D.bold?'bold ':'')+fs+'px '+F,my=yy+rh[k]/2;T(q[0],xc+off,my,'center',ff,col);T('×',xc,my,'center',(fs-2)+'px '+F,GR);T(q[1],xc-off,my,'center',ff,col)}else lines[k][i].forEach((s,j)=>T(s,AX(xr,cw[i],i),yy+(rh[k]-lines[k][i].length*lhh)/2+lhh*j+lhh/2,AL(i),(bold||D.bold?'bold ':'')+fs+'px '+F,col));xr-=cw[i]});yy+=rh[k]});
+      yy=y+hdh;tb.rows.forEach((r,k)=>{let xr=xr0;r.forEach((c,i)=>{const bold=opt.bold&&opt.bold(i),col=tb.red&&tb.red[k]?(D.retC||'#b42318'):(opt.colr&&opt.colr(i))||PL.ink;const zz=D.mob&&AL(i)==='center'&&tb.th[i]==='المقاس'&&/^\s*[\d.]+\s*\/\s*[\d.]+\s*$/.test(String(c));if(zz){const q=String(c).split('/').map(v=>v.trim()),xc=xr-cw[i]/2,off=5+(cw[i]-10)/4,ff=(D.bold?'bold ':'')+fs+'px '+F,my=yy+rh[k]/2;const gp=Math.round(fs*.7);let mA=0,mB=0;x.save();x.font=ff;tb.rows.forEach(rr=>{const cc=String(rr[i]);if(/^\s*[\d.]+\s*\/\s*[\d.]+\s*$/.test(cc)){const z=cc.split('/').map(v=>v.trim());mA=Math.max(mA,x.measureText(z[0]).width);mB=Math.max(mB,x.measureText(z[1]).width)}});x.restore();const gp2=Math.max(3,Math.round(fs*.3)),xw=fs*.7,tot=mB+gp2+xw+gp2+mA,xs=xc-tot/2;T(q[1],xs,my,'left',ff,col);T('×',xs+mB+gp2+xw/2,my,'center',(fs-2)+'px '+F,GR);T(q[0],xs+mB+gp2+xw+gp2,my,'left',ff,col)}else lines[k][i].forEach((s,j)=>T(s,AX(xr,cw[i],i),yy+(rh[k]-lines[k][i].length*lhh)/2+lhh*j+lhh/2,AL(i),(bold||D.bold?'bold ':'')+fs+'px '+F,col));xr-=cw[i]});yy+=rh[k]});
       x.strokeStyle=EDGEC;x.lineWidth=D.ew==null?1.2:+D.ew;rr(X,y,w,h,R);x.stroke();if(opt.lid)LR({t:'tbl',id:opt.lid,X,y,w,h,hdh,rows:rh.slice(),cw:cw.slice(),xr0,th:tb.th.slice()});return h};
     const tstyle=(a,b)=>a==='الإجمالي'?PL.tot:/^(المتبقي|الحساب بعد الدفعة)$/.test(a)?PL.gold:/^(المدفوع|صافي المدفوع|صافي الدفعة|المبلغ المدفوع)( \(.*\))?$/.test(a)?PL.paid:b?PL.lite:PL.lite2;
     const rowFont=(a,bold)=>{const kd=a==='الإجمالي'?'Tot':/^(المتبقي|الحساب بعد الدفعة)$/.test(a)?'Rem':/^(المدفوع|صافي المدفوع|صافي الدفعة|المبلغ المدفوع)( \(.*\))?$/.test(a)?'Paid':'',fz=+D['f'+kd]||(bold?D.sumBig:D.sum),bb=bold||(kd==='Paid'&&D.paidB);return{kd,fz,fo:(bb?'bold ':'')+fz+'px '+F}};
@@ -1232,14 +1234,14 @@ function sheet(o){lastSpec=o;const D=invd();
       const first=D.mob&&ti===0&&tb===tabs[0]&&o.tables&&o.tables[0]&&o.tables[0].th[0]==='البيان';
       if(D.mob){tb={...tb};if(!D.rowCol)delete tb.col;if(first){const CW=D.cw||{},mw=tb.th.map(t=>+CW[t]>0?+CW[t]/100:(MW[t]||0));if(mw.every(v=>v>0)){const sm=mw.reduce((a,b)=>a+b,0);tb.w=mw.map(v=>v/sm)}}}
       const h=tbl(tb,W-P,IW,first?{al:tb.th.map(t=>(D.ca||{})[t]||'c'),lid:'main'}:{});y+=h;
-      if(first&&tb.w.length>=3&&o.sum&&o.sum[0]&&/^إجمالي الإذن/.test(o.sum[0][0])){const n=tb.w.length,wl=tb.w[n-2]*IW,wv=tb.w[n-1]*IW,fo=Math.max(7,D.tbl)+'px '+F;y+=rowBox(P,y,[wl,wv],['الإجمالي',o.sum[0][1]],[HEADC,D.sumA],[PL.hfg,PL.ink],Math.min(22,Math.max(14,D.sumH)),[fo,fo])}
+      if(first&&!D.mtHide&&tb.w.length>=3&&o.sum&&o.sum[0]&&/^إجمالي الإذن/.test(o.sum[0][0])){const n=tb.w.length,wl=tb.w[n-2]*IW,wv=tb.w[n-1]*IW,fo=(+D.mtF||Math.max(7,D.tbl))+'px '+F,mh=+D.mtH||Math.min(22,Math.max(14,D.sumH)),mX=D.mtPos==='r'?W-P-wl-wv:D.mtPos==='c'?(W-wl-wv)/2:P;LR({t:'mt',x:mX,y,w:wl+wv,h:mh});y+=rowBox(mX,y,[wl,wv],['الإجمالي',o.sum[0][1]],[HEADC,D.sumA],[PL.hfg,PL.ink],mh,[fo,fo])}
       y+=GP})};
     /* مربع الإجماليات لما يكون لوحده: وسط (الافتراضي) أو يمين أو شمال */
     const sX=w=>D.sumPos==='r'?W-P-w:D.sumPos==='c'?(W-w)/2:P;
     const secSM=()=>{const its=D.sItems&&o.items&&o.items.length?o.items:null,rows0=(o.sum||[]).filter((r,i)=>!(D.hPrev&&r[0]==='رصيد سابق')&&!(o.tables&&o.tables.length&&i===0&&/^إجمالي الإذن/.test(r[0])));
       const rk=(a,bold)=>{const kd=a==='الإجمالي'?'Tot':/^(المتبقي|الحساب بعد الدفعة)$/.test(a)?'Rem':/^(المدفوع|صافي المدفوع|صافي الدفعة|المبلغ المدفوع)( \(.*\))?$/.test(a)?'Paid':'',fz=+D['f'+kd]||((kd==='Tot'||kd==='Rem')?D.sumBig:D.sum),bb=kd==='Tot'||kd==='Rem'||bold||(kd==='Paid'&&D.paidB);return{kd,fz,ff:(bb?'bold ':'')+fz+'px '+F,rh0:+D['h'+kd]||D.sumH}};
       let lwm=60,vwm=50;rows0.forEach(([a,b,bold])=>{x.font=rk(a,bold).ff;lwm=Math.max(lwm,x.measureText(String(a)).width+16);vwm=Math.max(vwm,x.measureText(String(b)).width+16)});
-      const fit=D.sumFit!==0,GAP=9,SS=D.sideSum==null?1:+D.sideSum,side=!!its&&(SS===2||(SS===1&&its.length<=6));let tw=fit?Math.min(lwm+vwm,IW*(side?.5:.7)):IW*Math.min(side?.5:1,Math.max(.3,(+D.sumW||40)/100)),vw=fit?Math.min(vwm,tw*.55):tw*.5,lw;
+      const fit=D.sumFit!==0,GAP=9,SS=D.sideSum==null?1:+D.sideSum,side=!!its&&SS!==0;let tw=fit?Math.min(lwm+vwm,IW*(side?.5:.7)):IW*Math.min(side?.5:1,Math.max(.3,(+D.sumW||40)/100)),vw=fit?Math.min(vwm,tw*.55):tw*.5,lw;
       if(+D.sumV>0){vw=IW*D.sumV/100;if(fit)tw=Math.min(IW*(side?.5:.95),Math.max(tw,vw+lwm));vw=Math.min(vw,tw-40)}lw=tw-vw;
       const sw=its?(side?Math.round(IW-tw-GAP):IW):0;let hS=0;
       if(its){const st={th:['الصنف','العدد','الأمتار','القيمة'],w:[.33,.17,.22,.28],rows:its.map(r=>[r[0],r[1],r[2],r[4]])},h1=tbl(st,W-P,sw,{fs:D.items,rh:+D.itRow||0,hh:+D.itHead||0,lid:'items'});const it=o.itemsTot||{},cw=st.w.map(v=>v*sw),fo2='bold '+D.items+'px '+F;
@@ -1914,7 +1916,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='87';
+const APP_VER='92';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
@@ -4045,7 +4047,7 @@ const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncN
   const E=id=>document.getElementById(id);
   const loadT=()=>{try{tpls=JSON.parse(localStorage.getItem('invtpls')||'[]')||[]}catch(e){tpls=[]}};
   const saveT=()=>{try{localStorage.setItem('invtpls',JSON.stringify(tpls))}catch(e){}};
-  const saveC=()=>{try{localStorage.setItem('invdesign',JSON.stringify(cfg))}catch(e){}};
+  const saveC=(chk)=>{try{const j=JSON.stringify(cfg);localStorage.setItem('invdesign',j);return !chk||localStorage.getItem('invdesign')===j}catch(e){return false}};
   const norm=c=>JSON.stringify(Object.keys(INV_G).sort().map(k=>c[k]===undefined?INV_G[k]:c[k]));
   const pvSpec=()=>({fancy:true,paper:'a4',name:'محمد علي',date:'2026/10/25 3:02 م',sub:'كود 1001 · إذن صرف رقم 1',
         tables:[{th:['البيان','المقاس','العدد','الكمية','السعر','القيمة'],w:[.3,.16,.1,.14,.14,.16],rows:[['زجاج سادة 6مم','100/50','2','1','300','300'],['سيكوريت 10مم','120/80','1','0.96','900','864'],['مرآة 5مم','90/60','3','1.62','250','405']],col:[0,1,2],red:[0,0,0]}],
@@ -4091,11 +4093,11 @@ const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncN
     E('idFont').querySelector('select').value=cfg.fam;
     const ck=(k,l)=>row(l,'<input type="checkbox" data-b="'+k+'"'+(cfg[k]?' checked':'')+'>'),
       NAMES={tables:'جدول البنود',summary:'ملخص الأصناف والإجماليات',notes:'الملاحظات'};
-    E('idCont').innerHTML=ck('sDate','إظهار التاريخ')+ck('sSub','إظهار سطر الكود ورقم الإذن')+ck('sItems','إظهار «ملخص الأصناف»')+ck('hPrev','إخفاء صف «رصيد سابق»')+ck('hNote','إخفاء الملاحظات (جملة التحويل وغيرها) من الفاتورة')+ck('hLine','خط تحت هيدر الجدول')+row('مكان ملخص الأصناف','<select data-f="sideSum" style="flex:1.6"><option value="1">تلقائي (جنب الإجماليات لو الأصناف قليلة)</option><option value="2">جنب الإجماليات دايماً</option><option value="0">فوق الإجماليات (بعرض كامل)</option></select>')+
+    E('idCont').innerHTML=ck('sDate','إظهار التاريخ')+ck('sSub','إظهار سطر الكود ورقم الإذن')+ck('sItems','إظهار «ملخص الأصناف»')+ck('hPrev','إخفاء صف «رصيد سابق»')+ck('hNote','إخفاء الملاحظات (جملة التحويل وغيرها) من الفاتورة')+ck('hLine','خط تحت هيدر الجدول')+ck('mtHide','إخفاء صف «الإجمالي» اللي تحت الجدول')+row('مكان صف «الإجمالي» تحت الجدول','<select data-f="mtPos" style="flex:1.4"><option value="l">شمال</option><option value="c">في النص</option><option value="r">يمين</option></select>')+row('مكان ملخص الأصناف','<select data-f="sideSum" style="flex:1.6"><option value="1">جنب الإجماليات</option><option value="0">فوق الإجماليات (بعرض كامل)</option></select>')+
       '<div class="idr"><span>إخفاء أعمدة من جدول البنود</span></div>'+ck('hSize','عمود المقاس')+ck('hCnt','عمود العدد')+ck('hQty','عمود الكمية')+ck('hPrice','عمود السعر')+
       row('وضوح ألوان الصفوف','<input type="range" data-n="tint" min="0" max="45" value="'+cfg.tint+'"><span class="v">'+cfg.tint+'</span>')+
       '<div class="idr"><span>ترتيب الأقسام (من فوق لتحت)</span></div>'+cfg.order.map((k,i)=>'<div class="idr"><span>'+(i+1)+' · '+NAMES[k]+'</span><button class="alt" data-o="'+k+'" data-d="-1"'+(i?'':' disabled')+'>↑</button><button class="alt" data-o="'+k+'" data-d="1"'+(i<cfg.order.length-1?'':' disabled')+'>↓</button></div>').join('');
-    E('idCont').querySelector('select[data-f="sideSum"]').value=String(cfg.sideSum==null?1:cfg.sideSum);
+    E('idCont').querySelector('select[data-f="mtPos"]').value=cfg.mtPos||'l';E('idCont').querySelector('select[data-f="sideSum"]').value=+cfg.sideSum===0?'0':'1';
     {const CW=cfg.cw||{},CA=cfg.ca||{},AO=[['c','وسط'],['r','يمين'],['l','شمال']];
     E('idCols').innerHTML='<div class="mute" style="margin:6px 0">العرض نسبة من عرض الجدول (0 = تلقائي). الأعمدة اللي على «تلقائي» بتاخد الباقي، والمجموع بيتظبط لوحده. الأعمدة المخفية من «المحتوى والترتيب» مش بتظهر.</div>'+
       COLN.map(n=>'<label class="idr"><span>'+n+'</span><input type="range" data-cw="'+n+'" min="0" max="90" value="'+(+CW[n]||0)+'"><span class="v">'+(+CW[n]?CW[n]+'%':'تلقائي')+'</span><select data-ca="'+n+'" style="flex:none;width:auto">'+AO.map(([v,l])=>'<option value="'+v+'"'+((CA[n]||'c')===v?' selected':'')+'>'+l+'</option>').join('')+'</select></label>').join('')+
@@ -4167,6 +4169,7 @@ const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncN
     'tot:Rem':{n:'المتبقي',f:['fRem',8,40,'sumBig'],c:[['remBg','الخلفية'],['remFg','الكتابة']]},
     'tot:Paid':{n:'المدفوع',f:['fPaid',8,40,'sum'],c:[['paidBg','خلفية الرقم'],['paidFg','كتابة الرقم']],b:['paidB','خط عريض']},
     'tot:':{n:'باقي صفوف الإجماليات',f:['sum',7,22],c:[['head','خلفية العنوان'],['hfg','كتابة العنوان'],['sumA','خلفية الرقم'],['sumB','خلفية الرقم (2)']]},
+    mt:{n:'صف الإجمالي تحت الجدول',f:['mtF',7,30,'tbl'],c:[['head','خلفية العنوان'],['hfg','كتابة العنوان'],['sumA','خلفية الرقم']],b:['mtHide','إخفاء الصف ده']},
     logo:{n:'اللوجو',f:['logoH',20,120,null,4]},
     bg:{n:'خلفية الفاتورة',c:[['bg','لون الخلفية'],['edge','لون الإطارات']]}};
   const DZ_COLN=['البيان','المقاس','العدد','الكمية','السعر','القيمة'];
@@ -4175,10 +4178,10 @@ const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncN
   const dzPush=()=>{dzHist.push(JSON.stringify(cfg));if(dzHist.length>60)dzHist.shift();E('dzUndo').disabled=false};
   const dzSet=(k,v)=>{cfg[k]=v;cur='';saveC();label();dzDraw()};
   function dzMake(){dzOv=document.createElement('div');dzOv.id='dzOv';dzOv.className='dz-ov hide';
-    dzOv.innerHTML='<div class="dz-top"><button type="button" class="alt" id="dzUndo" disabled aria-label="تراجع">↩ تراجع</button><div class="dz-tt"><b>✋ صمّم بإيدك</b><small>اسحب الخطوط المتقطعة · دوس على أي جزء عشان تكبّره أو تغيّر لونه</small></div><button type="button" class="main" id="dzX">تم ✓</button></div>'+
+    dzOv.innerHTML='<div class="dz-top"><button type="button" class="alt" id="dzUndo" disabled aria-label="تراجع">↩ تراجع</button><div class="dz-tt"><b>✋ صمّم بإيدك</b><small>اسحب الخطوط المتقطعة · دوس على أي جزء عشان تكبّره أو تغيّر لونه</small></div><button type="button" class="main" id="dzX">💾 حفظ التعديل</button></div>'+
       '<div class="dz-wrap" id="dzWrap"><div class="dz-stage"><canvas id="dzCv"></canvas><canvas id="dzOl"></canvas></div><div style="height:46vh"></div></div><div class="dz-bar" id="dzBar" style="display:none"></div><div class="dz-tip" id="dzTip"></div>';
     document.body.appendChild(dzOv);
-    E('dzX').onclick=dzClose;E('dzUndo').onclick=()=>{const p=dzHist.pop();if(p){cfg=JSON.parse(p);cur='';saveC();label();dzDraw();dzBar()}E('dzUndo').disabled=!dzHist.length};
+    E('dzX').onclick=()=>{const ok=saveC(true);dzClose();toast(ok?'اتحفظ ✓ التصميم ثابت ومش هيتغيّر':'⚠ مقدرتش أحفظ التصميم على الجهاز')};E('dzUndo').onclick=()=>{const p=dzHist.pop();if(p){cfg=JSON.parse(p);cur='';saveC();label();dzDraw();dzBar()}E('dzUndo').disabled=!dzHist.length};
     const ol=E('dzOl');
     ol.addEventListener('touchstart',e=>{const t=e.touches[0];if(e.touches.length===1&&dzHit(dzPt(t)))e.preventDefault()},{passive:false});
     ol.addEventListener('pointerdown',dzDown);ol.addEventListener('pointermove',dzMove);ol.addEventListener('pointerup',dzUp);ol.addEventListener('pointercancel',()=>{dzDrag=null;dzOver()});
@@ -4198,37 +4201,39 @@ const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncN
         H.push({k:'hdr',it,v:0,y:it.y+it.hdh,x1:it.X,x2:it.X+it.w});let yy=it.y+it.hdh;it.rows.forEach((g,j)=>{yy+=g;H.push({k:'row',it,j,v:0,y:yy,x1:it.X,x2:it.X+it.w})})}
       else if(it.t==='tot'){H.push({k:'totV',it,v:1,x:it.X+it.vw,y1:it.y,y2:it.y+it.h});H.push({k:'totL',it,v:1,x:it.X,y1:it.y,y2:it.y+it.h});H.push({k:'totR',it,v:1,x:it.X+it.w,y1:it.y,y2:it.y+it.h});
         it.rows.forEach(r=>H.push({k:'totRow',it,r,v:0,y:r.y+r.h,x1:it.X,x2:it.X+it.w}))}
+      else if(it.t==='mt')H.push({k:'mtRow',it,v:0,y:it.y+it.h,x1:it.x,x2:it.x+it.w});
       else if(it.t==='logo')H.push({k:'logo',it,pt:1,x:it.x,y:it.y+it.h})});return H}
-  function dzHit(p){const tol=12/dzScale();let best=null,bd=1e9;dzHandles().forEach(h=>{let d;
+  function dzHit(p){const tol=12/dzScale();let best=null,bd=1e9;const own=dzLay&&dzLay.items.find(it=>it.t==='mt'&&p.x>=it.x&&p.x<=it.x+it.w&&p.y>it.y+4&&p.y<=it.y+it.h+tol);dzHandles().forEach(h=>{if(own&&h.it!==own)return;let d;
       if(h.pt)d=Math.hypot(p.x-h.x,p.y-h.y)<=tol*1.6?Math.hypot(p.x-h.x,p.y-h.y)/2:1e9;
       else if(h.v)d=p.y>=h.y1-4&&p.y<=h.y2+4?Math.abs(p.x-h.x):1e9;else d=p.x>=h.x1-4&&p.x<=h.x2+4?Math.abs(p.y-h.y):1e9;
       if(d<=tol&&d<bd){bd=d;best=h}});return best}
   /* اللي اتداس عليه (للتكبير والألوان) */
   function dzPick(p){if(!dzLay)return'bg';let out='bg';const inn=(x,y,w,h)=>p.x>=x&&p.x<=x+w&&p.y>=y&&p.y<=y+h;
-    dzLay.items.forEach(it=>{if(it.t==='txt'&&inn(it.x,it.y,it.w,it.h))out=it.k;else if(it.t==='logo'&&inn(it.x,it.y,it.w,it.h))out='logo';
+    dzLay.items.forEach(it=>{if(it.t==='txt'&&inn(it.x,it.y,it.w,it.h))out=it.k;else if(it.t==='logo'&&inn(it.x,it.y,it.w,it.h))out='logo';else if(it.t==='mt'&&inn(it.x,it.y,it.w,it.h))out='mt';
       else if(it.t==='tbl'&&inn(it.X,it.y,it.w,it.h))out=(it.id==='main'?'main':'items')+(p.y<it.y+it.hdh?'Head':'Body');
       else if(it.t==='tot'&&inn(it.X,it.y,it.w,it.h)){const r=it.rows.find(r=>p.y>=r.y&&p.y<=r.y+r.h);out='tot:'+(r?r.kd:'')}});return out}
   function dzDown(e){const p=dzPt(e),h=dzHit(p);E('dzOl').setPointerCapture(e.pointerId);
-    let body=null;if(!h&&dzLay)body=dzLay.items.find(it=>it.t==='tot'&&p.x>=it.X&&p.x<=it.X+it.w&&p.y>=it.y&&p.y<=it.y+it.h)||null;
-    dzDrag={h,body,p0:p,moved:false,pushed:false,st:h?dzStart(h):body?{cx:body.X+body.w/2}:null};dzOv.dataset.last=h?h.k:body?'body':'';if(h)dzOver(h)}
+    let body=null;if(!h&&dzLay)body=dzLay.items.find(it=>(it.t==='tot'&&p.x>=it.X&&p.x<=it.X+it.w&&p.y>=it.y&&p.y<=it.y+it.h)||(it.t==='mt'&&p.x>=it.x&&p.x<=it.x+it.w&&p.y>=it.y&&p.y<=it.y+it.h))||null;
+    dzDrag={h,body,p0:p,moved:false,pushed:false,st:h?dzStart(h):body?{cx:(body.t==='mt'?body.x:body.X)+body.w/2}:null};dzOv.dataset.last=h?h.k:body?'body':'';if(h)dzOver(h)}
   function dzStart(h){const it=h.it;
     if(h.k==='col'){const th=it.th,tot=it.cw.reduce((a,b)=>a+b,0);return{fr:it.cw.map(c=>c/tot),th}}
     if(h.k==='hdr')return{v:it.id==='main'?+cfg.hdh||24:(+cfg.itHead||it.hdh)};
     if(h.k==='row')return{v:it.id==='main'?+cfg.pad||0:(+cfg.itRow||it.rows[h.j])};
-    if(h.k==='totRow')return{v:h.r.h};
+    if(h.k==='totRow')return{v:h.r.h};if(h.k==='mtRow')return{v:it.h};
     if(h.k==='totV')return{v:it.vw};
     if(h.k==='totL'||h.k==='totR')return{v:it.w};
     if(h.k==='logo')return{v:+cfg.logoH||36};return{}}
   function dzMove(e){if(!dzDrag){const h=dzHit(dzPt(e));E('dzOl').style.cursor=h?(h.pt?'nwse-resize':h.v?'ew-resize':'ns-resize'):'pointer';return}
     const p=dzPt(e),dx=p.x-dzDrag.p0.x,dy=p.y-dzDrag.p0.y;if(!dzDrag.moved&&Math.hypot(dx,dy)*dzScale()<6)return;dzDrag.moved=true;
     const h=dzDrag.h,st=dzDrag.st;if(!h&&!dzDrag.body)return;if(!dzDrag.pushed){dzPush();dzDrag.pushed=true}
-    if(dzDrag.body){const W=dzLay.W,cx=st.cx+dx,pos=cx<W*.38?'l':cx>W*.62?'r':'c';if(pos!=='l'&&dzDrag.body.side&&+cfg.sideSum!==0){cfg.sideSum=0;dzTip('ملخص الأصناف اتنقل فوق الإجماليات عشان المربع يتحرك')}if(cfg.sumPos!==pos)dzSet('sumPos',pos);return}
+    if(dzDrag.body){const W=dzLay.W,cx=st.cx+dx,pos=cx<W*.38?'l':cx>W*.62?'r':'c';if(dzDrag.body.t==='mt'){if((cfg.mtPos||'l')!==pos){dzSet('mtPos',pos);dzTip('صف الإجمالي: '+({l:'شمال',c:'في النص',r:'يمين'})[pos])}return}if(pos!=='l'&&dzDrag.body.side&&+cfg.sideSum!==0){cfg.sideSum=0;dzTip('ملخص الأصناف اتنقل فوق الإجماليات عشان المربع يتحرك')}if(cfg.sumPos!==pos)dzSet('sumPos',pos);return}
     const it=h.it;
     if(h.k==='col'){const fr=st.fr.slice(),i=h.i,d=dx/it.w,m=.07;let a=fr[i]-d,b=fr[i+1]+d;if(a<m){b-=m-a;a=m}if(b<m){a-=m-b;b=m}fr[i]=a;fr[i+1]=b;
       const o={...(cfg.cw||{})};st.th.forEach((t,j)=>{o[t]=Math.round(fr[j]*100)});dzSet('cw',o);dzTip(st.th[i]+' '+Math.round(fr[i]*100)+'% · '+st.th[i+1]+' '+Math.round(fr[i+1]*100)+'%');return}
     if(h.k==='hdr'){const v=Math.round(dzCl(st.v+dy,12,60));dzSet(it.id==='main'?'hdh':'itHead',v);dzTip('ارتفاع العناوين: '+v);return}
     if(h.k==='row'){if(it.id==='main'){const v=Math.round(dzCl(st.v+dy,0,30));dzSet('pad',v);dzTip('ارتفاع الصفوف: '+v)}else{const v=Math.round(dzCl(st.v+dy,12,60));dzSet('itRow',v);dzTip('ارتفاع صفوف الملخص: '+v)}return}
     if(h.k==='totRow'){const k=h.r.kd?'h'+h.r.kd:'sumH',v=Math.round(dzCl(st.v+dy,14,90));dzSet(k,v);dzTip('ارتفاع الصف: '+v);return}
+    if(h.k==='mtRow'){const v=Math.round(dzCl(st.v+dy,12,60));dzSet('mtH',v);dzTip('ارتفاع صف الإجمالي: '+v);return}
     if(h.k==='totV'){const IW=dzLay.W-2*(+cfg.m||10),v=Math.round(dzCl((st.v+dx)/IW*100,5,50));dzSet('sumV',v);dzTip('عرض عمود الأرقام: '+v+'%');return}
     if(h.k==='totL'||h.k==='totR'){const IW=dzLay.W-2*(+cfg.m||10),c=(cfg.sumPos==='c'&&!it.side)?2:1,w=st.v+(h.k==='totR'?dx:-dx)*c,v=Math.round(dzCl(w/IW*100,30,100));cfg.sumFit=0;dzSet('sumW',v);dzTip('عرض مربع الإجماليات: '+v+'%');return}
     if(h.k==='logo'){const v=Math.round(dzCl(st.v+(dy-dx)/2,20,120));dzSet('logoH',v);dzTip('حجم اللوجو: '+v)}}
@@ -4236,7 +4241,7 @@ const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncN
   /* الخطوط المتقطعة اللي بتتسحب + تحديد الجزء المختار */
   function dzOver(act){const ol=E('dzOl'),cv=E('dzCv'),r=cv.getBoundingClientRect(),dpr=window.devicePixelRatio||1;ol.width=Math.round(r.width*dpr);ol.height=Math.round(r.height*dpr);
     const x=ol.getContext('2d'),s=dzScale();x.setTransform(dpr*s,0,0,dpr*s,0,0);x.clearRect(0,0,ol.width,ol.height);if(!dzLay)return;const lw=1/s;
-    if(dzSel){const rs=[];dzLay.items.forEach(it=>{if(it.t==='txt'&&it.k===dzSel||(it.t==='logo'&&dzSel==='logo'))rs.push([it.x,it.y,it.w,it.h]);
+    if(dzSel){const rs=[];dzLay.items.forEach(it=>{if(it.t==='txt'&&it.k===dzSel||(it.t==='logo'&&dzSel==='logo')||(it.t==='mt'&&dzSel==='mt'))rs.push([it.x,it.y,it.w,it.h]);
         if(it.t==='tbl'&&dzSel.startsWith(it.id))rs.push(dzSel.endsWith('Head')?[it.X,it.y,it.w,it.hdh]:[it.X,it.y+it.hdh,it.w,it.h-it.hdh]);
         if(it.t==='tot'&&dzSel.startsWith('tot:'))it.rows.forEach(r=>{if('tot:'+r.kd===dzSel)rs.push([it.X,r.y,it.w,r.h])})});
       if(dzSel==='bg')rs.push([2,2,dzLay.W-4,dzLay.H-4]);x.save();x.strokeStyle='#f59e0b';x.lineWidth=2.5*lw;x.fillStyle='rgba(245,158,11,.12)';rs.forEach(q=>{x.fillRect(q[0]-2*lw,q[1]-2*lw,q[2]+4*lw,q[3]+4*lw);x.strokeRect(q[0]-2*lw,q[1]-2*lw,q[2]+4*lw,q[3]+4*lw)});x.restore()}
