@@ -36,7 +36,12 @@ self.addEventListener('fetch', e => {
 
     const timer = isNav ? setTimeout(() => { fromCache().then(finish); }, NAV_TIMEOUT) : null;
 
-    net.then(r => { clearTimeout(timer); finish(r); })
+    net.then(r => {
+      clearTimeout(timer);
+      // لو السيرفر رجّع خطأ (500 / 404 / 503...) افتح النسخة المحفوظة بدل صفحة الخطأ
+      if (r && !r.ok) return fromCache().then(m => finish(m || r));
+      finish(r);
+    })
       .catch(() => {
         clearTimeout(timer);
         fromCache().then(m => finish(m || Response.error()));
