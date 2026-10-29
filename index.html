@@ -770,6 +770,8 @@ html[data-theme="light"] #addbar button.b-acc,html[data-theme="light"] #qadd{col
 </div>
 <div class="stp hide" data-sp="inv"><div class="sth"><button type="button" class="lnk" data-stback="1" aria-label="رجوع للإعدادات">→</button><b>🧾 خيارات الفاتورة والطباعة</b></div>
 <div class="card"><b>بعد حفظ الفاتورة</b>
+  <label class="opt"><input type="checkbox" id="rndTot"> إلغاء القروش من إجمالي الفاتورة (تقريب لأقرب جنيه)</label>
+  <label class="opt"><input type="checkbox" id="rndDn"> التقريب لأسفل (يشيل القروش بدل ما يقرّب لأقرب جنيه)</label>
   <label class="opt"><input type="checkbox" id="ceilSz"> تقريب العرض والطول لأعلى رقم صحيح عند حساب المتر (42.2 و42.5 يتحسبوا 43)</label>
   <label class="opt"><input type="checkbox" id="editInv"> تعديل الفاتورة بعد حفظها</label>
   <label class="opt"><input type="checkbox" id="dupInv"> تكرار فاتورة قديمة لنفس العميل</label>
@@ -1103,7 +1105,7 @@ setTimeout(()=>{try{syncNav()}catch(e){}},0);
 let lastSpec=null,curSpec=null;const logoImg=new Image();
 const logoOK=()=>pget('logoOn',true)&&logoImg.complete&&logoImg.naturalWidth>0;
 /* ---------- تصميم الفاتورة (قابل للتعديل من الإعدادات) ---------- */
-const INV_G={bg:'#f7f3ea',marble:0,head:'#14233a',hfg:'#e5c675',ink:'#14233a',grid:'#d9cfb4',edge:'#b08d3c',totBg:'#14233a',totFg:'#e5c675',remBg:'#b08d3c',remFg:'#3a2a05',paidBg:'#ece7d4',paidFg:'#3d4a2c',sumA:'#efe8d4',sumB:'#f8f4ea',acc:['#b08d3c','#14233a','#8a7440','#5b6b82'],w:700,m:20,r:10,pad:10,fam:'sans',shop:18,title:22,sub:14,date:13,meta:15,th:14,tbl:15,sum:14,items:13,bold:0,sDate:1,sSub:1,sItems:1,hPrev:0,hSize:0,hCnt:0,hQty:0,hPrice:0,tint:17,sumH:30,sumW:40,sumBig:15,order:['tables','summary','notes'],topText:'',headText:'',footText:'',redNote:'',redColor:'#c0261b',xs:14,xal:'c',logoH:64,sumPos:'l',sumFit:1,shopC:'',sumV:0,hLine:1,sideSum:1,hdh:30,gw:1,ew:1.2,gap:10,tt:14,muteC:'#555555',retC:'#b42318',fTot:0,fRem:0,fPaid:0,hTot:0,hRem:0,hPaid:0,paidB:0,fTop:0,fHead:0,fFoot:0,fNote:0,rowCol:0,cw:null,ca:null,mtPos:'l',mtH:0,mtF:0,mtHide:0};
+const INV_G={bg:'#f7f3ea',marble:0,head:'#14233a',hfg:'#e5c675',ink:'#14233a',grid:'#d9cfb4',edge:'#b08d3c',totBg:'#14233a',totFg:'#e5c675',remBg:'#b08d3c',remFg:'#3a2a05',paidBg:'#ece7d4',paidFg:'#3d4a2c',sumA:'#efe8d4',sumB:'#f8f4ea',acc:['#b08d3c','#14233a','#8a7440','#5b6b82'],w:700,m:20,r:10,pad:10,fam:'sans',shop:18,title:22,sub:14,date:13,meta:15,th:14,tbl:15,sum:14,items:13,bold:0,sDate:1,sSub:1,sItems:1,hPrev:0,hSize:0,hCnt:0,hQty:0,hPrice:0,tint:17,sumH:30,sumW:40,sumBig:15,order:['tables','summary','notes'],topText:'',headText:'',footText:'',redNote:'',redColor:'#c0261b',xs:14,xal:'c',logoH:64,sumPos:'l',sumFit:1,shopC:'',sumV:0,hLine:1,sideSum:1,hdh:30,gw:1,ew:1.2,gap:10,tt:14,muteC:'#555555',retC:'#b42318',fTot:0,fRem:0,fPaid:0,hTot:0,hRem:0,hPaid:0,paidB:0,fTop:0,fHead:0,fFoot:0,fNote:0,rowCol:0,cw:null,ca:null,mtPos:'l',mtH:0,mtF:0,mtHide:0,sumR:8,gSep:2,gSepC:'#1f2937',gAlt:0,gAltC:'#dbe6f4'};
 const INV_M={...INV_G,bg:'#eceef2',marble:1,head:'#1b2a41',hfg:'#e8cc86',ink:'#1b2a41',grid:'#cfd4dc',edge:'#c9a24d',totBg:'#1b2a41',totFg:'#e8cc86',remBg:'#d3b25e',remFg:'#1b2a41',paidBg:'#e4e8ee',paidFg:'#2f4a3a',sumA:'#e6e9ef',sumB:'#f4f5f8',acc:['#c9a24d','#1b2a41','#a8873a','#60708a']};
 const INV_T={...INV_G,bg:'#ffffff',head:'#1f3a4d',hfg:'#ffffff',ink:'#111111',grid:'#c9d6d3',edge:'#6b7f7b',totBg:'#1f3a4d',totFg:'#ffffff',remBg:'#d4a537',remFg:'#3a2a05',paidBg:'#e3f1ea',paidFg:'#2e6b4f',sumA:'#e3eef0',sumB:'#f1f5f7',acc:['#4f9aa5','#d4a537','#8b6bb5','#d98282','#86b06a','#6d8fc2']};
 const INV_B={...INV_G,bg:'#ffffff',marble:0,head:'#eeeeee',hfg:'#000000',ink:'#000000',grid:'#444444',edge:'#444444',totBg:'#e2f1ef',totFg:'#000000',remBg:'#e2f1ef',remFg:'#000000',paidBg:'#ffffff',paidFg:'#000000',sumA:'#ffffff',sumB:'#ffffff',acc:['#ffffff'],tint:0,r:0,shop:17,title:24,sub:14,date:13,meta:15,th:14,tbl:15,sum:15,sumBig:15,sumH:30,sumW:100,sumV:32,shopC:'#0f766e',xs:15,xal:'r',pad:10,hdh:30,gw:1,ew:1,gap:10,tt:14,muteC:'#555555',retC:'#b42318'};
@@ -1207,10 +1209,10 @@ function sheet(o){lastSpec=o;const D=invd();
     const tbl=(tb,xr0,w,opt)=>{opt=opt||{};const AL=i=>{const a=opt.al&&opt.al[i];return a==='r'?'right':a==='l'?'left':'center'},AX=(xr,c,i)=>{const a=AL(i),px=Math.max(4,D.pad/2+3);return a==='right'?xr-px-(tb.col&&PALF.length?6:0):a==='left'?xr-c+px:xr-c/2};const fs=opt.fs||D.tbl,lhh=fs+(D.mob?4:7),hdh=opt.hh>0?opt.hh:Math.max(+D.hdh||30,D.th+(D.mob?7:16)),cw=tb.w.map(v=>v*w),pad=D.pad;
       const lines=tb.rows.map(r=>r.map((c,i)=>wrap(c,cw[i]-pad,fs+'px '+F))),rh=lines.map(l=>Math.max(Math.max(...l.map(a=>a.length))*lhh+pad,opt.rh||0)),h=hdh+rh.reduce((a,b)=>a+b,0),X=xr0-w;
       x.save();rr(X,y,w,h,R);x.clip();x.fillStyle=HEADC;x.fillRect(X,y,w,hdh);
-      let yy=y+hdh;tb.rows.forEach((r,k)=>{const c=tb.col&&tb.col[k];if(c!=null&&PALF[c%PALF.length]){x.fillStyle=PALF[c%PALF.length][0];x.fillRect(X,yy,w,rh[k]);x.fillStyle=PALF[c%PALF.length][1];x.fillRect(xr0-6,yy,6,rh[k])}yy+=rh[k]});
+      let yy=y+hdh;tb.rows.forEach((r,k)=>{if(D.gAlt&&tb.grp&&tb.grp[k]%2){x.fillStyle=D.gAltC||D.sumA;x.fillRect(X,yy,w,rh[k])}const c=tb.col&&tb.col[k];if(c!=null&&PALF[c%PALF.length]){x.fillStyle=PALF[c%PALF.length][0];x.fillRect(X,yy,w,rh[k]);x.fillStyle=PALF[c%PALF.length][1];x.fillRect(xr0-6,yy,6,rh[k])}yy+=rh[k]});
       x.strokeStyle=GRIDC;x.lineWidth=+D.gw||1;let xx=xr0;cw.forEach((c,i)=>{xx-=c;if(i<cw.length-1){x.beginPath();x.moveTo(xx,y);x.lineTo(xx,y+h);x.stroke()}});
       if(D.hLine!==0){x.beginPath();x.moveTo(X,y+hdh);x.lineTo(xr0,y+hdh);x.stroke()}
-      yy=y+hdh;rh.forEach((g,k)=>{yy+=g;if(k<rh.length-1){x.beginPath();x.moveTo(X,yy);x.lineTo(xr0,yy);x.stroke()}});x.restore();
+      yy=y+hdh;rh.forEach((g,k)=>{yy+=g;if(k<rh.length-1){const sp=tb.grp&&tb.grp[k]!==tb.grp[k+1]&&+D.gSep>0;x.save();if(sp){x.strokeStyle=D.gSepC||EDGEC;x.lineWidth=+D.gSep}x.beginPath();x.moveTo(X,yy);x.lineTo(xr0,yy);x.stroke();x.restore()}});x.restore();
       let xr=xr0;tb.th.forEach((t,i)=>{T(t,AX(xr,cw[i],i),y+hdh/2,AL(i),'bold '+(opt.fs?fs-1:D.th)+'px '+F,PL.hfg);xr-=cw[i]});
       yy=y+hdh;tb.rows.forEach((r,k)=>{let xr=xr0;r.forEach((c,i)=>{const bold=opt.bold&&opt.bold(i),col=tb.red&&tb.red[k]?(D.retC||'#b42318'):(opt.colr&&opt.colr(i))||PL.ink;const zz=D.mob&&AL(i)==='center'&&tb.th[i]==='المقاس'&&/^\s*[\d.]+\s*\/\s*[\d.]+\s*$/.test(String(c));if(zz){const q=String(c).split('/').map(v=>v.trim()),xc=xr-cw[i]/2,off=5+(cw[i]-10)/4,ff=(D.bold?'bold ':'')+fs+'px '+F,my=yy+rh[k]/2;const gp=Math.round(fs*.7);let mA=0,mB=0;x.save();x.font=ff;tb.rows.forEach(rr=>{const cc=String(rr[i]);if(/^\s*[\d.]+\s*\/\s*[\d.]+\s*$/.test(cc)){const z=cc.split('/').map(v=>v.trim());mA=Math.max(mA,x.measureText(z[0]).width);mB=Math.max(mB,x.measureText(z[1]).width)}});x.restore();x.save();x.font=(fs-2)+'px '+F;const xw=x.measureText('×').width;x.restore();const gp2=2,tot=mB+gp2+xw+gp2+mA,xs=xc-tot/2,dc=D.decC||col,TD=(v,xx)=>{const m=String(v).match(/^(\d*)(\.\d+)?$/);if(!m||!m[2]||dc===col){T(v,xx,my,'left',ff,col);return}T(m[1],xx,my,'left',ff,col);x.save();x.font=ff;const iw=x.measureText(m[1]).width;x.restore();T('\u200E'+m[2],xx+iw,my,'left',ff,dc)};TD(q[1],xs);T('×',xs+mB+gp2+xw/2,my,'center',(fs-2)+'px '+F,GR);TD(q[0],xs+mB+gp2+xw+gp2)}else lines[k][i].forEach((s,j)=>T(s,AX(xr,cw[i],i),yy+(rh[k]-lines[k][i].length*lhh)/2+lhh*j+lhh/2,AL(i),(bold||D.bold?'bold ':'')+fs+'px '+F,col));xr-=cw[i]});yy+=rh[k]});
       x.strokeStyle=EDGEC;x.lineWidth=D.ew==null?1.2:+D.ew;rr(X,y,w,h,R);x.stroke();if(opt.lid)LR({t:'tbl',id:opt.lid,X,y,w,h,hdh,rows:rh.slice(),cw:cw.slice(),xr0,th:tb.th.slice()});return h};
@@ -1228,13 +1230,13 @@ function sheet(o){lastSpec=o;const D=invd();
     const hc=tb=>{if(tb!==tws)return tb;const k=tb.th.map((t,i)=>i).filter(i=>!HID[tb.th[i]]);if(k.length===tb.th.length||k.length<2)return tb;const sm=k.reduce((q,i)=>q+tb.w[i],0);return{...tb,th:k.map(i=>tb.th[i]),w:k.map(i=>tb.w[i]/sm),rows:tb.rows.map(r=>k.map(i=>r[i]))}};
     const tabs=(o.tables||[]).map(hc);let lastF=tabs[0]&&tabs[0].w.length?tabs[0].w[tabs[0].w.length-1]:.14;const vw=D.sumV?IW*D.sumV/100:IW*lastF,tw=IW*D.sumW/100;
     const MW={'البيان':.25,'المقاس':.17,'العدد':.09,'الكمية':.13,'السعر':.15,'القيمة':.21},
-      rowBox=(X,Y,cw,tx,fl,fg,h,fo)=>{let xr=X+cw.reduce((a,b)=>a+b,0);x.save();cw.forEach((c,i)=>{x.fillStyle=fl[i];x.fillRect(xr-c,Y,c,h);xr-=c});x.strokeStyle=GRIDC;x.lineWidth=+D.gw||1;xr=X+cw.reduce((a,b)=>a+b,0);cw.forEach((c,i)=>{xr-=c;if(i<cw.length-1){x.beginPath();x.moveTo(xr,Y);x.lineTo(xr,Y+h);x.stroke()}});x.restore();
-        xr=X+cw.reduce((a,b)=>a+b,0);cw.forEach((c,i)=>{T(tx[i],xr-c/2,Y+h/2,'center',fo[i]||fo[0],fg[i]);xr-=c});x.strokeStyle=EDGEC;x.lineWidth=D.ew==null?1.2:+D.ew;x.strokeRect(X,Y,cw.reduce((a,b)=>a+b,0),h);return h};
+      rowBox=(X,Y,cw,tx,fl,fg,h,fo,rad)=>{let xr=X+cw.reduce((a,b)=>a+b,0);x.save();if(rad){rr(X,Y,cw.reduce((a,b)=>a+b,0),h,rad);x.clip()}cw.forEach((c,i)=>{x.fillStyle=fl[i];x.fillRect(xr-c,Y,c,h);xr-=c});x.strokeStyle=GRIDC;x.lineWidth=+D.gw||1;xr=X+cw.reduce((a,b)=>a+b,0);cw.forEach((c,i)=>{xr-=c;if(i<cw.length-1){x.beginPath();x.moveTo(xr,Y);x.lineTo(xr,Y+h);x.stroke()}});x.restore();
+        xr=X+cw.reduce((a,b)=>a+b,0);cw.forEach((c,i)=>{T(tx[i],xr-c/2,Y+h/2,'center',fo[i]||fo[0],fg[i]);xr-=c});x.strokeStyle=EDGEC;x.lineWidth=D.ew==null?1.2:+D.ew;if(rad){rr(X,Y,cw.reduce((a,b)=>a+b,0),h,rad);x.stroke()}else x.strokeRect(X,Y,cw.reduce((a,b)=>a+b,0),h);return h};
     const secT=()=>{tabs.forEach((tb0,ti)=>{let tb=tb0;if(tb.title){T(tb.title,W-P,y+8,'right','bold '+(D.tt||14)+'px '+F);y+=D.tt?D.tt+6:20}
       const first=D.mob&&ti===0&&tb===tabs[0]&&o.tables&&o.tables[0]&&o.tables[0].th[0]==='البيان';
       if(D.mob){tb={...tb};if(!D.rowCol)delete tb.col;if(first){const CW=D.cw||{},mw=tb.th.map(t=>+CW[t]>0?+CW[t]/100:(MW[t]||0));if(mw.every(v=>v>0)){const sm=mw.reduce((a,b)=>a+b,0);tb.w=mw.map(v=>v/sm)}}}
       const h=tbl(tb,W-P,IW,first?{al:tb.th.map(t=>(D.ca||{})[t]||'c'),lid:'main'}:{});y+=h;
-      if(first&&!D.mtHide&&tb.w.length>=3&&o.sum&&o.sum[0]&&/^إجمالي الإذن/.test(o.sum[0][0])){const n=tb.w.length,wl=tb.w[n-2]*IW,wv=tb.w[n-1]*IW,fo=(+D.mtF||Math.max(7,D.tbl))+'px '+F,mh=+D.mtH||Math.min(22,Math.max(14,D.sumH)),mX=D.mtPos==='r'?W-P-wl-wv:D.mtPos==='c'?(W-wl-wv)/2:P;LR({t:'mt',x:mX,y,w:wl+wv,h:mh});y+=rowBox(mX,y,[wl,wv],['الإجمالي',o.sum[0][1]],[HEADC,D.sumA],[PL.hfg,PL.ink],mh,[fo,fo])}
+      if(first&&!D.mtHide&&tb.w.length>=3&&o.sum&&o.sum[0]&&/^إجمالي الإذن/.test(o.sum[0][0])){const n=tb.w.length,wl=tb.w[n-2]*IW,wv=tb.w[n-1]*IW,fo=(+D.mtF||Math.max(7,D.tbl))+'px '+F,mh=+D.mtH||Math.min(22,Math.max(14,D.sumH)),mX=D.mtPos==='r'?W-P-wl-wv:D.mtPos==='c'?(W-wl-wv)/2:P;LR({t:'mt',x:mX,y,w:wl+wv,h:mh});y+=rowBox(mX,y,[wl,wv],['الإجمالي',o.sum[0][1]],[HEADC,D.sumA],[PL.hfg,PL.ink],mh,[fo,fo],+D.sumR)}
       y+=GP})};
     /* مربع الإجماليات لما يكون لوحده: وسط (الافتراضي) أو يمين أو شمال */
     const sX=w=>D.sumPos==='r'?W-P-w:D.sumPos==='c'?(W-w)/2:P;
@@ -1245,15 +1247,16 @@ function sheet(o){lastSpec=o;const D=invd();
       if(+D.sumV>0){vw=IW*D.sumV/100;if(fit)tw=Math.min(IW*(side?.5:.95),Math.max(tw,vw+lwm));vw=Math.min(vw,tw-40)}lw=tw-vw;
       const sw=its?(side?Math.round(IW-tw-GAP):IW):0;let hS=0;
       if(its){const st={th:['الصنف','العدد','الأمتار','القيمة'],w:[.33,.17,.22,.28],rows:its.map(r=>[r[0],r[1],r[2],r[4]])},h1=tbl(st,W-P,sw,{fs:D.items,rh:+D.itRow||0,hh:+D.itHead||0,lid:'items'});const it=o.itemsTot||{},cw=st.w.map(v=>v*sw),fo2='bold '+D.items+'px '+F;
-        hS=h1+rowBox(W-P-sw,y+h1,cw,['الإجمالي',String(it.c==null?'':it.c),it.q?fq(it.q):'-',it.v==null?'':f(it.v)],[HEADC,D.sumA,D.sumA,D.sumA],[PL.hfg,PL.ink,PL.ink,PL.ink],+D.itRow||D.sumH,[fo2])}
+        hS=h1+rowBox(W-P-sw,y+h1,cw,['الإجمالي',String(it.c==null?'':it.c),it.q?fq(it.q):'-',it.v==null?'':f(it.v)],[HEADC,D.sumA,D.sumA,D.sumA],[PL.hfg,PL.ink,PL.ink,PL.ink],+D.itRow||D.sumH,[fo2],[0,0,R,R])}
       if(its&&!side){y+=hS+GP;hS=0}
       const X=side?P:(D.sumPos==='r'?W-P-tw:D.sumPos==='c'?(W-tw)/2:P);let hT=0,yy=y,nI=0,RW=[];
+      let hPre=0;rows0.forEach(([a,b,bold])=>{const q=rk(a,bold),ls=wrap(a,lw-8,q.ff);hPre+=Math.max(q.rh0,ls.length*(q.fz+4)+4)});x.save();rr(X,y,tw,hPre,+D.sumR);x.clip();
       rows0.forEach(([a,b,bold])=>{const q=rk(a,bold),last=q.kd==='Rem',ls=wrap(a,lw-8,q.ff),rh=Math.max(q.rh0,ls.length*(q.fz+4)+4),
           lc=last?PL.gold:q.kd==='Tot'?PL.tot:[HEADC,PL.hfg],vc=last?PL.gold:q.kd==='Paid'?PL.paid:q.kd==='Tot'?[D.sumA,PL.ink]:[(nI++%2?D.sumB:D.sumA),PL.ink];
         x.save();x.fillStyle=lc[0];x.fillRect(X+vw,yy,lw,rh);x.fillStyle=vc[0];x.fillRect(X,yy,vw,rh);x.restore();
         x.strokeStyle=GRIDC;x.lineWidth=+D.gw||1;x.beginPath();x.moveTo(X+vw,yy);x.lineTo(X+vw,yy+rh);x.stroke();x.beginPath();x.moveTo(X,yy+rh);x.lineTo(X+tw,yy+rh);x.stroke();
-        RW.push({y:yy,h:rh,kd:q.kd});ls.forEach((t,j)=>T(t,X+vw+lw/2,yy+rh/2+(j-(ls.length-1)/2)*(q.fz+4),'center',q.ff,lc[1]));T(b,X+vw/2,yy+rh/2,'center',q.ff,vc[1]);yy+=rh});hT=yy-y;
-      if(hT){x.strokeStyle=EDGEC;x.lineWidth=D.ew==null?1.2:+D.ew;x.strokeRect(X,y,tw,hT);LR({t:'tot',X,y,w:tw,h:hT,vw,side,rows:RW})}
+        RW.push({y:yy,h:rh,kd:q.kd});ls.forEach((t,j)=>T(t,X+vw+lw/2,yy+rh/2+(j-(ls.length-1)/2)*(q.fz+4),'center',q.ff,lc[1]));T(b,X+vw/2,yy+rh/2,'center',q.ff,vc[1]);yy+=rh});hT=yy-y;x.restore();
+      if(hT){x.strokeStyle=EDGEC;x.lineWidth=D.ew==null?1.2:+D.ew;rr(X,y,tw,hT,+D.sumR);x.stroke();LR({t:'tot',X,y,w:tw,h:hT,vw,side,rows:RW})}
       y+=Math.max(hS,hT)+GP};
     const secS=()=>{if(D.mob)return secSM();const its=D.sItems?o.items:null;
       if(its&&its.length){T('ملخص الأصناف',W-P,y+8,'right','bold '+(D.tt||14)+'px '+F);y+=D.tt?D.tt+6:20;
@@ -1278,14 +1281,15 @@ function invSheet(r,paper){const TH=paper==='t80'||paper==='t58',fancy=!TH&&pget
   const cd=(pureRet(r)?'مرتجع · ':'')+(r.code?'كود '+r.code+' · ':'')+(r.rcode?'كود المرتجع '+r.rcode+' · ':'');
   if(r.type==='pay')return{...base,fancy,st:(+r.rest||0)<=0?'paid':'',...(Array.isArray(r.gn)?{gn:r.gn,gnote:r.gnote||''}:noteSnap()),sub:cd+'إذن دفعة'+(r.no?' رقم '+r.no:''),sum:[['الحساب قبل الدفعة',f(r.prev)],...(r.pfv?[['المبلغ المدفوع',f(r.amtRaw)],['خصم '+(r.pfWhy?r.pfWhy+' ':'')+fq(r.pf)+'% من المدفوع',f(r.pfv)],['صافي الدفعة',f(r.amount),1]]:[['المبلغ المدفوع'+(r.pfWhy?' ('+r.pfWhy+')':''),f(r.amount),1]]),['الحساب بعد الدفعة',f(r.rest),1]]};
   const RZ=/\s*(\d+(?:\.\d+)?)\s*[×x*]\s*(\d+(?:\.\d+)?)\s*$/,rdz=x=>x.t==='rd'&&!(x.q>0)&&!x.rt?String(x.n).match(RZ):null,bn=x=>rdz(x)?String(x.n).replace(RZ,''):x.n,nb=x=>{const m=rdz(x);return m?nn(x).replace(RZ,''):nn(x)};
-  const pl=r.rows.filter(x=>!x.cols),ar=pl.some(x=>x.q>0||(!TH&&rdz(x))),tables=[];
+  const pl0=r.rows.filter(x=>!x.cols),pl=(()=>{const o={};let n=0;pl0.forEach(x=>{if(!(bn(x) in o))o[bn(x)]=n++});return pl0.map((x,i)=>[x,i]).sort((a,b)=>o[bn(a[0])]-o[bn(b[0])]||a[1]-b[1]).map(a=>a[0])})(),ar=pl.some(x=>x.q>0||(!TH&&rdz(x))),tables=[];
   const cmap={};let cn=0;pl.forEach(x=>{if(!(bn(x) in cmap))cmap[bn(x)]=cn++});
   const grp={},ord=[];pl.forEach(x=>{const k=bn(x)+'|'+(+x.p||0);if(!grp[k]){grp[k]={n:bn(x),p:+x.p||0,c:0,q:0,v:0,a:x.q>0};ord.push(k)}const sg=x.rt?-1:1;grp[k].c+=sg*(+x.c||0);grp[k].q+=sg*(+x.q||0);grp[k].v+=(+x.v||0)});
   const itemsTot=ord.reduce((a,k)=>{const y=grp[k];a.c+=y.c;a.q+=y.q;a.v+=y.v;return a},{c:0,q:0,v:0}),showSum=ord.length>=2||(ord.length===1&&pl.length>=3),items=showSum?ord.map(k=>{const y=grp[k];return[y.n,String(y.c),y.a?fq(y.q):'-',f(y.p),f(y.v),cmap[y.n]]}):[];
-  if(pl.length)tables.push(TH?(paper==='t58'?{th:['البيان','العدد','القيمة'],w:[.5,.14,.36],rows:pl.map(x=>[lbl(x),x.c,f(x.v)])}:{th:['البيان','العدد','السعر','القيمة'],w:[.4,.12,.24,.24],rows:pl.map(x=>[lbl(x),x.c,f(x.p),f(x.v)])}):ar?{th:['البيان','المقاس','العدد','الكمية','السعر','القيمة'],w:[.3,.16,.1,.14,.14,.16],rows:pl.map(x=>{const a=x.q>0,m=rdz(x);return[nb(x),a?x.w+'/'+x.h:m?m[1]+'/'+m[2]:'-',x.c,a?fq(x.q):'-',f(x.p),f(x.v)]})}
+  if(pl.length)tables.push(TH?(paper==='t58'?{th:['البيان','العدد','القيمة'],w:[.5,.14,.36],rows:pl.map(x=>[lbl(x),x.c,f(x.v)])}:{th:['البيان','العدد','السعر','القيمة'],w:[.4,.12,.24,.24],rows:pl.map(x=>[lbl(x),x.c,f(x.p),f(x.v)])}):ar?{th:['البيان','المقاس','العدد','الكمية','السعر','القيمة'],w:[.3,.16,.1,.14,.14,.16],rows:pl.map(x=>{const a=x.q>0,m=rdz(x);return[nb(x),a?(+x.w>+x.h?x.h+'/'+x.w:x.w+'/'+x.h):m?(+m[1]>+m[2]?m[2]+'/'+m[1]:m[1]+'/'+m[2]):'-',x.c,a?fq(x.q):'-',f(x.p),f(x.v)]})}
     :{th:['البيان','العدد','السعر','القيمة'],w:[.46,.14,.2,.2],rows:pl.map(x=>[nn(x),x.c,f(x.p),f(x.v)])});
   const G={};r.rows.filter(x=>x.cols).forEach(x=>(G[x.t]=G[x.t]||[]).push(x));
   if(fancy&&tables[0]){tables[0].col=pl.map(x=>cmap[bn(x)]);tables[0].red=pl.map(x=>!!x.rt)}
+  if(!TH&&tables[0]&&pl.length){const gm={};let gn=0;tables[0].grp=pl.map(x=>{const k=bn(x);if(!(k in gm))gm[k]=gn++;return gm[k]})}
   if(TH&&items.length)tables.push({title:'ملخص الأصناف',th:['الصنف','العدد','القيمة'],w:[.5,.14,.36],rows:items.map(i=>[i[0],i[1],i[4]])});
   Object.values(G).forEach(g=>{const k=g[0].cols.length;tables.push({title:g[0].tn||'',th:['البيان',...g[0].cols.map(c=>c.l)],w:[.3,...g[0].cols.map(()=>.7/k)],rows:g.map(x=>[x.n,...x.cols.map(c=>c.v)])})});
   const sum=[['إجمالي الإذن'+(r.tq>0?' ('+fq(r.tq)+' م²)':''),f(r.sub)]];(r.sums||[]).forEach(x=>sum.push(['إجمالي '+x.l,f(x.v)]));
@@ -1586,7 +1590,7 @@ function swipeDel(d){let x0=0,y0=0,dx=0,on=false;
 function addRow(t,rt,src){const rd=t==='rd',one=rd,d=document.createElement('div');d.className='row';d.dataset.t=t;
   const num=(c,l)=>`<div><label>${l}</label><input class="${c}" type="text" inputmode="decimal"></div>`;
   d.innerHTML=one?`<div class="r1 one"><input class="n" placeholder="اسم الصنف" autocomplete="off"><input class="c" type="text" inputmode="decimal" placeholder="العدد"><input class="p" type="text" inputmode="decimal" placeholder="السعر"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button class="del" aria-label="حذف">×</button><span class="qq hide"></span><b class="val hide"></b></div>`:`<div class="rg c5"><input class="n" placeholder="بحث" autocomplete="off" aria-label="اسم الصنف"><input class="w" type="text" inputmode="decimal" placeholder="عرض" aria-label="العرض"><input class="h" type="text" inputmode="decimal" placeholder="طول" aria-label="الطول"><input class="c" type="text" inputmode="decimal" placeholder="عدد" aria-label="العدد"><input class="p" type="text" inputmode="decimal" placeholder="سعر" aria-label="السعر"></div><div class="bz c5 hide"><span></span><input class="bw" type="text" inputmode="decimal" placeholder="حساب" aria-label="عرض اللوح للحساب"><input class="bh" type="text" inputmode="decimal" placeholder="حساب" aria-label="طول اللوح للحساب"></div><div class="ro rf"><button class="cp" aria-label="نسخ البند" title="نسخ">⧉</button><button type="button" class="bt" title="مقاس مختلف للحساب (عرض وطول اللوح)">📐 حساب</button><span style="flex:1"></span><span>القيمة: <b class="val num">0</b></span><button class="del" aria-label="حذف">×</button><span class="qq"></span></div>`;
-  d.querySelector('.del').onclick=()=>delRow(d);d.querySelector('.cp').onclick=()=>{const d2=addRow(t);setVals(d2,getVals(d));d.after(d2);calc()};swipeDel(d);d.querySelectorAll('input').forEach(i=>i.oninput=calc);
+  d.querySelector('.del').onclick=()=>delRow(d);d.querySelector('.cp').onclick=()=>{const v=getVals(d),d2=addRow(t),k={};['n','p','i'].forEach(q=>{if(v[q]!=null)k[q]=v[q]});setVals(d2,k);if(d.dataset.iid)d2.dataset.iid=d.dataset.iid;d.after(d2);calc()};swipeDel(d);d.querySelectorAll('input').forEach(i=>i.oninput=calc);
   {const bt=d.querySelector('.bt');if(bt){const bz=d.querySelector('.bz'),bw=d.querySelector('.bw'),bh=d.querySelector('.bh');
     bt.onclick=()=>{const op=bz.classList.contains('hide');if(op){bz.classList.remove('hide');bt.textContent='إخفاء';bt.classList.add('on');bw.focus()}else{bz.classList.add('hide');const has=!!(bw.value.trim()||bh.value.trim());bt.textContent=has?'📐 حساب ✓':'📐 حساب';bt.classList.toggle('on',has);calc()}}}}
   const n=d.querySelector('.n');n.onfocus=()=>showDD(n,d);n.addEventListener('click',()=>showDD(n,d));n.addEventListener('input',()=>showDD(n,d));$('rows').appendChild(d);if(rt)markRt(d,src);return d}
@@ -1594,14 +1598,15 @@ function markRt(d,src){d.dataset.rt='1';if(src)d.dataset.src=src;if(d.querySelec
 let TOT={},editId=null,_pw='',dpOpen=false,qtFrom=null,fullK=null,lastSaved=null,dbFull=false;
 /* المبلغ اللي لو اتدفع بعد خصم النسبة يغطي t بالظبط */
 function grossFor(t,pf){t=rd2(t);if(!(pf>0)||pf>=100)return t;let g=rd2(t/(1-pf/100));for(let i=0;i<4&&rd2(g-rd2(g*pf/100))<t;i++)g=rd2(g+.01);return g}
+const rndInv=a=>pget('rndTot',true)?(pget('rndDn',false)?Math.floor(a+1e-9):Math.round(a)):a;
 function calc(){let sub=0,tq=0;const rows=[];const CZ=pget('ceilSz',true),cz=v=>CZ&&v>0?Math.ceil(v-1e-9):v;/* رقم الصنف بيتحفظ مع البند لو اسمه لسه زي اسم الصنف بالظبط (اتختار من القايمة أو اتكتب زيه) */
   let exM=null;const itKeys=it=>{const k=nkey(it.name);return k?[k].concat(it.type==='rd'&&it.w&&it.h?[nkey(it.name+' '+it.w+'×'+it.h)]:[]):[]},itemOf=(d,t,n)=>{const k=nkey(n);if(!k||d.dataset.rt)return null;const a=d.dataset.iid&&S.items.find(x=>x.id===d.dataset.iid);if(a&&a.type===t&&itKeys(a).includes(k))return a.id;if(!exM){exM=new Map();S.items.forEach(it=>itKeys(it).forEach(x=>{if(!exM.has(it.type+'|'+x))exM.set(it.type+'|'+x,it.id)}))}return exM.get(t+'|'+k)||null};
   document.querySelectorAll('#rows .row').forEach(d=>{const g=c=>d.querySelector(c),gv=c=>nv(g(c)&&g(c).value),rd=d.dataset.t==='rd';
     const w=gv('.w'),h=gv('.h'),c=gv('.c'),p=gv('.p'),bw=gv('.bw'),bh=gv('.bh'),ew=cz(bw>0?bw:w),eh=cz(bh>0?bh:h),area=!rd&&ew>0&&eh>0;
     const sg=d.dataset.rt?-1:1,q=area?rd2(ew*eh/10000*c):0,v=rd2((area?q:c)*p)*sg;
-    g('.qq').textContent=area?'الكمية: '+fq(q)+' م²'+(bw>0||bh>0||ew!==w||eh!==h?' (محسوبة: عرض '+ew+' · طول '+eh+')':''):'';g('.val').textContent=f(v);
+    g('.qq').textContent=area?'الكمية: '+fq(q)+' م²'+'':'';g('.val').textContent=f(v);
     if(c>0){const o={t:d.dataset.t,n:g('.n').value,w,h,c,q,p,v};if(w>0&&h>0&&w>h){o.w=h;o.h=w;if(bw>0||bh>0){o.bw=bh;o.bh=bw}}{const ii=itemOf(d,o.t,o.n);if(ii)o.i=ii}if(!o.bw)delete o.bw;if(!o.bh)delete o.bh;if(!o.bw&&!o.bh){if(bw>0)o.bw=bw;if(bh>0)o.bh=bh}if(sg<0){o.rt=1;if(d.dataset.src)o.src=d.dataset.src}rows.push(o);sub+=v;tq+=q*sg}});
-  sub=rd2(sub);const prev=nv($('prev').value),pf=Math.min(100,Math.max(0,nv($('dp').value))),refund=nv($('refund').value),total=rd2(sub+nv($('nylon').value)-nv($('disc').value)+prev);
+  sub=rd2(sub);const prev=nv($('prev').value),pf=Math.min(100,Math.max(0,nv($('dp').value))),refund=nv($('refund').value),invA=rd2(sub+nv($('nylon').value)-nv($('disc').value)),total=rd2(rndInv(invA)+prev);
   /* "دفع كامل": المدفوع بيفضل ماشي مع الإجمالي والنسبة لحد ما تكتب مبلغ بإيدك */
   if(fullK){const t=rd2((fullK==='inv'?total-prev:total)+refund),v=t>0?grossFor(t,pf):0;if(Math.abs(nv($('paid').value)-v)>0.004)$('paid').value=v?String(v):''}
   const paidRaw=nv($('paid').value),pfv=rd2(paidRaw*pf/100),paid=rd2(paidRaw-pfv-refund);
@@ -1732,7 +1737,7 @@ async function doSave(img){const m=$('msg'),qf=qtFrom;m.textContent='';
     if(editId){const o=S.invoices.find(x=>x.id===editId);if(!o){m.textContent='الفاتورة الأصلية مش موجودة.';return}
       if(o.type==='inv'&&!hasRows){m.textContent='الفاتورة لازم يكون فيها بند.';return}
       if(o.type==='pay'&&hasRows){m.textContent='ده إيصال دفعة: اكتب المبلغ المدفوع بس.';return}
-      if(o.type==='inv'){const total=rd2(TOT.sub+nyl-dsc+o.prev);Object.assign(o,{rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nyl,disc:dsc,discWhy:dWhy,refund:rfd,dp:0,dpv:0,paidRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,total,paid:TOT.paid,rest:rd2(total-TOT.paid),note})}
+      if(o.type==='inv'){const total=rd2(rndInv(rd2(TOT.sub+nyl-dsc))+o.prev);Object.assign(o,{rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nyl,disc:dsc,discWhy:dWhy,refund:rfd,dp:0,dpv:0,paidRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,total,paid:TOT.paid,rest:rd2(total-TOT.paid),note})}
       else Object.assign(o,{amount:TOT.paid,amtRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,rest:rd2(o.prev-TOT.paid),note});
       o.edited=Date.now();ensureRc(o);put('invoices',o);reflow(o.cid);clearInv();drawCusts();drawDash();
       await showRec(o,img,'تم حفظ التعديل ✓');return}
@@ -1740,7 +1745,7 @@ async function doSave(img){const m=$('msg'),qf=qtFrom;m.textContent='';
     if(!c){c={id:uid(),name,phone:ph,addr:'',note:'',open:nv($('prev').value)};ncid=c.id;S.customers.push(c);put('customers',c)}
     else if(ph&&ph!==c.phone){c.phone=ph;put('customers',c)}
     rememberRate(c,TOT.pfWhy,TOT.pf);const prev=balOf(c);let r;
-    if(hasRows){const total=rd2(TOT.sub+nyl-dsc+prev);
+    if(hasRows){const total=rd2(rndInv(rd2(TOT.sub+nyl-dsc))+prev);
       r={id:uid(),type:'inv',cid:c.id,cname:c.name,phone:c.phone||'',no:nextNo(c),code:nextCode(),ts:Date.now(),rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nyl,disc:dsc,discWhy:dWhy,refund:rfd,paidRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,prev,total,paid:TOT.paid,rest:rd2(total-TOT.paid),note,...noteSnap()}}
     else r={id:uid(),type:'pay',cid:c.id,cname:c.name,phone:c.phone||'',no:nextPayNo(c),code:nextCode(),ts:Date.now(),amount:TOT.paid,amtRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,prev,rest:rd2(prev-TOT.paid),note,...noteSnap()};
     ensureRc(r);S.invoices.push(r);put('invoices',r);const dueBak=payDone(c,r);if(qf&&hasRows)qtDel(qf);
@@ -1916,7 +1921,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='95';
+const APP_VER='98';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
@@ -1956,7 +1961,7 @@ $('themeChk').onchange=()=>setTheme($('themeChk').checked);
 (function(){let p='teal';try{p=localStorage.getItem('pal')||'teal'}catch(e){}setPal(p);
 document.querySelectorAll('#pals button').forEach(b=>b.onclick=()=>setPal(b.dataset.p));$('palCustom').value=getCC();$('palCustom').oninput=()=>{try{localStorage.setItem('cc',$('palCustom').value)}catch(e){}setPal('custom')};
 $('animChk').checked=pget('anim',animDef());$('animChk').onchange=()=>{pset('anim',$('animChk').checked);applyAnim()};applyAnim();perfWatch()})();
-[['editInv','editInv'],['dupInv','dupInv'],['dayCl','dayCl'],['weekCl','weekCl'],['monCl','monCl'],['bulkRemChk','bulkRem'],['trashOn','trashOn'],['bkAl','bkAl'],['snapOn','snapOn'],['autoBk','autoBk'],['logoOn','logoOn'],['fancyInv','fancyInv'],['pdfOn','pdfOn'],['ceilSz','ceilSz']].forEach(([id,k])=>{$(id).checked=pget(k,true);$(id).onchange=()=>{pset(k,$(id).checked);applyFeatures();drawCusts();if(k==='ceilSz')calc()}});
+[['editInv','editInv'],['dupInv','dupInv'],['dayCl','dayCl'],['weekCl','weekCl'],['monCl','monCl'],['bulkRemChk','bulkRem'],['trashOn','trashOn'],['bkAl','bkAl'],['snapOn','snapOn'],['autoBk','autoBk'],['logoOn','logoOn'],['fancyInv','fancyInv'],['pdfOn','pdfOn'],['ceilSz','ceilSz'],['rndTot','rndTot'],['rndDn','rndDn']].forEach(([id,k])=>{$(id).checked=pget(k,true);$(id).onchange=()=>{pset(k,$(id).checked);applyFeatures();drawCusts();if(k==='ceilSz'||k==='rndTot'||k==='rndDn')calc()}});
 const DEFPRE='تحويل محفظة=1\nتحويل انستا=0';
 const pfPresets=()=>lsv('pfPre',DEFPRE).split('\n').map(l=>{const i=l.lastIndexOf('=');return i<0?null:{n:l.slice(0,i).trim(),p:nv(l.slice(i+1))}}).filter(x=>x&&x.n);
 const preHtml=c=>pfPresets().map((x,i)=>`<button class="alt" data-pre="${i}">${esc(x.n)} ${fq(rateFor(c,x))}%</button>`).join('');
@@ -4039,8 +4044,8 @@ const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncN
 <script>
 /* ========== تصميم الفاتورة ========== */
 (function(){
-  const COLS=[['bg','لون الخلفية'],['head','هيدر الجدول'],['hfg','كلام الهيدر'],['ink','لون الكتابة'],['grid','خطوط الجدول'],['edge','الإطار'],['totBg','الإجمالي · خلفية'],['totFg','الإجمالي · كتابة'],['remBg','المتبقي · خلفية'],['remFg','المتبقي · كتابة'],['paidBg','المدفوع · خلفية'],['paidFg','المدفوع · كتابة'],['sumA','صفوف الملخص (1)'],['sumB','صفوف الملخص (2)'],['shopC','لون اسم المحل'],['muteC','لون التاريخ وسطر الكود'],['retC','لون بنود المرتجع'],['decC','لون الكسور في المقاس (.5)']];
-  const SIZES=[['logoH','حجم اللوجو',20,120,2],['m','الهوامش',2,50,1],['r','تدوير الزوايا',0,24,1],['pad','ارتفاع الصفوف',0,24,1],['hdh','ارتفاع هيدر الجدول',14,50,1],['itRow','ارتفاع صفوف ملخص الأصناف (0 = تلقائي)',0,60,1],['itHead','ارتفاع هيدر ملخص الأصناف (0 = تلقائي)',0,60,1],['gw','سمك خطوط الجدول',.5,4,.5],['ew','سمك الإطار',0,4,.5],['gap','المسافة بين الأقسام',2,30,1],['sumV','عرض عمود الأرقام في الإجماليات (0 = تلقائي)',0,50,2]];
+  const COLS=[['bg','لون الخلفية'],['head','هيدر الجدول'],['hfg','كلام الهيدر'],['ink','لون الكتابة'],['grid','خطوط الجدول'],['edge','الإطار'],['totBg','الإجمالي · خلفية'],['totFg','الإجمالي · كتابة'],['remBg','المتبقي · خلفية'],['remFg','المتبقي · كتابة'],['paidBg','المدفوع · خلفية'],['paidFg','المدفوع · كتابة'],['sumA','صفوف الملخص (1)'],['sumB','صفوف الملخص (2)'],['shopC','لون اسم المحل'],['muteC','لون التاريخ وسطر الكود'],['retC','لون بنود المرتجع'],['decC','لون الكسور في المقاس (.5)'],['gSepC','لون الفاصل بين الأصناف'],['gAltC','لون تظليل الصنف التاني']];
+  const SIZES=[['logoH','حجم اللوجو',20,120,2],['m','الهوامش',2,50,1],['r','تدوير الزوايا',0,24,1],['pad','ارتفاع الصفوف',0,24,1],['hdh','ارتفاع هيدر الجدول',14,50,1],['itRow','ارتفاع صفوف ملخص الأصناف (0 = تلقائي)',0,60,1],['itHead','ارتفاع هيدر ملخص الأصناف (0 = تلقائي)',0,60,1],['gw','سمك خطوط الجدول',.5,4,.5],['sumR','تدوير زوايا مربعات الإجماليات',0,20,1],['gSep','سمك الفاصل بين الأصناف المختلفة (0 = بدون)',0,8,.5],['ew','سمك الإطار',0,4,.5],['gap','المسافة بين الأقسام',2,30,1],['sumV','عرض عمود الأرقام في الإجماليات (0 = تلقائي)',0,50,2]];
   const COLN=['البيان','المقاس','العدد','الكمية','السعر','القيمة'];
   const FONTS=[['shop','اسم المحل',8,34],['title','اسم العميل',9,36],['sub','سطر الكود',7,22],['date','التاريخ',7,22],['th','عناوين الجدول',7,22],['tbl','نص الجدول',7,24],['sum','الإجماليات',7,22],['items','ملخص الأصناف',7,22]];
   let cfg=invd(),cur='',tpls=[];
@@ -4093,7 +4098,7 @@ const _dc=drawCusts;drawCusts=function(){const r=_dc.apply(this,arguments);syncN
     E('idFont').querySelector('select').value=cfg.fam;
     const ck=(k,l)=>row(l,'<input type="checkbox" data-b="'+k+'"'+(cfg[k]?' checked':'')+'>'),
       NAMES={tables:'جدول البنود',summary:'ملخص الأصناف والإجماليات',notes:'الملاحظات'};
-    E('idCont').innerHTML=ck('sDate','إظهار التاريخ')+ck('sSub','إظهار سطر الكود ورقم الإذن')+ck('sItems','إظهار «ملخص الأصناف»')+ck('hPrev','إخفاء صف «رصيد سابق»')+ck('hNote','إخفاء الملاحظات (جملة التحويل وغيرها) من الفاتورة')+ck('hLine','خط تحت هيدر الجدول')+ck('mtHide','إخفاء صف «الإجمالي» اللي تحت الجدول')+row('مكان صف «الإجمالي» تحت الجدول','<select data-f="mtPos" style="flex:1.4"><option value="l">شمال</option><option value="c">في النص</option><option value="r">يمين</option></select>')+row('مكان ملخص الأصناف','<select data-f="sideSum" style="flex:1.6"><option value="1">جنب الإجماليات</option><option value="0">فوق الإجماليات (بعرض كامل)</option></select>')+
+    E('idCont').innerHTML=ck('sDate','إظهار التاريخ')+ck('sSub','إظهار سطر الكود ورقم الإذن')+ck('sItems','إظهار «ملخص الأصناف»')+ck('hPrev','إخفاء صف «رصيد سابق»')+ck('hNote','إخفاء الملاحظات (جملة التحويل وغيرها) من الفاتورة')+ck('hLine','خط تحت هيدر الجدول')+ck('mtHide','إخفاء صف «الإجمالي» اللي تحت الجدول')+ck('gAlt','تظليل كل صنف تاني بلون مختلف')+row('مكان صف «الإجمالي» تحت الجدول','<select data-f="mtPos" style="flex:1.4"><option value="l">شمال</option><option value="c">في النص</option><option value="r">يمين</option></select>')+row('مكان ملخص الأصناف','<select data-f="sideSum" style="flex:1.6"><option value="1">جنب الإجماليات</option><option value="0">فوق الإجماليات (بعرض كامل)</option></select>')+
       '<div class="idr"><span>إخفاء أعمدة من جدول البنود</span></div>'+ck('hSize','عمود المقاس')+ck('hCnt','عمود العدد')+ck('hQty','عمود الكمية')+ck('hPrice','عمود السعر')+
       row('وضوح ألوان الصفوف','<input type="range" data-n="tint" min="0" max="45" value="'+cfg.tint+'"><span class="v">'+cfg.tint+'</span>')+
       '<div class="idr"><span>ترتيب الأقسام (من فوق لتحت)</span></div>'+cfg.order.map((k,i)=>'<div class="idr"><span>'+(i+1)+' · '+NAMES[k]+'</span><button class="alt" data-o="'+k+'" data-d="-1"'+(i?'':' disabled')+'>↑</button><button class="alt" data-o="'+k+'" data-d="1"'+(i<cfg.order.length-1?'':' disabled')+'>↓</button></div>').join('');
