@@ -1051,7 +1051,7 @@ function put(k,o){DV++;o.u=Date.now();if(k==='invoices')noteCode(o);lset(k,S[k])
 /* إعادة حساب "رصيد سابق" لكل فواتير العميل بالترتيب (بعد تعديل أو حذف أو تغيير الرصيد الافتتاحي) */
 function reflowC(c,ch){let run=c.open||0;
   ledger(c).slice().sort((a,b)=>a.ts-b.ts||(a.id<b.id?-1:a.id>b.id?1:0)).forEach(r=>{const p=rd2(run),old=+r.prev||0;
-    if(Math.abs(p-old)>0.004){if(r.type==='pay'){r.prev=p;r.rest=rd2(p-(r.amount||0))}else{r.total=rd2((r.total||0)-old+p);r.prev=p;r.rest=rd2(r.total-(r.paid||0))}ch.push(r)}
+    if(Math.abs(p-old)>0.004){if(r.type==='pay'){r.prev=p;r.rest=rd2(p-(r.amount||0))}else{r.total=rd2(rndInv((r.total||0)-old+p));r.prev=p;r.rest=rd2(r.total-(r.paid||0))}ch.push(r)}
     run=rd2(run+net(r))})}
 function reflowList(cs){const ch=[];cs.forEach(c=>{if(c)reflowC(c,ch)});if(!ch.length)return 0;const t=Date.now();ch.forEach(r=>r.u=t);DV++;lset('invoices',S.invoices);ch.forEach(r=>pushDoc('invoices',r));return ch.length}
 const reflow=cid=>reflowList([getC(cid)]),reflowAll=()=>reflowList(S.customers);
@@ -1606,14 +1606,14 @@ function calc(){let sub=0,tq=0;const rows=[];const CZ=pget('ceilSz',true),cz=v=>
     const sg=d.dataset.rt?-1:1,q=area?rd2(ew*eh/10000*c):0,v=rd2((area?q:c)*p)*sg;
     g('.qq').textContent=area?'الكمية: '+fq(q)+' م²'+'':'';g('.val').textContent=f(v);
     if(c>0){const o={t:d.dataset.t,n:g('.n').value,w,h,c,q,p,v};if(w>0&&h>0&&w>h){o.w=h;o.h=w;if(bw>0||bh>0){o.bw=bh;o.bh=bw}}{const ii=itemOf(d,o.t,o.n);if(ii)o.i=ii}if(!o.bw)delete o.bw;if(!o.bh)delete o.bh;if(!o.bw&&!o.bh){if(bw>0)o.bw=bw;if(bh>0)o.bh=bh}if(sg<0){o.rt=1;if(d.dataset.src)o.src=d.dataset.src}rows.push(o);sub+=v;tq+=q*sg}});
-  sub=rd2(sub);const prev=nv($('prev').value),pf=Math.min(100,Math.max(0,nv($('dp').value))),refund=nv($('refund').value),invA=rd2(sub+nv($('nylon').value)-nv($('disc').value)),total=rd2(rndInv(invA)+prev);
+  sub=rd2(sub);const prev=nv($('prev').value),pf=Math.min(100,Math.max(0,nv($('dp').value))),refund=nv($('refund').value),invA=rd2(sub+nv($('nylon').value)-nv($('disc').value)),total=rd2(rndInv(invA+prev));
   /* "دفع كامل": المدفوع بيفضل ماشي مع الإجمالي والنسبة لحد ما تكتب مبلغ بإيدك */
   if(fullK){const t=rd2((fullK==='inv'?total-prev:total)+refund),v=t>0?grossFor(t,pf):0;if(Math.abs(nv($('paid').value)-v)>0.004)$('paid').value=v?String(v):''}
   const paidRaw=nv($('paid').value),pfv=rd2(paidRaw*pf/100),paid=rd2(paidRaw-pfv-refund);
-  $('tqw').textContent=tq>0?' ('+fq(tq)+' م²)':'';$('sub').textContent=f(sub);$('grand').textContent=f(total);$('rest').textContent=f(total-paid);{const pr=$('rest').parentNode;pr.classList.toggle('dr',total-paid>0);pr.classList.toggle('ok',total-paid<=0&&(total!==0||paid!==0))}
+  $('tqw').textContent=tq>0?' ('+fq(tq)+' م²)':'';$('sub').textContent=f(sub);$('grand').textContent=f(total);$('rest').textContent=f(rndInv(rd2(total-paid)));{const pr=$('rest').parentNode;pr.classList.toggle('dr',total-paid>0);pr.classList.toggle('ok',total-paid<=0&&(total!==0||paid!==0))}
   $('r_sub').classList.toggle('hide',['r_nylon','r_disc','r_prev','r_ref'].every(i=>$(i).classList.contains('hide')));
   drawPayBar(total,prev,refund,pf,pfv,paidRaw);$('saveQt').classList.toggle('hide',!rows.length||!!editId);
-  $('dpAmt').textContent=pfv?' = '+f(pfv):'';TOT={rows,sub,tq:rd2(tq),prev,pf,pfv,pfWhy:$('pfWhy').value.trim(),paidRaw,refund,total,paid,rest:rd2(total-paid)};
+  $('dpAmt').textContent=pfv?' = '+f(pfv):'';TOT={rows,sub,tq:rd2(tq),prev,pf,pfv,pfWhy:$('pfWhy').value.trim(),paidRaw,refund,total,paid,rest:rndInv(rd2(total-paid))};
   const pay=!rows.length&&paid>0;$('save').textContent=(editId?'حفظ التعديل':pay?'تسجيل دفعة':'حفظ الفاتورة')+(rows.length?' · '+f(total):pay?' · '+f(paid):'');$('saveImg').textContent=pay?'دفعة كصورة':'حفظ كصورة'}
 ['nylon','disc','dp','prev','paid','refund','discWhy','pfWhy'].forEach(i=>$(i).oninput=calc);
 $('paid').oninput=()=>{fullK=null;calc()};
@@ -1737,7 +1737,7 @@ async function doSave(img){const m=$('msg'),qf=qtFrom;m.textContent='';
     if(editId){const o=S.invoices.find(x=>x.id===editId);if(!o){m.textContent='الفاتورة الأصلية مش موجودة.';return}
       if(o.type==='inv'&&!hasRows){m.textContent='الفاتورة لازم يكون فيها بند.';return}
       if(o.type==='pay'&&hasRows){m.textContent='ده إيصال دفعة: اكتب المبلغ المدفوع بس.';return}
-      if(o.type==='inv'){const total=rd2(rndInv(rd2(TOT.sub+nyl-dsc))+o.prev);Object.assign(o,{rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nyl,disc:dsc,discWhy:dWhy,refund:rfd,dp:0,dpv:0,paidRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,total,paid:TOT.paid,rest:rd2(total-TOT.paid),note})}
+      if(o.type==='inv'){const total=rd2(rndInv(rd2(TOT.sub+nyl-dsc+o.prev)));Object.assign(o,{rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nyl,disc:dsc,discWhy:dWhy,refund:rfd,dp:0,dpv:0,paidRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,total,paid:TOT.paid,rest:rndInv(rd2(total-TOT.paid)),note})}
       else Object.assign(o,{amount:TOT.paid,amtRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,rest:rd2(o.prev-TOT.paid),note});
       o.edited=Date.now();ensureRc(o);put('invoices',o);reflow(o.cid);clearInv();drawCusts();drawDash();
       await showRec(o,img,'تم حفظ التعديل ✓');return}
@@ -1745,8 +1745,8 @@ async function doSave(img){const m=$('msg'),qf=qtFrom;m.textContent='';
     if(!c){c={id:uid(),name,phone:ph,addr:'',note:'',open:nv($('prev').value)};ncid=c.id;S.customers.push(c);put('customers',c)}
     else if(ph&&ph!==c.phone){c.phone=ph;put('customers',c)}
     rememberRate(c,TOT.pfWhy,TOT.pf);const prev=balOf(c);let r;
-    if(hasRows){const total=rd2(rndInv(rd2(TOT.sub+nyl-dsc))+prev);
-      r={id:uid(),type:'inv',cid:c.id,cname:c.name,phone:c.phone||'',no:nextNo(c),code:nextCode(),ts:Date.now(),rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nyl,disc:dsc,discWhy:dWhy,refund:rfd,paidRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,prev,total,paid:TOT.paid,rest:rd2(total-TOT.paid),note,...noteSnap()}}
+    if(hasRows){const total=rd2(rndInv(rd2(TOT.sub+nyl-dsc+prev)));
+      r={id:uid(),type:'inv',cid:c.id,cname:c.name,phone:c.phone||'',no:nextNo(c),code:nextCode(),ts:Date.now(),rows:TOT.rows,tq:TOT.tq,sub:TOT.sub,nylon:nyl,disc:dsc,discWhy:dWhy,refund:rfd,paidRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,prev,total,paid:TOT.paid,rest:rndInv(rd2(total-TOT.paid)),note,...noteSnap()}}
     else r={id:uid(),type:'pay',cid:c.id,cname:c.name,phone:c.phone||'',no:nextPayNo(c),code:nextCode(),ts:Date.now(),amount:TOT.paid,amtRaw:TOT.paidRaw,pf:TOT.pf,pfv:TOT.pfv,pfWhy:TOT.pfWhy,prev,rest:rd2(prev-TOT.paid),note,...noteSnap()};
     ensureRc(r);S.invoices.push(r);put('invoices',r);const dueBak=payDone(c,r);if(qf&&hasRows)qtDel(qf);
     lastSaved={id:r.id,at:Date.now(),snap,ncid,qt:hasRows?qo:null,dueBak};clearInv();drawCusts();drawDash();
@@ -1921,7 +1921,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&FBDB&&Dat
 
 /* ---------- تطبيق الموبايل (PWA) ---------- */
 /* رقم النسخة: غيّر الرقم ده بس مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='99';
+const APP_VER='100';
 $('appVer').textContent='نسخة التطبيق: '+APP_VER;
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js?v='+APP_VER).catch(()=>{});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
