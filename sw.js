@@ -1,7 +1,7 @@
 /* رقم النسخة بييجي من التطبيق نفسه (sw.js?v=APP_VER)، فكل تحديث بيعمل كاش جديد ويمسح القديم */
 const V = new URL(self.location.href).searchParams.get('v') || '0';
 const C = 'eltabakha-v' + V;
-const A = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const A = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './vodafone.svg', './instapay.png'];
 const NAV_TIMEOUT = 4000; // لو النت بطيء أكتر من كده افتح النسخة المحفوظة على طول
 
 self.addEventListener('install', e => {
@@ -36,12 +36,7 @@ self.addEventListener('fetch', e => {
 
     const timer = isNav ? setTimeout(() => { fromCache().then(finish); }, NAV_TIMEOUT) : null;
 
-    net.then(r => {
-      clearTimeout(timer);
-      // لو السيرفر رجّع خطأ (500 / 404 / 503...) افتح النسخة المحفوظة بدل صفحة الخطأ
-      if (r && !r.ok) return fromCache().then(m => finish(m || r));
-      finish(r);
-    })
+    net.then(r => { clearTimeout(timer); finish(r); })
       .catch(() => {
         clearTimeout(timer);
         fromCache().then(m => finish(m || Response.error()));
