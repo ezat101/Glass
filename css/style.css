@@ -1432,3 +1432,104 @@ html #stFab{background:var(--acc)!important;color:#fff!important;border-color:tr
 /* v306: زرار الرجوع دايرة صغيرة وبيختفي وانت نازل */
 html #stFab{width:44px;height:44px;padding:0;font-size:20px;line-height:44px;text-align:center;opacity:.92;transition:transform .2s,opacity .2s}
 html #stFab.away{transform:translateY(90px);opacity:0;pointer-events:none}
+
+/* v307: كارت العملاء المكررين مقفول ومختصر، وكل سطر فيه اسم العميل */
+#cuDup .dupc{border-color:var(--danger)}#cuDup .dupc summary{cursor:pointer;list-style:none}#cuDup .dupc summary::-webkit-details-marker{display:none}
+#cuDup .dupg{margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+#cuDup .duph{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:13px}
+#cuDup .dupr{color:var(--ink);padding:3px 0}#cuDup .dupr small{font-size:12px}
+html #cuDup button{padding:3px 10px!important;min-height:0!important;height:auto!important;font-size:12.5px!important;flex:0 0 auto;width:auto!important}
+
+/* v311: زراير الدفع لونها أخضر ثابت مهما اتغير لون التطبيق */
+html:not(#zz) :is(button,a).b-green{background:linear-gradient(180deg,#22c55e,#16a34a)!important;border-color:transparent!important;color:#fff!important;box-shadow:0 6px 12px -7px #16a34a!important}
+html.d3:not(#zz) :is(button,a).b-green:not(#t-cl *){border:0!important;border-bottom:3px solid #15803d!important}
+
+/* v312: صفحة رسائل الواتساب المبسّطة */
+.mst{margin:4px 0 6px}.mst button{font-size:14px;padding:8px 4px}
+.mcust{margin:2px 0 4px;color:var(--danger)}
+.madv{margin-top:8px}.madv summary{cursor:pointer;font-size:13px;color:var(--mute)}
+#mTabs button{font-size:13px;padding:7px 2px}
+
+.mopts{margin:2px 0 6px}.mopts .opt{padding:5px 0}
+
+/* v314: محرر طرق الدفع */
+#spChips .spedit,.pwchips .spedit{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:auto;height:56px;padding:5px 3px;border-radius:12px;border:1.5px dashed var(--line);background:transparent;min-width:0;opacity:.8}
+
+/* v317: صفحة التصميم متقسمة: المقاسات لوحدها، والشكل والألوان لوحدهم */
+#invDes[data-dm=sz] [data-dm=col],#invDes[data-dm=col] [data-dm=sz]{display:none!important}
+
+/* v318: طرق الدفع مضغوطة */
+#t-st [data-sp=pay] .pmcard{padding:8px}
+#t-st [data-sp=pay] .pmhow summary{cursor:pointer;font-size:12px}#t-st [data-sp=pay] .pmhow div{font-size:12px;margin-top:4px}
+#t-st [data-sp=pay] .pmc2{border:1px solid var(--line);border-radius:10px;padding:5px 6px;margin-top:5px;display:flex;flex-direction:column;gap:4px;background:var(--card)}
+#t-st [data-sp=pay] .pmc2.off{opacity:.5}
+#t-st [data-sp=pay] .pmh{display:flex;align-items:center;gap:4px}
+#t-st [data-sp=pay] .pmh input,#t-st [data-sp=pay] .pmh select{height:30px;min-height:30px;font-size:13px;padding:0 6px;margin:0}
+#t-st [data-sp=pay] .pmh select{width:40px;flex:none;padding:0 2px;font-size:16px}
+#t-st [data-sp=pay] .pmh [data-pm=n],#t-st [data-sp=pay] .pmh [data-pm=num]{flex:1;min-width:0}
+#t-st [data-sp=pay] .pin{display:flex;align-items:center;gap:1px;font-weight:700;font-size:12px;flex:none}#t-st [data-sp=pay] .pin input{width:42px;text-align:center;font-weight:700;padding:0 2px}
+#t-st [data-sp=pay] .pmh .opt{margin:0;flex:none;padding:0;min-height:0}#t-st [data-sp=pay] .pmh .opt input[type=checkbox]{width:38px;height:22px;min-height:22px;padding:0;flex:none}#t-st [data-sp=pay] .pmh .del{position:relative;width:30px;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px}
+#t-st [data-sp=pay] .pme{font-size:11px;white-space:nowrap;flex:none}
+#t-st [data-sp=pay] .pmh button{min-width:30px;min-height:30px;height:30px;padding:0 6px;flex:none;font-size:13px;margin:0}
+#t-st [data-sp=pay] .pmq{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}#t-st [data-sp=pay] .pmq button,#t-st [data-sp=pay] #pmAdd{font-size:12px;padding:3px 8px;min-height:28px;height:28px;margin:0}
+#t-st [data-sp=pay] #pmAdd{margin-top:4px}
+
+/* v321: لوجوهات طرق الدفع */
+.pmlogo{height:16px;width:auto;max-width:44px;vertical-align:middle;object-fit:contain}
+#t-st [data-sp=pay] .pmlg{width:40px;height:30px;flex:none;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:8px;padding:2px}#t-st [data-sp=pay] .pmlg img{max-width:100%;max-height:100%;object-fit:contain}
+#t-st [data-sp=pay] .pmh select[hidden]{display:none}
+
+/* v322: نافذة بيانات التحويل */
+#tfOv .res-in{display:flex;flex-direction:column;gap:6px}
+#tfList{display:flex;flex-direction:column;gap:4px}
+#tfOv .tfi{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:10px;padding:4px 6px;margin:0;cursor:pointer;font-size:13px;color:var(--ink)}
+#tfOv .tfi.no{opacity:.5}
+#tfOv .tfi input{width:18px;height:18px;flex:none;margin:0}
+#tfOv .tfl{width:42px;height:24px;flex:none;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:6px}#tfOv .tfl .pmlogo{height:20px;max-width:40px}
+#tfOv .tfi b{flex:1;min-width:0}#tfOv .tfi .num{font-size:12px;direction:ltr}
+#tfOv .tfrow{display:flex;gap:6px}#tfOv .tfrow input{flex:1;min-width:0;height:32px;font-size:13px;margin:0}
+#tfOv textarea{font-size:13px;margin:0}
+#tfOv .tfbtn{display:flex;gap:6px}#tfOv .tfbtn button{flex:1;min-height:34px;padding:4px 6px;font-size:13px;margin:0}#tfOv .tfbtn .main{flex:1.4}
+
+/* v324: كارت طرق الدفع تحت المديون + بحث العميل في نافذة التحويل */
+.dbtf{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:5px 6px;margin:-2px 0 6px;border:1px dashed var(--line);border-radius:10px;background:var(--card);font-size:12px}
+.dbtf .ab{min-height:28px;height:28px;padding:0 8px;font-size:12px;display:inline-flex;align-items:center;gap:4px;margin:0}
+.dbtf .tfm .pmlogo{height:16px;max-width:36px;background:#fff;border-radius:3px}
+.dbr.tfon{outline:2px solid color-mix(in srgb,var(--acc,#16a34a) 50%,transparent);outline-offset:-2px}
+#tfOv .tfq input{width:100%;height:32px;font-size:13px;margin:0}
+#tfSug{display:flex;flex-direction:column;gap:3px}#tfSug:empty{display:none}
+#tfOv .tfs{display:flex;justify-content:space-between;align-items:center;gap:6px;min-height:30px;padding:3px 8px;font-size:13px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);margin:0;text-align:right}
+
+/* v325: زرار المبلغ */
+.dbtf .tfa{border-style:dashed}.dbtf .tfa.on{background:color-mix(in srgb,#16a34a 15%,var(--card));border-color:#16a34a;color:var(--ink)}
+#tfOv .tfao{display:flex;align-items:center;gap:2px;flex:none;margin:0;font-size:14px;cursor:pointer}#tfOv .tfao input{width:18px;height:18px;margin:0}
+#tfOv #tfAmt:disabled{opacity:.45}
+
+/* v329: أماكن ظهور طريقة الدفع */
+#t-st [data-sp=pay] .pmw{display:flex;flex-wrap:wrap;align-items:center;gap:3px;font-size:11px}
+#t-st [data-sp=pay] .pmw label{display:inline-flex;align-items:center;margin:0;padding:2px 7px;min-height:24px;border:1px dashed var(--line);border-radius:99px;cursor:pointer;color:var(--mute);font-size:11px;text-decoration:line-through}
+#t-st [data-sp=pay] .pmw label.on{border-style:solid;border-color:#16a34a;background:color-mix(in srgb,#16a34a 12%,var(--card));color:var(--ink);text-decoration:none}
+#t-st [data-sp=pay] .pmw input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+
+/* v330 */
+#t-st [data-sp=pay] .tfpl .opt{font-size:13px;margin:4px 0}
+#t-cu .dbtf{margin:0 0 6px}
+
+/* v331: أرقام كل طريقة */
+#t-st [data-sp=pay] .pmal{display:flex;flex-direction:column;gap:4px}
+#t-st [data-sp=pay] .pma2{border:1px solid var(--line);border-radius:8px;padding:4px;display:flex;flex-direction:column;gap:3px;background:color-mix(in srgb,var(--line) 18%,var(--card))}
+#t-st [data-sp=pay] .pma2.off{opacity:.5}#t-st [data-sp=pay] .pma2.full{border-color:#dc2626}
+#t-st [data-sp=pay] .pma2 [data-ac=lb]{flex:.8;min-width:0}#t-st [data-sp=pay] .pma2 [data-ac=num],#t-st [data-sp=pay] .pma2 [data-ac=bn],#t-st [data-sp=pay] .pma2 [data-ac=holder],#t-st [data-sp=pay] .pma2 [data-ac=acct],#t-st [data-sp=pay] .pma2 [data-ac=iban],#t-st [data-sp=pay] .pma2 [data-ac=card]{flex:1.2;min-width:0}
+#t-st [data-sp=pay] .pma2 .pin input{width:38px}
+#t-st [data-sp=pay] .pma2 .del{min-width:26px;width:26px;height:26px;min-height:26px;font-size:12px}
+#t-st [data-sp=pay] .pml{display:flex;align-items:center;gap:4px;font-size:11px;flex-wrap:wrap}#t-st [data-sp=pay] .pml label{display:inline-flex;align-items:center;gap:2px;margin:0;font-size:11px}#t-st [data-sp=pay] .pml input{width:64px;height:24px;min-height:24px;font-size:12px;padding:0 4px;margin:0}
+#t-st [data-sp=pay] .pmu{font-size:11px;color:var(--mute)}#t-st [data-sp=pay] .pmu.full{color:#dc2626;font-weight:700}
+#t-st [data-sp=pay] .pmadd{font-size:12px;align-self:flex-start;padding:2px 4px}
+.spacc{flex:none;min-height:26px;height:26px;padding:0 6px;font-size:11px;border:1px dashed var(--line);border-radius:8px;background:var(--card);color:var(--ink);margin:0;max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.spacc.full{border-color:#dc2626;color:#dc2626}
+
+/* v332: لوجو موحد في كل مكان بنفس شكل صف المبلغ (لوجو صافي، 18px، من غير برواز) */
+html:not(#zz) .mi{display:inline-flex;align-items:center;justify-content:center;height:22px;width:auto;min-width:22px;max-width:36px;font-size:17px;line-height:1;flex:none;background:none;border:0;padding:0;box-shadow:none}
+html:not(#zz) .mi img,html:not(#zz) .mi svg{height:18px;width:auto;max-width:34px;max-height:18px;display:block;border-radius:4px;object-fit:contain}
+html:not(#zz) #t-st [data-sp=pay] .pmh select[data-pm=ic]{width:30px;height:22px;min-height:22px;border:0;background:none;padding:0;font-size:17px;-webkit-appearance:none;appearance:none;text-align:center}
+html:not(#zz) #tfOv .tfl{width:auto;height:22px;background:none;border-radius:0}
+html:not(#zz) .pmq button,html:not(#zz) .dbtf .tfm{display:inline-flex;align-items:center;gap:4px}
