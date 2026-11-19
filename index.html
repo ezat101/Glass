@@ -45,7 +45,7 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <link rel="apple-touch-startup-image" href="splash/14_15pro.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="splash/12_13_14promax.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="splash/14_15promax.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)">
-<link rel="stylesheet" href="css/style.css?v=347">
+<link rel="stylesheet" href="css/style.css?v=348">
 
 
 
@@ -525,11 +525,9 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <div class="card"><b>💾 نسخة احتياطية</b><div class="mute" id="bkInfo" style="margin-top:4px"></div>
   <div class="btns"><button class="main" id="bkSave">💾 حفظ نسخة</button><button class="alt" id="bkLoad">♻️ استرجاع نسخة</button><input type="file" id="bkFile" accept=".json,application/json" class="hide"></div>
   <div class="btns"><button class="alt b-out" id="bkShare">📤 مشاركة نسخة (درايف / واتساب / تيليجرام)</button></div><div class="info" id="bkMsg"></div>
-  <div class="card" id="dsBox" style="margin-top:8px"><b>📊 ملخص اليوم</b><div class="mute" style="font-size:12px">شريط صغير فوق كل يوم فيه مختصر: المبيعات والمدفوع والمصروفات والمديونيات وحالة النسخ الاحتياطية.</div>
-  <label class="opt"><input type="checkbox" id="dsOn"> إظهار ملخص اليوم فوق</label>
-  <label for="dsWa" style="margin-top:6px">رقم الواتساب اللي يتبعتله (ثابت)</label><div class="ro" style="gap:6px"><input id="dsWa" type="tel" inputmode="tel" dir="ltr" placeholder="مثال: 01012345678" autocomplete="off" style="flex:1"><button type="button" class="alt" id="dsWaGo" style="flex:none">📲 ابعت دلوقتي</button></div>
-  <label class="opt"><input type="checkbox" id="dsTg"> ابعت ملخص امبارح على تيليجرام لوحده كل يوم (لو مفعّل تحت)</label>
-  <div class="mute" style="font-size:12px">الواتساب بيفتح الشات برقمك والرسالة جاهزة، وانت بتدوس «إرسال» (المتصفح مبيسمحش أكتر من كده). تيليجرام بيتبعت لوحده.</div><div class="info" id="dsMsg"></div></div>
+  <div class="card" id="dsBox" style="margin-top:8px"><b>📤 تذكير النسخة اليومية</b><div class="mute" style="font-size:12px">كل يوم لسه ما بعتّش نسخة، بيظهر فوق شريط صغير فيه زرار واحد يبعتلك ملف النسخة الاحتياطية (الداتا نفسها). على واتساب اختار رقمك «أنت» اللي فوق في القايمة.</div>
+  <label class="opt"><input type="checkbox" id="dsOn"> شريط تذكير النسخة فوق</label>
+  <label class="opt"><input type="checkbox" id="dsTg"> ابعت النسخة لتيليجرام لوحدها كل يوم (لو مفعّل تحت)</label><div class="info" id="dsMsg"></div></div>
   <details class="card spdt" id="tgBox" style="margin-top:8px"><summary>✈️ إرسال النسخة لتيليجرام أوتوماتيك (مجاني)</summary>
     <div class="mute" style="font-size:12px;margin:6px 0">بعد ما تظبطه، «📤 مشاركة نسخة» بتبعت الملف على تيليجرام بتاعك لوحدها من غير أي خطوة تانية.<br>١) في تيليجرام افتح <b>@BotFather</b> واكتب <b>/newbot</b> واتبع الخطوات، هيدّيك <b>Token</b>.<br>٢) افتح البوت بتاعك وابعتله أي رسالة (مثلًا: أهلاً).<br>٣) الصق الـToken هنا ودوس «🔍 هات الـChat ID»، وبعدها «اختبار».</div>
     <input id="tgTok" type="password" dir="ltr" placeholder="Token (123456:ABC…)" autocomplete="off" aria-label="Token">
@@ -602,11 +600,11 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 
 <div id="dd"></div>
 
-<script src="js/app.js?v=347"></script>
-<script src="js/qr.js?v=347"></script>
+<script src="js/app.js?v=348"></script>
+<script src="js/qr.js?v=348"></script>
 <!-- ===== CutList: مخطط التقطيع ===== -->
-<script src="js/cutlist.js?v=347"></script>
-<script src="js/features.js?v=347"></script>
+<script src="js/cutlist.js?v=348"></script>
+<script src="js/features.js?v=348"></script>
 </body>
 </html>
 
