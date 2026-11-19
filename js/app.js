@@ -1,6 +1,6 @@
 /* فواتير · التطبيق الأساسي (فواتير، عملاء، سجل، مديونين، إعدادات) */
 /* رقم النسخة: غيّر الرقم ده مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='349';
+const APP_VER='350';
 /* صفحة قديمة وصلت مع ملف أحدث منها (نت بطيء وقت التحديث): نعيد الفتح مرة بدل ما البرنامج يقع */
 (function(){const s=document.querySelector('script[src*="js/app.js"]'),m=s&&/[?&]v=(\d+)/.exec(s.src);if(!m||m[1]===APP_VER)return;let seen=APP_VER;try{seen=sessionStorage.getItem('verFix');sessionStorage.setItem('verFix',APP_VER)}catch(e){}if(seen===APP_VER)return;window.__bootOK=true;location.reload();throw new Error('stale-page')})();
 const $=id=>document.getElementById(id);
@@ -2985,7 +2985,7 @@ setTimeout(()=>{dsBar();dsAuto()},3500);document.addEventListener('visibilitycha
 $('bkShare').onclick=async()=>{const name='نسخة-فواتير-'+dshort(Date.now()).replace(/\//g,'-')+'.json',blob=new Blob([JSON.stringify(bkFull())],{type:'application/json'}),waN=pget('bkWaOn',true)?waNum(lsv('bkWa','')):'',mark=()=>{try{localStorage.setItem('lastBackup',Date.now())}catch(e){}bkInfo();bkBan();try{dsBar()}catch(e){}};let tgOk=false,tgErr='';
   if(tgCfg().t&&tgCfg().c){try{$('snapMsg').textContent='⏳ بيتبعت لتيليجرام…';await tgSend(blob,name,'نسخة فواتير · '+stamp(Date.now()));tgOk=true}catch(e){tgErr=' · ⚠ تيليجرام: '+e.message}}
   if(!pget('bkWaOn',true)&&tgOk){mark();$('snapMsg').textContent='✅ النسخة وصلت على تيليجرام';return}
-  try{const file=new File([blob],name,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[file]})){$('snapMsg').textContent=(waN?'📲 اختار واتساب وابعتها لرقمك: '+lsv('bkWa',''):'اختار واتساب أو درايف أو جيميل')+(tgOk?' · ✅ اتبعتت على تيليجرام كمان':tgErr);await navigator.share({files:[file],title:name,text:'نسخة احتياطية من برنامج فواتير'});mark();$('snapMsg').textContent='تمت المشاركة ✓'+(tgOk?' · ووصلت تيليجرام':'');return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{const file=new File([blob],name.replace(/.json$/,'.txt'),{type:'text/plain'});if(navigator.canShare&&navigator.canShare({files:[file]})){$('snapMsg').textContent=(waN?'📲 اختار واتساب وابعتها لرقمك: '+lsv('bkWa',''):'اختار واتساب أو درايف أو جيميل')+(tgOk?' · ✅ اتبعتت على تيليجرام كمان':tgErr);await navigator.share({files:[file],title:file.name,text:'نسخة احتياطية من برنامج فواتير'});mark();$('snapMsg').textContent='تمت المشاركة ✓'+(tgOk?' · ووصلت تيليجرام':'');return}}catch(e){if(e&&e.name==='AbortError')return}
   $('bkSave').click();if(tgOk)mark();
   if(waN)setTimeout(()=>{window.open('https://wa.me/'+waN+'?text='+encodeURIComponent('نسخة فواتير الاحتياطية اتحمّلت على الموبايل (في التنزيلات). ارفقها هنا وابعتها.'),'_blank','noopener')},900)};
 setTimeout(snapMaybe,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)snapMaybe()});
