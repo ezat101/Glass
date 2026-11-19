@@ -1591,3 +1591,9 @@ html:not(#zz) #t-it .itw.ed input{border-color:#16a34a!important;background:var(
 
 /* v345: ترتيب أعمدة كارت المخزن ثابت (الأيقونة/الاسم/الرصيد) حتى لو مفيش أيقونة */
 #t-st .skr .sks{grid-column:1}#t-st .skr .skn{grid-column:2}#t-st .skr .skb{grid-column:3}
+
+/* v347: شريط ملخص اليوم */
+.dsbar{margin:0 0 8px;padding:6px 10px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.dsbar .dsr{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px}.dsbar .dsr b:first-child{font-size:13px}
+.dsbar .dsb{justify-content:space-between}.dsbar small{color:var(--mute);font-size:11px;flex:1;min-width:0}
+.dsbar .dsa{display:flex;gap:4px}.dsbar .ab{min-height:26px;height:26px;padding:0 8px;font-size:12px;margin:0}
