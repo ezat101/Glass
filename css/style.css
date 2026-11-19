@@ -1573,3 +1573,7 @@ html:not(#zz) #t-it .itw.ed input{border-color:#16a34a!important;background:var(
 #t-it .itpm{min-width:26px;min-height:26px;padding:0 4px;font-size:13px;margin:0}
 #t-it .itck{width:20px;height:20px;margin:0}
 #itSelB.on{background:color-mix(in srgb,#16a34a 15%,var(--card));border-color:#16a34a}
+
+/* v343: مقاسات الألواح */
+#stkPanel .skzr input,#stkPanel .skzr2 input{min-width:0;flex:1;height:34px}
+#stkPanel .skszr .szw,#stkPanel .skszr .szh{flex:.7}
