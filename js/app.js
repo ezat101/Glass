@@ -1,6 +1,6 @@
 /* فواتير · التطبيق الأساسي (فواتير، عملاء، سجل، مديونين، إعدادات) */
 /* رقم النسخة: غيّر الرقم ده مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='350';
+const APP_VER='351';
 /* صفحة قديمة وصلت مع ملف أحدث منها (نت بطيء وقت التحديث): نعيد الفتح مرة بدل ما البرنامج يقع */
 (function(){const s=document.querySelector('script[src*="js/app.js"]'),m=s&&/[?&]v=(\d+)/.exec(s.src);if(!m||m[1]===APP_VER)return;let seen=APP_VER;try{seen=sessionStorage.getItem('verFix');sessionStorage.setItem('verFix',APP_VER)}catch(e){}if(seen===APP_VER)return;window.__bootOK=true;location.reload();throw new Error('stale-page')})();
 const $=id=>document.getElementById(id);
@@ -2688,8 +2688,10 @@ const itDim=s=>{let t=String(s||'').trim().replace(/[×xX*]/g,' × ').split(/\s+
 let ITK=null;function itKey(x){if(!ITK||ITK.v!==DV){const m=new Map();S.items.forEach(i=>{const k=nm(i.name)+'|'+i.type;if(!m.has(k))m.set(k,i)});ITK={v:DV,m,byId:new Map(S.items.map(i=>[i.id,i])),L:S.items.map(i=>({n:nm(i.name),t:i.type}))}}
   const raw=String(x.n||'').trim(),base=itDim(raw)||raw,it=x.i&&ITK.byId.get(x.i),ty=(it&&it.type)||(x.t==='rd'?'rd':x.t==='mq'?'mq':''),n0=nm(base);
   const ok=!!it||ITK.L.some(i=>(!ty||i.t===ty)&&i.n&&(n0===i.n||n0.startsWith(i.n+' ')));return{k:base||raw,ty:ok?(ty||'mq'):'',ok}}
+/* v351: مقاس القطعة الجاهزة (من الصنف، أو من آخر الاسم) بالأصغر الأول */
+function itSzKey(x){const it=x.i&&ITK&&ITK.byId.get(x.i);let a=0,b=0;if(it&&+it.w>0&&+it.h>0){a=+it.w;b=+it.h}else{const m=String(x.n||'').match(/(\d+(?:\.\d+)?)\s*[×xX*]\s*(\d+(?:\.\d+)?)\s*$/);if(m){a=+m[1];b=+m[2]}}return a>0&&b>0?fq(Math.min(a,b))+'×'+fq(Math.max(a,b)):''}
 function iAgg(a,b){const recs=S.invoices.filter(r=>r.ts>=a&&r.ts<b),G=new Map();let tot=0,cnt=0,nk=0;
-  const add=(k,v,c,ty,q,dn)=>{if(!k)return;const o=G.get(k)||{v:0,c:0,q:0,ty:ty||'',n:dn||k};o.v=rd2(o.v+v);o.c+=c;o.q=rd2(o.q+(q||0));G.set(k,o);tot=rd2(tot+v);cnt++};
+  const add=(k,v,c,ty,q,dn,sk)=>{if(!k)return;const o=G.get(k)||{v:0,c:0,q:0,ty:ty||'',n:dn||k};o.v=rd2(o.v+v);o.c+=c;o.q=rd2(o.q+(q||0));if(sk){const z=o.z||(o.z=new Map()),s=z.get(sk)||{c:0,v:0};s.c+=c;s.v=rd2(s.v+v);z.set(sk,s)}G.set(k,o);tot=rd2(tot+v);cnt++};
   recs.forEach(r=>{
     if(iSub==='p'){const v=pd(r)||0;if(rd2(v)!==0)add(r.cname||'—',v,1)}
     else if(iSub==='t'){if(r.type==='inv'&&hasRet(r)){const v=rd2((r.rows||[]).reduce((a,x)=>a+(x.rt?Math.abs(+x.v||0):0),0));if(v)add(r.cname||'—',v,1)}}
@@ -2697,8 +2699,8 @@ function iAgg(a,b){const recs=S.invoices.filter(r=>r.ts>=a&&r.ts<b),G=new Map();
     else if(iSub==='w'){pdBy(r).forEach(([k,v])=>{if(rd2(v||0)!==0)add(k,v,1)})}
     else if(iSub==='s'){if(r.type==='inv')add(r.cname||'—',val(r),1)}
     else if(iSub==='d'){if(r.type==='inv'){const u=rd2(val(r)-r.paid);if(u>0)add(r.cname||'—',u,1)}}
-    else if(iSub==='r'){if(r.type==='inv')(r.rows||[]).forEach(x=>{if(x.k==null){nk=rd2(nk+(+x.v||0));return}{const m=itKey(x),ty=m.ok?m.ty:'u';add(ty+'|'+m.k,rd2((+x.v||0)-(+x.k||0)),(x.rt?-1:1)*(+x.c||0),ty,(x.rt?-1:1)*(+x.q||0),m.k)}})}
-    else if(iSub==='i'){if(r.type==='inv')(r.rows||[]).forEach(x=>{/* v189: المرتجع بيتخصم من مبيعات الصنف */{const m=itKey(x),ty=m.ok?m.ty:'u';add(ty+'|'+m.k,+x.v||0,(x.rt?-1:1)*(+x.c||0),ty,(x.rt?-1:1)*(+x.q||0),m.k)}})}});
+    else if(iSub==='r'){if(r.type==='inv')(r.rows||[]).forEach(x=>{if(x.k==null){nk=rd2(nk+(+x.v||0));return}{const m=itKey(x),ty=m.ok?m.ty:'u';add(ty+'|'+m.k,rd2((+x.v||0)-(+x.k||0)),(x.rt?-1:1)*(+x.c||0),ty,(x.rt?-1:1)*(+x.q||0),m.k,ty==='rd'?itSzKey(x):'')}})}
+    else if(iSub==='i'){if(r.type==='inv')(r.rows||[]).forEach(x=>{/* v189: المرتجع بيتخصم من مبيعات الصنف */{const m=itKey(x),ty=m.ok?m.ty:'u';add(ty+'|'+m.k,+x.v||0,(x.rt?-1:1)*(+x.c||0),ty,(x.rt?-1:1)*(+x.q||0),m.k,ty==='rd'?itSzKey(x):'')}})}});
   return{G,tot,cnt,nk,n:recs.length,inv:recs.filter(r=>r.type==='inv').length}}
 const PNAME={d:'النهارده',ys:'أمس',d2:'قبل أمس',d3:'قبل 3 أيام',d4:'قبل 4 أيام',d5:'قبل 5 أيام',d6:'قبل 6 أيام',w3:'آخر 3 أيام',w:'آخر 7 أيام',w30:'آخر 30 يوم'},SNAME={s:'المبيعات',p:'المدفوع',d:'الديون',t:'المرتجع',i:'الأصناف',w:'طرق الدفع',o:'الطلبيات',r:'الربح',x:'المصروفات والصافي'};
 const perLab=R=>(PNAME[iPer]?PNAME[iPer]+' · ':'')+rLab(R);
@@ -2758,7 +2760,7 @@ function repGo(){
     tb={th:['التاريخ','العميل','فاتورة','الحالة','القيمة'],w:[.14,.29,.15,.22,.20]};sum=[['عدد الطلبيات',String(l.length)],['إجمالي القيمة',f(tot),1]]}
   else{const A=iAgg(R.a,R.b);tot=A.tot;rows=[...A.G].sort((x,y)=>y[1].v-x[1].v).map(([k,o])=>[o.n||k,sb==='w'?String(o.c):f(o.c),f(o.v)]);
     tb={th:[sb==='w'?'الطريقة':'الصنف',sb==='w'?'عدد':'الكمية',sb==='r'?'الربح':sb==='w'?'المبلغ':'المبلغ'],w:[.5,.2,.3]};
-    if(sb==='i'||sb==='r'){/* v342: جاهز أولًا ثم مقطع ثم غير مسجلة */const GR=[['rd','📦 شغل جاهز'],['mq','✂️ مقطع'],['u','❔ غير مسجلة في الأصناف']];ITG=GR.map(([t,ti])=>({title:ti,th:[t==='u'?'الصنف':'الصنف','العدد'+(t==='mq'?' (م²)':''),sb==='r'?'الربح':'المبلغ'],w:[.46,.24,.30],rows:[...A.G].filter(([k,o])=>(o.ty||'u')===t).sort((x,y)=>y[1].v-x[1].v).map(([k,o])=>[o.n||k,f(o.c)+(t==='mq'&&o.q?' ('+fq(o.q)+')':''),f(o.v)])})).filter(g=>g.rows.length)}
+    if(sb==='i'||sb==='r'){/* v342: جاهز أولًا ثم مقطع ثم غير مسجلة */const GR=[['rd','📦 شغل جاهز'],['mq','✂️ مقطع'],['u','❔ غير مسجلة في الأصناف']];ITG=GR.map(([t,ti])=>({title:ti,th:[t==='u'?'الصنف':'الصنف','العدد'+(t==='mq'?' (م²)':''),sb==='r'?'الربح':'المبلغ'],w:[.46,.24,.30],rows:[...A.G].filter(([k,o])=>(o.ty||'u')===t).sort((x,y)=>y[1].v-x[1].v).flatMap(([k,o])=>[[o.n||k,f(o.c)+(t==='mq'&&o.q?' ('+fq(o.q)+')':''),f(o.v)],...(t==='rd'&&o.z?[...o.z].sort((p,q)=>q[1].v-p[1].v).map(([s,v])=>['      ↳ '+'⁦'+s+'⁩',f(v.c),f(v.v)]):[])])})).filter(g=>g.rows.length)}
     if(sb==='r'){const ex=exTot(exIn(R.a,R.b));{const WV=skWasteRange(R.a,R.b);sum=[['ربح الأصناف',f(tot)],['− مصروفات الفترة',f(ex)],...(WV.v>0?[['− خسارة هادر الألواح ('+fq(WV.m)+' م²)',f(WV.v)]]:[]),['= صافي الربح',f(rd2(tot-ex-WV.v)),1]]}if(A.nk)note='مبيعات بقيمة '+f(A.nk)+' ملهاش سعر شراء، مش داخلة في الربح.'}
     else sum=[[sb==='w'?'إجمالي المدفوع':'إجمالي مبيعات الأصناف',f(tot),1]]}
   if(!rows.length){toast(sb==='d'?'مفيش مديونين ✓':sb==='x'?'مفيش مصروفات متسجلة في الفترة دي':'مفيش بيانات في الفترة دي');return}
