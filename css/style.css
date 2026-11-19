@@ -1565,3 +1565,11 @@ html:not(#zz) .pmq button,html:not(#zz) .dbtf .tfm{display:inline-flex;align-ite
 /* v339: الأصناف للعرض لحد ما تدوس */
 html:not(#zz) #t-it .itw input[readonly]{background:transparent!important;border-color:transparent!important;box-shadow:none!important;cursor:pointer}
 html:not(#zz) #t-it .itw.ed input{border-color:#16a34a!important;background:var(--card)!important}
+
+/* v342: الأصناف بالشكل القديم */
+#t-it .itw{margin-bottom:2px}
+#t-it .itpc{display:flex;align-items:center;gap:6px;padding:4px 6px;margin:0 0 4px;border:1px dashed var(--line);border-radius:8px;font-size:12px}
+#t-it .itpc input{width:64px;height:30px;min-height:30px;margin:0}#t-it .itpc button{min-height:30px;padding:2px 10px;font-size:12px;margin:0}
+#t-it .itpm{min-width:26px;min-height:26px;padding:0 4px;font-size:13px;margin:0}
+#t-it .itck{width:20px;height:20px;margin:0}
+#itSelB.on{background:color-mix(in srgb,#16a34a 15%,var(--card));border-color:#16a34a}
