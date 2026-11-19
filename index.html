@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl" data-theme="light" data-pal="sage">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' data: blob: https://*.googleapis.com https://*.firebaseio.com https://www.gstatic.com https://apis.google.com; frame-src https://ezat-101.firebaseapp.com https://accounts.google.com https://apis.google.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' data: blob: https://api.telegram.org https://*.googleapis.com https://*.firebaseio.com https://www.gstatic.com https://apis.google.com; frame-src https://ezat-101.firebaseapp.com https://accounts.google.com https://apis.google.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>try{if(localStorage.getItem('lkOn')==='1')document.documentElement.classList.add('locked')}catch(e){}try{var z=localStorage.getItem('fz');if(z==='x'||z==='s'||z==='l'||z==='xl')document.documentElement.classList.add('fz-'+z)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -45,7 +45,7 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <link rel="apple-touch-startup-image" href="splash/14_15pro.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="splash/12_13_14promax.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="splash/14_15promax.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)">
-<link rel="stylesheet" href="css/style.css?v=345">
+<link rel="stylesheet" href="css/style.css?v=346">
 
 
 
@@ -523,7 +523,13 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <div class="card"><b>🌐 رابط احتياطي للبرنامج</b><div class="mute" style="font-size:12px">لو البرنامج ما فتحش أو الموبايل باظ: افتح الرابط ده من أي موبايل أو كمبيوتر، وسجّل دخول بنفس الحساب، وبياناتك هتنزل من السحابة.</div><div class="ro" style="gap:6px;margin-top:6px"><input id="mirUrl" readonly value="https://ezat-101.web.app" dir="ltr" style="flex:1;height:32px;font-size:13px"><button type="button" class="alt" id="mirCp" style="flex:none">📋 نسخ</button></div><div class="info" id="mirMsg"></div></div>
 <div class="card"><b>💾 نسخة احتياطية</b><div class="mute" id="bkInfo" style="margin-top:4px"></div>
   <div class="btns"><button class="main" id="bkSave">💾 حفظ نسخة</button><button class="alt" id="bkLoad">♻️ استرجاع نسخة</button><input type="file" id="bkFile" accept=".json,application/json" class="hide"></div>
-  <div class="btns"><button class="alt b-out" id="bkShare">📤 مشاركة نسخة (درايف / واتساب)</button></div><div class="info" id="bkMsg"></div>
+  <div class="btns"><button class="alt b-out" id="bkShare">📤 مشاركة نسخة (درايف / واتساب / تيليجرام)</button></div><div class="info" id="bkMsg"></div>
+  <details class="card spdt" id="tgBox" style="margin-top:8px"><summary>✈️ إرسال النسخة لتيليجرام أوتوماتيك (مجاني)</summary>
+    <div class="mute" style="font-size:12px;margin:6px 0">بعد ما تظبطه، «📤 مشاركة نسخة» بتبعت الملف على تيليجرام بتاعك لوحدها من غير أي خطوة تانية.<br>١) في تيليجرام افتح <b>@BotFather</b> واكتب <b>/newbot</b> واتبع الخطوات، هيدّيك <b>Token</b>.<br>٢) افتح البوت بتاعك وابعتله أي رسالة (مثلًا: أهلاً).<br>٣) الصق الـToken هنا ودوس «🔍 هات الـChat ID»، وبعدها «اختبار».</div>
+    <input id="tgTok" type="password" dir="ltr" placeholder="Token (123456:ABC…)" autocomplete="off" aria-label="Token">
+    <div class="ro" style="gap:6px;margin-top:6px"><input id="tgChat" dir="ltr" placeholder="Chat ID" autocomplete="off" aria-label="Chat ID" style="flex:1"><button type="button" class="alt" id="tgFind" style="flex:none">🔍 هات الـChat ID</button></div>
+    <div class="ro" style="gap:6px;margin-top:6px"><button type="button" class="main" id="tgTest" style="flex:1">✉️ اختبار</button><button type="button" class="alt b-red" id="tgOff" style="flex:none">إيقاف</button></div>
+    <div class="info" id="tgMsg"></div></details>
   <label class="opt"><input type="checkbox" id="bkAl"> تنبيه لو عدّى أسبوع من غير نسخة</label></div>
 <details class="card"><summary>🗄 نسخ تلقائية (على الجهاز والسحابة)</summary>
   <label class="opt"><input type="checkbox" id="snapOn"> نسخة على الجهاز كل يوم (آخر 14 يوم)</label>
@@ -590,11 +596,11 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 
 <div id="dd"></div>
 
-<script src="js/app.js?v=345"></script>
-<script src="js/qr.js?v=345"></script>
+<script src="js/app.js?v=346"></script>
+<script src="js/qr.js?v=346"></script>
 <!-- ===== CutList: مخطط التقطيع ===== -->
-<script src="js/cutlist.js?v=345"></script>
-<script src="js/features.js?v=345"></script>
+<script src="js/cutlist.js?v=346"></script>
+<script src="js/features.js?v=346"></script>
 </body>
 </html>
 

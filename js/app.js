@@ -1,6 +1,6 @@
 /* فواتير · التطبيق الأساسي (فواتير، عملاء، سجل، مديونين، إعدادات) */
 /* رقم النسخة: غيّر الرقم ده مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='345';
+const APP_VER='346';
 /* صفحة قديمة وصلت مع ملف أحدث منها (نت بطيء وقت التحديث): نعيد الفتح مرة بدل ما البرنامج يقع */
 (function(){const s=document.querySelector('script[src*="js/app.js"]'),m=s&&/[?&]v=(\d+)/.exec(s.src);if(!m||m[1]===APP_VER)return;let seen=APP_VER;try{seen=sessionStorage.getItem('verFix');sessionStorage.setItem('verFix',APP_VER)}catch(e){}if(seen===APP_VER)return;window.__bootOK=true;location.reload();throw new Error('stale-page')})();
 const $=id=>document.getElementById(id);
@@ -2964,8 +2964,16 @@ $('snapList').onclick=drawSnaps;
 $('snapRows').onclick=async e=>{const d=e.target.dataset;if(!d.sd&&!d.sr)return;const k=d.sd||d.sr,x=await idbDo('readonly',st=>st.get(k));if(!x)return;
   if(d.sd){await dl(new Blob([x.json],{type:'application/json'}),'نسخة-فواتير-'+k+'.json');return}
   if(!ok2(e.target))return;try{$('snapMsg').textContent=await restoreData(JSON.parse(x.json))}catch(err){$('snapMsg').textContent='النسخة دي مش صالحة.'}};
+/* v346: إرسال النسخة لتيليجرام لوحده (Bot API مجاني). الـToken بيتخزن على الجهاز ده بس */
+const tgCfg=()=>({t:lsv('tgTok','').trim(),c:lsv('tgChat','').trim()}),tgApi=async(m,body)=>{const{t}=tgCfg();const r=await fetch('https://api.telegram.org/bot'+t+'/'+m,{method:'POST',body});const d=await r.json().catch(()=>({}));if(!d.ok)throw new Error(d.description||'فشل الإرسال');return d.result};
+const tgSend=(blob,name,cap)=>{const fd=new FormData();fd.append('chat_id',tgCfg().c);fd.append('caption',cap||name);fd.append('document',blob,name);return tgApi('sendDocument',fd)};
+(()=>{const t=$('tgTok'),c=$('tgChat'),m=$('tgMsg');if(!t)return;t.value=lsv('tgTok','');c.value=lsv('tgChat','');const sv=()=>{svk('tgTok',t.value.trim());svk('tgChat',c.value.trim())};t.onchange=sv;c.onchange=sv;
+  $('tgFind').onclick=async()=>{sv();if(!t.value.trim()){m.textContent='الصق الـToken الأول';return}m.textContent='⏳ بدوّر…';try{const r=await tgApi('getUpdates',new FormData()),ch=r.map(u=>(u.message||u.channel_post||{}).chat).filter(Boolean).pop();if(!ch){m.textContent='مفيش رسايل للبوت. ابعتله أي رسالة من تيليجرام وجرّب تاني';return}c.value=String(ch.id);sv();m.textContent='✅ لقيته: '+(ch.first_name||ch.title||ch.id)}catch(e){m.textContent='⚠ '+e.message}};
+  $('tgTest').onclick=async()=>{sv();if(!tgCfg().t||!tgCfg().c){m.textContent='اكتب الـToken والـChat ID';return}m.textContent='⏳ بيتبعت…';try{const fd=new FormData();fd.append('chat_id',tgCfg().c);fd.append('text','✅ فواتير: الربط شغّال، والنسخ الاحتياطية هتوصلك هنا');await tgApi('sendMessage',fd);m.textContent='✅ اتبعتت رسالة تجربة على تيليجرام'}catch(e){m.textContent='⚠ '+e.message}};
+  $('tgOff').onclick=()=>{t.value='';c.value='';sv();m.textContent='اتوقف. المشاركة رجعت عادية'}})();
 $('bkShare').onclick=async()=>{const name='نسخة-فواتير-'+dshort(Date.now()).replace(/\//g,'-')+'.json',blob=new Blob([JSON.stringify(bkFull())],{type:'application/json'});
-  try{const file=new File([blob],name,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});try{localStorage.setItem('lastBackup',Date.now())}catch(e){}bkInfo();bkBan();$('snapMsg').textContent='تمت المشاركة ✓ (اختار درايف أو ابعتها لنفسك على واتساب)';return}}catch(e){if(e&&e.name==='AbortError')return}
+  if(tgCfg().t&&tgCfg().c){try{$('snapMsg').textContent='⏳ بيتبعت لتيليجرام…';await tgSend(blob,name,'نسخة فواتير · '+stamp(Date.now()));try{localStorage.setItem('lastBackup',Date.now())}catch(e){}bkInfo();bkBan();$('snapMsg').textContent='✅ النسخة وصلت على تيليجرام';return}catch(e){$('snapMsg').textContent='⚠ تيليجرام: '+e.message+' · فتحنا المشاركة العادية'}}
+  try{const file=new File([blob],name,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});try{localStorage.setItem('lastBackup',Date.now())}catch(e){}bkInfo();bkBan();$('snapMsg').textContent='تمت المشاركة ✓ (على واتساب اختار رقمك «أنت» اللي فوق، وعلى جيميل اكتب إيميلك). ولو عايزها تتبعت لوحدها فعّل تيليجرام من تحت';return}}catch(e){if(e&&e.name==='AbortError')return}
   $('bkSave').click()};
 setTimeout(snapMaybe,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)snapMaybe()});
 /* v189: مسودة الفاتورة. اللي بتكتبه في الفاتورة بيتحفظ على الجهاز أول بأول، فلو الموبايل قفل البرنامج (مكالمة، واتساب، بطارية) بترجع زي ما سبتها.
