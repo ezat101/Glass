@@ -1,6 +1,6 @@
 /* فواتير · التطبيق الأساسي (فواتير، عملاء، سجل، مديونين، إعدادات) */
 /* رقم النسخة: غيّر الرقم ده مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='352';
+const APP_VER='354';
 /* صفحة قديمة وصلت مع ملف أحدث منها (نت بطيء وقت التحديث): نعيد الفتح مرة بدل ما البرنامج يقع */
 (function(){const s=document.querySelector('script[src*="js/app.js"]'),m=s&&/[?&]v=(\d+)/.exec(s.src);if(!m||m[1]===APP_VER)return;let seen=APP_VER;try{seen=sessionStorage.getItem('verFix');sessionStorage.setItem('verFix',APP_VER)}catch(e){}if(seen===APP_VER)return;window.__bootOK=true;location.reload();throw new Error('stale-page')})();
 const $=id=>document.getElementById(id);
@@ -333,7 +333,7 @@ function sheet(o){lastSpec=o;const D=invd();
       if(tb.title){T(tb.title,W-P,y+10,'right','bold 15px '+F);y+=24}
       const ws=tb.w.map(v=>v*IW),hh=TH?26:30;let xr=W-P;if(!TH){x.fillStyle='#eee';x.fillRect(P,y,IW,hh)}x.strokeStyle=TH?'#000':'#444';
       tb.th.forEach((h,i)=>{T(h,xr-ws[i]/2,y+hh/2,'center',fit1(h,ws[i]-6,tf-1,0).z+'px '+F);x.strokeRect(xr-ws[i],y,ws[i],hh);xr-=ws[i]});y+=hh;
-      tb.rows.forEach(row=>{const fz=[],ln=row.map((c,i)=>{const q=fit1(c,ws[i]-pad,tf,0);fz[i]=q.z;return[q.s]}),n=Math.max(...ln.map(l=>l.length)),rh=n*lh+pad;let xr=W-P;
+      tb.rows.forEach(row=>{const fz=[],ln=row.map((c,i)=>{const q=fit1(c,ws[i]-pad,tf,0);fz[i]=q.z;return[q.s]}),n=Math.max(...ln.map(l=>l.length)),rh=n*lh+pad;let xr=W-P;if(row.bg&&!TH){x.fillStyle=row.bg;x.fillRect(P,y,IW,rh)}
         row.forEach((c,i)=>{ln[i].forEach((s,k)=>T(s,xr-ws[i]/2,y+pad/2+lh*k+lh/2,'center',fz[i]+'px '+F));x.strokeRect(xr-ws[i],y,ws[i],rh);xr-=ws[i]});y+=rh});
       y+=8});
     if(o.sum){const lw=IW*.68,vw=IW-lw,sf=TH?14:15;o.sum.forEach(([a,b,bold])=>{const _g=fitF(a,lw-16,(bold?'bold ':'')+sf+'px '+F),fo=_g.font,ls=[_g.s],rh=Math.max(TH?26:30,ls.length*(sf+5)+8);
@@ -841,7 +841,10 @@ const itSelN=()=>{const e=$('itSelN');if(e)e.textContent=itSelOn?'معلّم '+i
 $('seg').onclick=e=>{const t=e.target.dataset.it;if(!t)return;curIT=t;document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b===e.target));drawItems()};
 $('nform').addEventListener('click',e=>{if(e.target.id!=='addIt')return;const name=$('ni_name').value.trim();if(!name){toast('اكتب اسم الصنف الأول');$('ni_name').focus();return}
   /* v189: نفس الاسم بنفس النوع ميتكررش */
-  if(S.items.some(x=>x.type===curIT&&nkey(x.name)===nkey(name))){toast('الصنف ده موجود قبل كده: '+name+'. عدّل سعره من القايمة تحت');$('iq').value=name;drawItemList();return}
+  /* v353: نفس الاسم بمقاس مختلف مسموح؛ المكرر هو نفس الاسم + نفس المقاس */
+  const szN=(w,h)=>{w=+w||0;h=+h||0;return Math.min(w,h)+'x'+Math.max(w,h)},wI=document.querySelector('#nform [data-nf="w"]'),hI=document.querySelector('#nform [data-nf="h"]'),nsz=szN(wI?nv(wI.value):0,hI?nv(hI.value):0);
+  if(curIT==='mq'&&S.items.some(x=>x.type==='mq'&&nkey(x.name)===nkey(name))){if(!confirm('الصنف ده موجود قبل كده: '+name+'. تضيفه برضه؟'))return}
+  else if(S.items.some(x=>x.type===curIT&&nkey(x.name)===nkey(name)&&szN(x.w,x.h)===nsz)){toast('الصنف ده موجود قبل كده بنفس المقاس: '+name+'. عدّل سعره من القايمة تحت أو غيّر المقاس');$('iq').value=name;drawItemList();return}
   const o={id:uid(),type:curIT,name,p:0,w:0,h:0};
   document.querySelectorAll('#nform [data-nf]').forEach(i=>{if(i.dataset.nf==='p')setPrice(o,itCat,nv(i.value));else o[i.dataset.nf]=nv(i.value)});S.items.push(o);put('items',o);drawItems()});
 $('items').addEventListener('input',e=>{const t=e.target,k=t.dataset.k;if(!k)return;const it=S.items.find(x=>x.id===k);if(!it)return;if(t.dataset.f==='p')setPrice(it,itCat,nv(t.value));else it[t.dataset.f]=t.dataset.f==='name'?t.value:nv(t.value);touch('items',it)});
@@ -2719,11 +2722,7 @@ function drawInfo(){
   let rt=0;recs.forEach(r=>{if(r.type==='inv'&&hasRet(r))(r.rows||[]).forEach(x=>{if(x.rt)rt=rd2(rt+Math.abs(+x.v||0))})});
   const P=iAggK('r',R.a,R.b),I=iAggK('i',R.a,R.b),W=iAggK('w',R.a,R.b),top=G=>[...G].sort((x,y)=>y[1].v-x[1].v);
   const pu=puIn(R.a,R.b).buy,exA=rd2(T.ex+pu),net=rd2(T.s-exA),WV0=skWasteRange(R.a,R.b).v;
-  let cmp='',bd='';
-  {const now=Date.now(),part=R.b>now&&R.a<=now;let a2,b2;if(R.u==='g'){a2=R.a-(R.b-R.a);b2=R.a}else{a2=shiftT(R.a,R.u,-1);b2=shiftT(R.b,R.u,-1)}if(part)b2=Math.min(b2,a2+(now-R.a));
-    const pv=iSum(a2,b2).s,pl=R.u==='g'||(part&&R.u!=='d')?dshort(a2)+' ← '+dshort(b2-1):labT(a2,R.u),df=rd2(T.s-pv);
-    if(pv){const pc=Math.round(Math.abs(df)/pv*100);bd=df?'<em class="'+(df>0?'up':'dn')+'">'+(df>0?'▲ ':'▼ ')+pc+'%</em>':'<em>زي ما هي</em>';cmp='مقارنة بـ '+pl+': '+f(pv)}
-    }
+  const cmp='',bd='';/* v354: مفيش مقارنات في التقارير إلا لو اتطلبت */
   $('infoSum').innerHTML='<div class="rhero"><small>'+esc(R.u==='g'?'من '+dshort(R.a)+' إلى '+dshort(R.b-1):rLab(R))+(R.b>Date.now()&&R.a<=Date.now()&&R.u!=='d'?' (لحد دلوقتي)':'')+'</small>'
     +'<div class="rbig"><b class="num">'+f(T.s)+'</b><span>مبيعات · '+plN(T.n,'فاتورة')+'</span>'+bd+'</div>'
     +(cmp?'<span class="rcmp">'+esc(cmp)+'</span>':'')
@@ -2763,24 +2762,20 @@ function repGo(){
     tb={th:[sb==='w'?'الطريقة':'الصنف',sb==='w'?'عدد':'الكمية',sb==='r'?'الربح':sb==='w'?'المبلغ':'المبلغ'],w:[.5,.2,.3]};
     if(sb==='i'||sb==='r'){/* v352: جاهز (بمقاساته: عدد، سعر القطعة، ربح، متبقي) ثم مقطع ثم غير مسجلة */const GR=[['rd','📦 شغل جاهز'],['mq','✂️ مقطع'],['u','❔ غير مسجلة في الأصناف']],SM=new Map();try{stkAll().forEach((o,id)=>SM.set(id,o))}catch(e){}
       const szk=i=>{const a=+i.w,b=+i.h;return a>0&&b>0?fq(Math.min(a,b))+'×'+fq(Math.max(a,b)):''},bal=(n0,sz)=>{let t=null;S.items.forEach(i=>{if(i.type!=='rd'||nm(i.name)!==nm(n0))return;if(sz&&szk(i)!==sz)return;const o=SM.get(i.id);if(o)t=(t||0)+o.bal});return t};
-      const WS={3:[.46,.24,.30],4:[.36,.14,.2,.30],5:[.30,.12,.17,.23,.18],6:[.26,.1,.14,.2,.16,.14]};
+      const PAL=[['#e8f1fb','#cfe2f7'],['#fdf0dc','#f9deb5'],['#e6f4e6','#cde8cd'],['#f3e9fa','#e3cff2'],['#fde9e8','#f8cfcd'],['#e5f4f4','#c8e6e6']],WS={3:[.46,.24,.30],4:[.36,.14,.2,.30],5:[.30,.12,.17,.23,.18],6:[.26,.1,.14,.2,.16,.14]};
       ITG=GR.map(([t,ti])=>{const L=[...A.G].filter(([k,o])=>(o.ty||'u')===t).sort((x,y)=>y[1].v-x[1].v),pu=t==='rd'&&sb==='i',hasPr=pu&&L.some(([k,o])=>o.hp),hasSt=t==='rd'&&L.some(([k,o])=>bal(o.n)!=null);
         const th=['الصنف','العدد'+(t==='mq'?' (م²)':''),...(pu?['سعر القطعة']:[]),sb==='r'?'الربح':'المبلغ',...(hasPr?['الربح']:[]),...(hasSt?['المخزن']:[])],
-          cell=(n,c,v,pr,st)=>[n,c,...(pu?[c>0?f(rd2(v/c)):'—']:[]),f(v),...(hasPr?[pr!=null?f(pr):'—']:[]),...(hasSt?[st!=null?fq(rd2(st)):'—']:[])],rows=[];
-        L.forEach(([k,o])=>{rows.push(cell(o.n||k,f(o.c)+(t==='mq'&&o.q?' ('+fq(o.q)+')':''),o.v,o.hp?o.pr:null,t==='rd'?bal(o.n):null));
-          if(t==='rd'&&sb==='i'||t==='rd'&&sb==='r'){const z=new Map(o.z||[]);if(iAllZ)S.items.forEach(i=>{if(i.type==='rd'&&nm(i.name)===nm(o.n)&&szk(i)&&!z.has(szk(i)))z.set(szk(i),{c:0,v:0,pr:0,z0:1})});
-            [...z].sort((p,q)=>(q[1].c-p[1].c)||(q[1].v-p[1].v)).forEach(([s,v])=>rows.push(cell('      ↳ \u2066'+s+'\u2069',f(v.c),v.v,o.hp&&!v.z0?v.pr:null,bal(o.n,s))))}});
+          cell=(n,c,v,pr,st,np)=>[n,c,...(pu?[np?'':c>0?f(rd2(v/c)):'—']:[]),f(v),...(hasPr?[pr!=null?f(pr):'—']:[]),...(hasSt?[st!=null?fq(rd2(st)):'—']:[])],rows=[];
+        L.forEach(([k,o],gi)=>{const pl=PAL[gi%PAL.length],mk=(r,bg)=>{r.bg=bg;return r};let zl=[];
+          if(t==='rd'&&(sb==='i'||sb==='r')){const z=new Map(o.z||[]);if(iAllZ)S.items.forEach(i=>{if(i.type==='rd'&&nm(i.name)===nm(o.n)&&szk(i)&&!z.has(szk(i)))z.set(szk(i),{c:0,v:0,pr:0,z0:1})});zl=[...z].sort((p,q)=>(q[1].c-p[1].c)||(q[1].v-p[1].v))}
+          zl.forEach(([s,v])=>rows.push(mk(cell('   \u2066'+s+'\u2069',f(v.c),v.v,o.hp&&!v.z0?v.pr:null,bal(o.n,s)),pl[0])));
+          rows.push(mk(cell((zl.length?'إجمالي ':'')+(o.n||k),f(o.c)+(t==='mq'&&o.q?' ('+fq(o.q)+')':''),o.v,o.hp?o.pr:null,t==='rd'?bal(o.n):null,1),pl[zl.length?1:0]))});
         return{title:ti,th,w:WS[th.length]||WS[3],rows}}).filter(g=>g.rows.length)}
     if(sb==='r'){const ex=exTot(exIn(R.a,R.b));{const WV=skWasteRange(R.a,R.b);sum=[['ربح الأصناف',f(tot)],['− مصروفات الفترة',f(ex)],...(WV.v>0?[['− خسارة هادر الألواح ('+fq(WV.m)+' م²)',f(WV.v)]]:[]),['= صافي الربح',f(rd2(tot-ex-WV.v)),1]]}if(A.nk)note='مبيعات بقيمة '+f(A.nk)+' ملهاش سعر شراء، مش داخلة في الربح.'}
     else sum=[[sb==='w'?'إجمالي المدفوع':'إجمالي مبيعات الأصناف',f(tot),1]]}
   if(!rows.length){toast(sb==='d'?'مفيش مديونين ✓':sb==='x'?'مفيش مصروفات متسجلة في الفترة دي':'مفيش بيانات في الفترة دي');return}
   if(rows.length>CAP){note=(note?note+' ':'')+'ظهر أول '+CAP+' من '+rows.length+' بس. اضغط «تصدير Excel» للتفاصيل كاملة.';rows=rows.slice(0,CAP)}
   tb.rows=rows;
-  if(iCmp!=='0'&&sb!=='d'){const now=Date.now(),part=R.b>now&&R.a<=now;let a2,b2,pl;
-    if(R.u==='g'&&iCmp==='prev'){a2=R.a-(R.b-R.a);b2=R.a}else{const uu=R.u==='g'?'y':iCmp==='yoy'?'y':R.u;a2=shiftT(R.a,uu,-1);b2=shiftT(R.b,uu,-1)}
-    if(part)b2=Math.min(b2,a2+(now-R.a));pl=R.u==='g'||(part&&R.u!=='d')?dshort(a2)+' ← '+dshort(b2-1):labT(a2,iCmp==='yoy'&&R.u==='d'?'d':R.u);
-    const P=sb==='o'||sb==='t'||sb==='x'?null:iAgg(a2,b2);
-    if(P){const dif=rd2(tot-P.tot),pc=P.tot?Math.round(Math.abs(dif)/Math.abs(P.tot)*100)+'%':'';sum.push(['مقارنة بـ '+pl,f(P.tot)]);sum.push(['الفرق',dif?(dif>0?'زيادة ':'نقص ')+f(Math.abs(dif))+(pc?' ('+pc+')':''):'زي بعض',1])}}
   const lab=perLab(R),cv=sheet({title:'تقرير '+SNAME[sb],name:'',sub:sb==='d'?'الأرصدة لحد دلوقتي':lab,date:stamp(Date.now()),tables:ITG&&ITG.length?ITG:[tb],sum,note});
   showImg(cv,'تقرير-'+SNAME[sb]+'-'+dshort(R.a).replace(/\//g,'-')+'.png','تقرير '+SNAME[sb]+' · '+(sb==='d'?'لحد دلوقتي':lab),false,'',null);
   function T0(){return rd2(recs.reduce((a,r)=>a+(pd(r)||0),0))}}
@@ -2992,12 +2987,13 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 (()=>{const on=$('dsOn'),tg=$('dsTg'),m=$('dsMsg');if(!on)return;on.checked=pget('dsOn',true);tg.checked=pget('dsTg',false);
   on.onchange=()=>{svk('dsOn',on.checked?'1':'0');dsBar()};tg.onchange=()=>{svk('dsTg',tg.checked?'1':'0');m.textContent=tg.checked&&!(tgCfg().t&&tgCfg().c)?'⚠ فعّل تيليجرام من الكارت اللي تحت الأول':''}})();
 setTimeout(()=>{dsBar();dsAuto()},3500);document.addEventListener('visibilitychange',()=>{if(!document.hidden){dsBar();dsAuto()}});setInterval(dsBar,5*60*1000);
+/* v354: لو رقم الواتساب الثابت مكتوب، بيفتح شات الرقم ده على طول (الملف بيتحمّل في التنزيلات وانت بترفقه) بدل قايمة المشاركة */
 /* v349: مشاركة النسخة: واتساب مفعّل افتراضي والملف مرفق (والرقم الثابت بيتعرضلك)، وتيليجرام بيتبعتله في الخلفية لو مظبوط */
 (()=>{const on=$('bkWaOn'),w=$('bkWa');if(!on)return;on.checked=pget('bkWaOn',true);w.value=lsv('bkWa','');on.onchange=()=>{svk('bkWaOn',on.checked?'1':'0')};w.onchange=()=>{const v=w.value.trim(),n=waNum(v);svk('bkWa',n?v:'');$('bkMsg').textContent=v&&!n?'⚠ رقم الواتساب مش مظبوط':n?'✅ اتحفظ رقم الواتساب: '+n:''}})();
 $('bkShare').onclick=async()=>{const name='نسخة-فواتير-'+dshort(Date.now()).replace(/\//g,'-')+'.json',blob=new Blob([JSON.stringify(bkFull())],{type:'application/json'}),waN=pget('bkWaOn',true)?waNum(lsv('bkWa','')):'',mark=()=>{try{localStorage.setItem('lastBackup',Date.now())}catch(e){}bkInfo();bkBan();try{dsBar()}catch(e){}};let tgOk=false,tgErr='';
   if(tgCfg().t&&tgCfg().c){try{$('snapMsg').textContent='⏳ بيتبعت لتيليجرام…';await tgSend(blob,name,'نسخة فواتير · '+stamp(Date.now()));tgOk=true}catch(e){tgErr=' · ⚠ تيليجرام: '+e.message}}
   if(!pget('bkWaOn',true)&&tgOk){mark();$('snapMsg').textContent='✅ النسخة وصلت على تيليجرام';return}
-  try{const file=new File([blob],name.replace(/.json$/,'.txt'),{type:'text/plain'});if(navigator.canShare&&navigator.canShare({files:[file]})){$('snapMsg').textContent=(waN?'📲 اختار واتساب وابعتها لرقمك: '+lsv('bkWa',''):'اختار واتساب أو درايف أو جيميل')+(tgOk?' · ✅ اتبعتت على تيليجرام كمان':tgErr);await navigator.share({files:[file],title:file.name,text:'نسخة احتياطية من برنامج فواتير'});mark();$('snapMsg').textContent='تمت المشاركة ✓'+(tgOk?' · ووصلت تيليجرام':'');return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{const file=new File([blob],name.replace(/.json$/,'.txt'),{type:'text/plain'});if(!waN&&navigator.canShare&&navigator.canShare({files:[file]})){$('snapMsg').textContent=(waN?'📲 اختار واتساب وابعتها لرقمك: '+lsv('bkWa',''):'اختار واتساب أو درايف أو جيميل')+(tgOk?' · ✅ اتبعتت على تيليجرام كمان':tgErr);await navigator.share({files:[file],title:file.name,text:'نسخة احتياطية من برنامج فواتير'});mark();$('snapMsg').textContent='تمت المشاركة ✓'+(tgOk?' · ووصلت تيليجرام':'');return}}catch(e){if(e&&e.name==='AbortError')return}
   $('bkSave').click();if(tgOk)mark();
   if(waN)setTimeout(()=>{window.open('https://wa.me/'+waN+'?text='+encodeURIComponent('نسخة فواتير الاحتياطية اتحمّلت على الموبايل (في التنزيلات). ارفقها هنا وابعتها.'),'_blank','noopener')},900)};
 setTimeout(snapMaybe,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)snapMaybe()});
