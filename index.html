@@ -45,7 +45,7 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <link rel="apple-touch-startup-image" href="splash/14_15pro.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="splash/12_13_14promax.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="splash/14_15promax.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)">
-<link rel="stylesheet" href="css/style.css?v=363">
+<link rel="stylesheet" href="css/style.css?v=403">
 
 
 
@@ -54,7 +54,7 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <div class="app-header">
   <div class="hdr-logo"><img id="hdrLogo" alt="" class="hide"></div>
   <span class="hdr-ver" id="hdrVer"></span>
-  <div class="hdr-end"><button type="button" id="nfBell" class="hdr-btn" aria-label="التنبيهات">🔔<span id="nfCnt" class="nf-cnt hide"></span></button><button type="button" id="tfBtn" class="hdr-btn" aria-label="بيانات التحويل" title="بيانات التحويل">💳</button><button type="button" id="calcFab" class="hdr-btn" aria-label="حاسبة">🧮</button><button type="button" id="cloudSt" class="hdr-cloud" aria-label="حالة الحفظ على السحابة"><span class="cs-i">☁️</span><span class="cs-d"></span></button><script>(function(){try{var b=document.getElementById('cloudSt'),on=localStorage.getItem('fbOn')==='1'||localStorage.getItem('fbCfg'),l=localStorage.getItem('cloudLast');var s=!on?'off':(l==='ok'&&navigator.onLine!==false)?'ok':'busy';b.className='hdr-cloud '+s;b.dataset.s=s}catch(e){}})()</script><button id="wkOut" class="hdr-set" aria-label="خروج من وضع العامل" style="font-size:13px;width:auto;padding:0 10px">🔓 مالك</button><button id="hdrSet" class="hdr-set" data-t="st" aria-label="إعدادات">⚙️</button></div>
+  <div class="hdr-end"><button type="button" id="hdrCu" class="hdr-btn" data-t="cu" aria-label="العملاء" title="العملاء">👥</button><button type="button" id="hdrCl" class="hdr-btn" data-t="cl" aria-label="CutList" title="CutList"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" style="display:block;margin:0 auto" aria-hidden="true"><rect x="3" y="3" width="8" height="7" rx="1.2"/><rect x="13" y="3" width="8" height="11" rx="1.2"/><rect x="3" y="12" width="8" height="9" rx="1.2"/><rect x="13" y="16" width="8" height="5" rx="1.2"/></svg></button><button type="button" id="nfBell" class="hdr-btn" aria-label="التنبيهات">🔔<span id="nfCnt" class="nf-cnt hide"></span></button><button type="button" id="tfBtn" class="hdr-btn" aria-label="بيانات التحويل" title="بيانات التحويل">💳</button><button type="button" id="calcFab" class="hdr-btn" aria-label="حاسبة">🧮</button><button type="button" id="cloudSt" class="hdr-cloud" aria-label="حالة الحفظ على السحابة"><span class="cs-i">☁️</span><span class="cs-d"></span></button><script>(function(){try{var b=document.getElementById('cloudSt'),on=localStorage.getItem('fbOn')==='1'||localStorage.getItem('fbCfg'),l=localStorage.getItem('cloudLast');var s=!on?'off':(l==='ok'&&navigator.onLine!==false)?'ok':'busy';b.className='hdr-cloud '+s;b.dataset.s=s}catch(e){}})()</script><button id="wkOut" class="hdr-set" aria-label="خروج من وضع العامل" style="font-size:13px;width:auto;padding:0 10px">🔓 مالك</button><button id="hdrSet" class="hdr-set" data-t="st" aria-label="إعدادات">⚙️</button></div>
 </div>
 <div id="busy" class="busy hide" role="status"></div>
 <div id="dsBar" class="dsbar hide"></div>
@@ -263,21 +263,14 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
   <div id="clHost"></div>
 </section>
 
+<section id="t-sk" class="hide"><div class="seg s skmain" id="skMain"><button type="button" data-skm="it">📦 الأصناف</button><button type="button" data-skm="stk">🧱 المخزن</button><button type="button" data-skm="buy">🛒 المشتريات</button><button type="button" data-skm="cnt">📋 الجرد</button></div><div class="card mute hide" id="skNew" style="text-align:center;padding:24px 8px">🚧 الصفحة دي هنبنيها خطوة خطوة</div><div id="pu" class="hide"></div><div id="sk2" class="hide"></div><div id="jd" class="hide"></div><div id="skOld"><div class="card sktop" id="skTop"><div id="skSum"></div><div class="skact"><button type="button" class="main" data-sg="rcv">📥 وصلت بضاعة</button><button type="button" class="alt" data-sg="cnt">✍️ عدّ</button><button type="button" class="alt" data-sg="mv">🕘 الحركات</button></div></div><div class="seg s skseg" id="skSeg"><button type="button" data-skt="it">📦 الأصناف</button><button type="button" data-skt="stk">🧱 الرصيد</button><button type="button" data-skt="sup">🚚 الموردين</button></div><div id="skBody"></div></div></section>
 <section id="t-it" class="hide">
-  <div class="sth"><button type="button" class="lnk" data-goset="1" aria-label="رجوع للإعدادات">→</button><b>📦 الأصناف</b></div>
-  <div class="seg s" style="max-width:220px" id="seg"><button data-it="rd">📦 جاهز</button><button data-it="mq" class="on">✂️ مقطع</button></div>
-  <div class="ro" id="catBar" style="gap:6px;margin:6px 0"><span class="mute">سعر فئة:</span><select id="icat" class="catsel" style="max-width:150px"></select><button class="lnk" id="catMgrBtn" style="flex:none">🗂️ إدارة الفئات</button></div>
+  <div class="ro" id="itTop" style="gap:6px;margin:6px 0;flex-wrap:nowrap"><div class="seg s" style="flex:none" id="seg"><button data-it="rd">📦 جاهز</button><button data-it="mq" class="on">✂️ مقطع</button></div><span id="catBar" class="ro" style="gap:6px;flex:1;min-width:0;flex-wrap:nowrap"><select id="icat" class="catsel" aria-label="سعر فئة" style="flex:1;min-width:0;max-width:130px"></select><button class="lnk" id="catMgrBtn" style="flex:none;white-space:nowrap">🗂️ إدارة الفئات</button></span></div>
   <div id="catMgr" class="card hide"></div>
   <div class="card itadd"><b>➕ صنف جديد</b><div id="nform" class="it"></div></div>
-  <details class="card itool"><summary>🧮 أدوات الأسعار (زيادة الأسعار · أسعار الشراء)</summary>
-    <div class="mute" style="font-size:12px;margin:4px 0">لصنف واحد: دوس «±» جنب الصنف. لأكتر من صنف: «☑️ حدّد أصناف» وعلّم عليهم. ولو ما علّمتش حاجة، بتشتغل على كل الأصناف الظاهرة (حسب النوع والفئة والبحث).</div>
-    <div class="ro" style="gap:6px"><button type="button" class="alt" id="itSelB" style="flex:none">☑️ حدّد أصناف</button><button type="button" class="alt" id="itSelAll" style="flex:none">☑️ الكل</button><span class="mute" id="itSelN" style="font-size:12px"></span></div>
-    <div class="ro" style="gap:6px;flex-wrap:wrap"><span style="flex:none">غيّر أسعار البيع</span><input id="itPct" inputmode="decimal" placeholder="10" style="width:64px;flex:none"><span style="flex:none">%</span><button type="button" class="alt" id="itUp" style="flex:none">⬆ زوّد</button><button type="button" class="alt" id="itDn" style="flex:none">⬇ قلّل</button></div>
-    <div class="ro" style="gap:6px;flex-wrap:wrap;margin-top:6px"><span style="flex:none">سعر الشراء الفاضي =</span><input id="itCpPct" inputmode="decimal" placeholder="70" style="width:64px;flex:none"><span style="flex:none">% من البيع</span><button type="button" class="alt" id="itCpGo" style="flex:none">املاه</button></div>
-    <div class="mute" style="font-size:12px;margin-top:4px">سعر الشراء هو اللي بيخلّي البرنامج يحسب ربحك الحقيقي. الأحسن تكتبه بإيدك لكل صنف، والنسبة دي للبداية بس.</div>
-    <div class="info" id="itToolMsg"></div></details>
   <div class="mute" id="itHint" style="font-size:12px;margin:2px 0"></div>
-  <div class="rowc"><input id="iq" placeholder="ابحث في الأصناف" style="flex:1"><select id="isort" style="width:auto;flex:none"><option value="use">الأكثر استخداماً</option><option value="name">بالاسم</option></select></div>
+  <div class="rowc"><input id="iq" placeholder="🔍 ابحث في الأصناف" style="flex:1"><select id="isort" style="width:auto;flex:none"><option value="use">🔥 الأكثر</option><option value="name">🔤 بالاسم</option></select><button type="button" class="alt" id="itToolB" aria-label="أدوات الأسعار" title="أدوات الأسعار" style="flex:none">🧮</button></div>
+  <div class="card itool hide" id="itTool"><div class="ro itr"><span>💰 البيع</span><input id="itPct" inputmode="decimal" placeholder="10" aria-label="المقدار"><select id="itUnit" aria-label="الوحدة"><option value="a">ج</option><option value="p">%</option></select><button type="button" class="alt" id="itUp">⬆️</button><button type="button" class="alt" id="itDn">⬇️</button></div><div class="ro itr"><button type="button" class="alt" id="itSelB">☑️ حدّد</button><button type="button" class="alt" id="itSelAll">☑️ الكل</button><span class="mute" id="itSelN"></span></div><div class="ro itr"><span>🛒 الشراء الفاضي</span><input id="itCpPct" inputmode="decimal" placeholder="70" aria-label="نسبة الشراء"><span>% من البيع</span><button type="button" class="alt" id="itCpGo">املاه</button></div><div class="info" id="itToolMsg"></div></div>
   <div id="ihead" class="mute"></div><div id="items" style="margin-top:4px"></div>
 </section>
 
@@ -286,12 +279,11 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
   <div class="ro" style="gap:6px;margin:0 0 6px"><input id="stSrch" type="search" placeholder="🔍 دوّر في الإعدادات: خصم، واتساب، مصروفات…" autocomplete="off" aria-label="بحث في الإعدادات" style="flex:1;height:34px"></div>
   <div id="stRes" class="sgl hide" style="margin-bottom:8px"></div>
   <div id="stMain">
-  <div class="sgh">البيانات</div>
-  <div class="stiles" style="grid-template-columns:repeat(4,minmax(0,1fr))"><button type="button" class="stile" data-go="it"><span class="ti">📦</span><b>الأصناف</b><small id="ssIt"></small></button><button type="button" class="stile" data-sp="stk"><span class="ti">🧱</span><b>المخزون</b><small id="ssStk"></small></button><button type="button" class="stile" data-sp="sup"><span class="ti">🚚</span><b>الموردين</b><small id="ssSup"></small></button><button type="button" class="stile" data-sp="exp"><span class="ti">💸</span><b>المصروفات</b><small id="ss_exp"></small></button></div>
+  <div class="stiles" style="grid-template-columns:1fr"><button type="button" class="stile" data-go="it"><span class="ti">📦</span><b>الأصناف</b><small id="ssIt"></small></button><small id="ssStk" hidden></small><small id="ssSup" hidden></small></div>
   <div class="sgh">الفاتورة</div>
   <div class="sgl"><button type="button" class="sti" data-sp="shop"><span class="si">🏪</span><span class="stt"><b>بيانات المحل</b><small id="ss_shop"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="des"><span class="si">📐</span><span class="stt"><b>تصميم ومقاسات الفاتورة</b><small id="ss_des"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="desc"><span class="si">🎨</span><span class="stt"><b>شكل الفاتورة والألوان</b><small id="ss_desc"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="inv"><span class="si">🧾</span><span class="stt"><b>خيارات وطباعة</b><small id="ss_inv"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="notes"><span class="si">📝</span><span class="stt"><b>ملاحظات وسطور ثابتة</b><small id="ss_notes"></small></span><span class="sa">‹</span></button></div>
   <div class="sgh">الفلوس</div>
-  <div class="sgl"><button type="button" class="sti" data-sp="pay"><span class="si">💳</span><span class="stt"><b>طرق الدفع</b><small id="ss_pay"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="drw"><span class="si">💵</span><span class="stt"><b>الخزنة (الكاش)</b><small id="ss_drw"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="cl"><span class="si">📊</span><span class="stt"><b>الإقفال والتقارير</b><small id="ss_cl"></small></span><span class="sa">‹</span></button></div>
+  <div class="sgl"><button type="button" class="sti" data-sp="pay"><span class="si">💳</span><span class="stt"><b>طرق الدفع</b><small id="ss_pay"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="drw"><span class="si">💵</span><span class="stt"><b>الخزنة (الكاش)</b><small id="ss_drw"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="exp"><span class="si">💸</span><span class="stt"><b>المصروفات</b><small id="ss_exp"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="cl"><span class="si">📊</span><span class="stt"><b>الإقفال والتقارير</b><small id="ss_cl"></small></span><span class="sa">‹</span></button></div>
   <div class="sgh">العملاء</div>
   <div class="sgl"><button type="button" class="sti" data-sp="msg"><span class="si"><i class="wai"></i></span><span class="stt"><b>رسائل الواتساب</b><small id="ss_msg"></small></span><span class="sa">‹</span></button><button type="button" class="sti" data-sp="rem"><span class="si">🔔</span><span class="stt"><b>تذكير المديونين</b><small id="ss_rem"></small></span><span class="sa">‹</span></button></div>
   <div class="sgl" style="margin-bottom:8px"><button type="button" class="sti" data-sp="chk"><span class="si">✅</span><span class="stt"><b>فحص سريع</b><small id="ss_chk"></small></span><span class="sa">‹</span></button></div>
@@ -436,43 +428,38 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <div class="card"><div class="rowc" style="margin:0"><input id="supName" placeholder="➕ مورد جديد: الاسم" autocomplete="off" aria-label="اسم المورد"><button type="button" class="main" id="supAdd" style="flex:none">➕ مورد</button></div><div class="spc" id="supNewCat" style="margin-top:6px"></div><div class="info" id="supMsg"></div></div>
 </div>
 <div id="supOne" class="hide">
-<div class="card spd"><div class="ro" style="color:var(--ink)"><button type="button" class="lnk" id="supBack">→ كل الموردين</button><span class="mute" id="supCatB"></span></div>
-  <div class="sph"><span class="spn2" id="supNm"></span><span class="spb"><small id="supBL">عليك</small><span class="num" id="supB"></span></span></div>
+<div class="card spd"><div class="sph1"><button type="button" class="lnk" id="supBack" aria-label="كل الموردين">→</button><span class="spn2" id="supNm"></span><span id="supCatB"></span><button type="button" class="xd" id="supPen" aria-label="تعديل بيانات المورد">✏️</button><span class="spb"><small id="supBL">عليك</small><span class="num" id="supB"></span></span></div>
   <div class="spdue hide" id="supDue"></div><div class="spsc" id="supSched"></div>
-  <div class="spact"><a class="alt hide" id="supCall">📞 اتصل</a><a class="alt wa hide" id="supWa" target="_blank" rel="noopener"><i class="wai"></i> واتساب</a><button type="button" class="alt" id="supStm">🧾 كشف حساب</button><button type="button" class="alt" id="supRcv">📥 استلام بضاعة</button></div>
-  <div class="spst" id="supStats"></div><div class="spbars" id="supBars"></div><div class="spit" id="supTop"></div></div>
-<div class="card" id="spFiles"><div class="ro" style="color:var(--ink)"><b>📎 الصور والمستندات</b><small class="mute" id="spFN"></small></div>
-  <div class="spc" id="spFK" style="margin-top:6px"></div><div class="spth" id="spTh"></div><input type="file" id="spFI" accept="image/*" multiple class="vh">
-  <small class="mute">دوس على نوع المستند وصوّره أو اختاره من المعرض. بتتحفظ أبيض وأسود وصغيرة (حوالي 50 ك.ب)، وبتتنقل مع باقي بياناتك على السحابة.</small></div>
-<div class="card" id="spNew"><div class="spdue hide" id="spEd"><span>✏️ بتعدّل حركة موجودة</span> <button type="button" class="lnk" id="spEdX">إلغاء التعديل</button></div><div class="spc" id="spTy"><button type="button" data-ty="buy">🛒 اشتريت</button><button type="button" data-ty="pay">💵 دفعت</button></div>
-  <div class="rowc" style="margin:6px 0 4px"><input id="spAmt" inputmode="decimal" placeholder="المبلغ" autocomplete="off" aria-label="المبلغ"></div>
-  <div class="spc" id="spQuick"></div>
-  <div class="spc" id="spDays"></div><input type="date" id="spDate" class="hide" aria-label="التاريخ">
-  <div class="spc" id="spDueRow"></div><div class="spc hide" id="spHowRow"></div>
-  <div class="spc" id="spNotes"></div><input id="spNote" placeholder="ملاحظة (اختياري)" autocomplete="off" aria-label="ملاحظة" style="margin-top:4px">
-  <div class="spc" style="margin:4px 0 0"><button type="button" id="spAtt">📎 صورة الفاتورة</button><small class="mute" id="spAttN"></small></div><input type="file" id="spEI" accept="image/*" multiple class="vh">
-  <details class="spdt" id="spStk"><summary>📦 دخّل الأصناف دي في المخزون</summary><div class="ro" style="gap:6px;margin-top:6px"><select id="spIt" aria-label="الصنف" style="flex:2;min-width:0"></select><input id="spQty" inputmode="decimal" placeholder="الكمية" autocomplete="off" aria-label="الكمية" style="flex:1;min-width:0"></div></details>
-  <button type="button" class="main" id="spAdd" style="width:100%;margin-top:8px">✅ حفظ</button><div class="info" id="spMsg"></div></div>
-<div class="card" style="padding:6px 8px"><div class="spc" id="spLF"></div><table class="xl" id="spList"></table><button type="button" class="alt hide" id="spMore" style="width:100%;margin-top:6px">عرض كل الحركات</button></div>
+  <div class="spact"><a class="alt hide" id="supCall">📞 اتصل</a><a class="alt wa hide" id="supWa" target="_blank" rel="noopener"><i class="wai"></i> واتساب</a><button type="button" class="alt" id="supStm">🧾 كشف</button><button type="button" class="alt" id="supRcv">📥 استلام</button></div>
+  <details class="spdt" id="supInfo"><summary>📊 إحصائيات</summary><div class="spst" id="supStats"></div><div class="spbars" id="supBars"></div><div class="spit" id="supTop"></div></details></div>
 <details class="card spdt" id="supEdit"><summary>✏️ بيانات المورد</summary>
   <div class="g2" style="margin-top:6px"><div><label for="supEN">الاسم</label><input id="supEN" autocomplete="off"></div><div><label for="supPh">التليفون</label><input id="supPh" inputmode="tel" autocomplete="off"></div></div>
   <label style="margin-top:4px">النوع</label><div class="spc" id="supEC"></div>
-  <label style="margin-top:4px">ميعاد السداد المعتاد (بيتحط لوحده على كل شراء)</label><div class="spc" id="supET"></div>
-  <label for="supENote" style="margin-top:4px">ملاحظات عن المورد</label><input id="supENote" autocomplete="off" placeholder="عنوان، مواعيد، اسم المندوب…">
-  <div class="info" id="supEM"></div></details>
-<button type="button" class="alt b-red" id="supDel" style="width:100%;margin-top:4px">🗑️ حذف المورد</button>
+  <label style="margin-top:4px">ميعاد السداد المعتاد</label><div class="spc" id="supET"></div>
+  <label for="supENote" style="margin-top:4px">ملاحظات</label><input id="supENote" autocomplete="off" placeholder="عنوان، مواعيد، اسم المندوب…">
+  <div class="info" id="supEM"></div><button type="button" class="alt b-red" id="supDel" style="width:100%;margin-top:6px">🗑️ حذف المورد</button></details>
+<div class="card spnw" id="spNew"><div class="spdue hide" id="spEd"><span>✏️ بتعدّل حركة</span> <button type="button" class="lnk" id="spEdX">إلغاء</button></div>
+  <div class="spr1"><div class="spc" id="spTy"><button type="button" data-ty="buy">🛒 شراء</button><button type="button" data-ty="pay">💵 دفع</button></div><input id="spAmt" inputmode="decimal" placeholder="المبلغ" autocomplete="off" aria-label="المبلغ"><button type="button" class="main" id="spAdd">✅</button></div>
+  <div class="spc" id="spQuick"></div>
+  <details class="spdt" id="spXtra"><summary>⚙️ تاريخ · سداد · ملاحظة · صورة</summary>
+  <div class="spc" id="spDays"></div><input type="date" id="spDate" class="hide" aria-label="التاريخ">
+  <div class="spc" id="spDueRow"></div><div class="spc hide" id="spHowRow"></div>
+  <div class="spc" id="spNotes"></div><input id="spNote" placeholder="ملاحظة (اختياري)" autocomplete="off" aria-label="ملاحظة" style="margin-top:4px">
+  <div class="spc" style="margin:4px 0 0"><button type="button" id="spAtt">📎 صورة الفاتورة</button><small class="mute" id="spAttN"></small></div><input type="file" id="spEI" accept="image/*" multiple class="vh"></details>
+  <details class="spdt" id="spStk"><summary>📦 دخّل الأصناف في المخزون</summary><div class="ro" style="gap:6px;margin-top:6px"><select id="spIt" aria-label="الصنف" style="flex:2;min-width:0"></select><input id="spQty" inputmode="decimal" placeholder="الكمية" autocomplete="off" aria-label="الكمية" style="flex:1;min-width:0"></div></details>
+  <div class="info" id="spMsg"></div></div>
+<details class="card spdt" id="spFiles"><summary>📎 الصور والمستندات <small class="mute" id="spFN"></small></summary>
+  <div class="spc" id="spFK" style="margin-top:6px"></div><div class="spth" id="spTh"></div><input type="file" id="spFI" accept="image/*" multiple class="vh"></details>
+<div class="card" style="padding:6px 8px"><div class="spc" id="spLF"></div><table class="xl" id="spList"></table><button type="button" class="alt hide" id="spMore" style="width:100%;margin-top:6px">عرض كل الحركات</button></div>
 </div>
 </div>
 <div class="stp hide" data-sp="stk" id="stkPanel"><div class="sth"><button type="button" class="lnk" data-stback="1" aria-label="رجوع للإعدادات">→</button><b>🧱 المخزن</b></div>
 <div id="stkHome">
-<div class="card sktop"><div id="skSum"></div>
-  <div class="skact"><button type="button" class="main" data-sg="rcv">📥 وصلت بضاعة</button><button type="button" class="alt" data-sg="cnt">✍️ عدّ المخزن</button></div>
-  <div class="skmini"><button type="button" class="lnk" data-sg="ord">📋 محتاج أطلب إيه؟</button><button type="button" class="lnk" data-sg="mv">🕘 اللي دخل وخرج</button><button type="button" class="lnk" data-sg="wst">🗑 الهادر</button></div></div>
 <div class="card skstart hide" id="skStart"></div>
-<div class="ro" style="gap:6px;margin:0 0 6px"><input id="stkQ" type="search" placeholder="🔍 دوّر على صنف" autocomplete="off" aria-label="بحث في المخزن" style="flex:1;height:34px"></div>
+<div class="ro skq"><input id="stkQ" type="search" placeholder="🔍 دوّر على صنف" autocomplete="off" aria-label="بحث في المخزن"><div class="seg s" id="stkTy"></div></div>
 <div class="spc" id="stkFil"></div>
 <div id="stkRows"></div>
-<details class="card spdt"><summary>⚙️ نبّهني لما الصنف يقل</summary><label for="stkLim" style="margin-top:6px">نبّهني لما يفضل من الصنف (لأي صنف مالوش رقم خاص بيه)</label><input id="stkLim" inputmode="decimal" autocomplete="off"><label for="stkWmax" style="margin-top:6px">نبّهني لو هادر نوع في الشهر عدّى (%)</label><input id="stkWmax" inputmode="decimal" autocomplete="off"><div class="mute" style="margin-top:4px">القطع الجاهزة بتنقص لوحدها مع كل فاتورة. الألواح بتعدّها بإيدك من «✍️ عدّ المخزن». وكل صنف ممكن تحط له رقم تنبيه وسعر ومكان ومورد من صفحته.</div><div class="info" id="stkMsg" aria-live="polite"></div></details>
+<details class="card spdt"><summary>⚙️ التنبيهات</summary><label for="stkLim" style="margin-top:6px">⚠️ نبّهني لما يفضل من الصنف</label><input id="stkLim" inputmode="decimal" autocomplete="off"><input id="stkWmax" class="hide" aria-hidden="true" tabindex="-1"><div class="info" id="stkMsg" aria-live="polite"></div></details>
 </div>
 <div id="stkSub" class="hide"></div>
 </div>
@@ -591,18 +578,19 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <nav class="bottom-nav" id="bnav">
   <button data-t="new" class="on"><span class="nav-icon">🧾</span><span class="nav-label">فاتورة</span></button>
   <button data-t="dash"><span class="nav-icon">📒</span><span class="nav-label">سجل</span></button>
-  <button data-t="cl"><span class="nav-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" style="display:block;margin:0 auto" aria-hidden="true"><rect x="3" y="3" width="8" height="7" rx="1.2"/><rect x="13" y="3" width="8" height="11" rx="1.2"/><rect x="3" y="12" width="8" height="9" rx="1.2"/><rect x="13" y="16" width="8" height="5" rx="1.2"/></svg></span><span class="nav-label">CutList</span></button>
   <button data-t="it" class="hide"><span class="nav-icon">📦</span><span class="nav-label">الأصناف</span></button>
-  <button data-t="cu"><span class="nav-icon">👥</span><span class="nav-label">العملاء</span></button>
+  <button data-t="sk"><span class="nav-icon">🧱</span><span class="nav-label">المخزن</span></button>
+  <button data-t="cl" class="hide"><span class="nav-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" style="display:block;margin:0 auto" aria-hidden="true"><rect x="3" y="3" width="8" height="7" rx="1.2"/><rect x="13" y="3" width="8" height="11" rx="1.2"/><rect x="3" y="12" width="8" height="9" rx="1.2"/><rect x="13" y="16" width="8" height="5" rx="1.2"/></svg></span><span class="nav-label">CutList</span></button>
+  <button data-t="cu" class="hide"><span class="nav-icon">👥</span><span class="nav-label">العملاء</span></button>
 </nav>
 
 <div id="dd"></div>
 
-<script src="js/app.js?v=363"></script>
-<script src="js/qr.js?v=363"></script>
+<script src="js/app.js?v=403"></script>
+<script src="js/qr.js?v=403"></script>
 <!-- ===== CutList: مخطط التقطيع ===== -->
-<script src="js/cutlist.js?v=363"></script>
-<script src="js/features.js?v=363"></script>
+<script src="js/cutlist.js?v=403"></script>
+<script src="js/features.js?v=403"></script>
 </body>
 </html>
 
