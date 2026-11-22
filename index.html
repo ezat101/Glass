@@ -45,7 +45,7 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <link rel="apple-touch-startup-image" href="splash/14_15pro.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="splash/12_13_14promax.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="splash/14_15promax.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)">
-<link rel="stylesheet" href="css/style.css?v=354">
+<link rel="stylesheet" href="css/style.css?v=363">
 
 
 
@@ -180,10 +180,7 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
   </div></div>
   <div id="dbView" class="hide">
     <div id="dbList0">
-      <div class="card dbhero"><b id="dbTot"></b><button class="lnk" id="dbBack">→ رجوع</button></div>
-      <div class="card">
-        <input id="dbq" placeholder="ابحث باسم المديون">
-        <button class="main b-green hide" id="bulkRem" style="width:100%;margin-top:6px"><i class="wai"></i> تذكير كل المديونين</button></div>
+      <div class="card dbtop"><button type="button" class="alt" id="dbSb" aria-label="بحث باسم المديون">🔍</button><input id="dbq" placeholder="ابحث باسم المديون" style="flex:1"><button class="alt b-green hide" id="bulkRem" style="margin-inline-start:auto" aria-label="تذكير كل المديونين"><i class="wai"></i> تذكير الكل</button><b id="dbTot" class="hide"></b></div>
       <div id="dbList"></div>
     </div>
     <div id="dbDet" class="hide"></div>
@@ -376,8 +373,8 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 <div class="pmq" id="pmQ"></div><button type="button" class="alt" id="pmAdd">➕ طريقة جديدة</button></div>
 <div class="card tfpl"><b>💳 بيانات التحويل تظهر فين</b><div class="mute" style="font-size:12px">اختار الأماكن اللي يظهر فيها زرار بيانات التحويل.</div>
   <label class="opt"><input type="checkbox" id="tfHdr"> زرار 💳 في الشريط اللي فوق</label>
-  <label class="opt"><input type="checkbox" id="tfDb"> صفحة المديون («💳 ابعتله»)</label>
-  <label class="opt"><input type="checkbox" id="tfCu"> صفحة العميل («💳 ابعتله»)</label>
+  
+  
   <label class="opt"><input type="checkbox" id="tfSet"> زرار «🔍 ابعت بيانات التحويل لعميل» هنا في الإعدادات</label></div>
 <button type="button" class="main" id="tfOpen2" style="width:100%;margin:6px 0">🔍 ابعت بيانات التحويل لعميل</button>
 <div class="card"><b>👥 نسب العملاء المحفوظة</b><div class="mute">البرنامج بيفتكر آخر نسبة اتسجلت لكل عميل. امسح النسبة لو عايز العميل يرجع للنسبة العامة.</div><div id="pmCust"></div><button type="button" class="lnk hide" id="pmOrph" style="color:var(--danger);font-size:12px;margin-top:4px"></button></div>
@@ -601,11 +598,11 @@ setTimeout(function(){if(!window.__bootOK)show('timeout')},15000)})();
 
 <div id="dd"></div>
 
-<script src="js/app.js?v=354"></script>
-<script src="js/qr.js?v=354"></script>
+<script src="js/app.js?v=363"></script>
+<script src="js/qr.js?v=363"></script>
 <!-- ===== CutList: مخطط التقطيع ===== -->
-<script src="js/cutlist.js?v=354"></script>
-<script src="js/features.js?v=354"></script>
+<script src="js/cutlist.js?v=363"></script>
+<script src="js/features.js?v=363"></script>
 </body>
 </html>
 
