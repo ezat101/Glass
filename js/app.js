@@ -1,6 +1,6 @@
 /* فواتير · التطبيق الأساسي (فواتير، عملاء، سجل، مديونين، إعدادات) */
 /* رقم النسخة: غيّر الرقم ده مع كل تحديث، والـ service worker بياخده لوحده */
-const APP_VER='404';
+const APP_VER='405';
 /* صفحة قديمة وصلت مع ملف أحدث منها (نت بطيء وقت التحديث): نعيد الفتح مرة بدل ما البرنامج يقع */
 (function(){const s=document.querySelector('script[src*="js/app.js"]'),m=s&&/[?&]v=(\d+)/.exec(s.src);if(!m||m[1]===APP_VER)return;let seen=APP_VER;try{seen=sessionStorage.getItem('verFix');sessionStorage.setItem('verFix',APP_VER)}catch(e){}if(seen===APP_VER)return;window.__bootOK=true;location.reload();throw new Error('stale-page')})();
 const $=id=>document.getElementById(id);
@@ -3062,10 +3062,10 @@ $('snapRows').onclick=async e=>{const d=e.target.dataset;if(!d.sd&&!d.sr)return;
   if(d.sd){await dl(new Blob([x.json],{type:'application/json'}),'نسخة-فواتير-'+k+'.json');return}
   if(!ok2(e.target))return;try{$('snapMsg').textContent=await restoreData(JSON.parse(x.json))}catch(err){$('snapMsg').textContent='النسخة دي مش صالحة.'}};
 /* v346: إرسال النسخة لتيليجرام لوحده (Bot API مجاني). الـToken بيتخزن على الجهاز ده بس */
-const tgCfg=()=>({t:lsv('tgTok','').trim(),c:lsv('tgChat','').trim()}),tgApi=async(m,body)=>{const{t}=tgCfg();const r=await fetch('https://api.telegram.org/bot'+t+'/'+m,{method:'POST',body});const d=await r.json().catch(()=>({}));if(!d.ok)throw new Error(d.description||'فشل الإرسال');return d.result};
+const tgCfg=()=>({t:lsv('tgTok','').trim(),c:lsv('tgChat','').trim()}),tgApi=async(m,body)=>{const{t}=tgCfg();const r=await fetch('https://api.telegram.org/bot'+t+'/'+m,body?{method:'POST',body}:{});const d=await r.json().catch(()=>({}));if(!d.ok)throw new Error(d.description||('فشل الإرسال ('+r.status+')'));return d.result};
 const tgSend=(blob,name,cap)=>{const fd=new FormData();fd.append('chat_id',tgCfg().c);fd.append('caption',cap||name);fd.append('document',blob,name);return tgApi('sendDocument',fd)};
 (()=>{const t=$('tgTok'),c=$('tgChat'),m=$('tgMsg');if(!t)return;t.value=lsv('tgTok','');c.value=lsv('tgChat','');const sv=()=>{svk('tgTok',t.value.trim());svk('tgChat',c.value.trim())};t.onchange=sv;c.onchange=sv;
-  $('tgFind').onclick=async()=>{sv();if(!t.value.trim()){m.textContent='الصق الـToken الأول';return}m.textContent='⏳ بدوّر…';try{const r=await tgApi('getUpdates',new FormData()),ch=r.map(u=>(u.message||u.channel_post||{}).chat).filter(Boolean).pop();if(!ch){m.textContent='مفيش رسايل للبوت. ابعتله أي رسالة من تيليجرام وجرّب تاني';return}c.value=String(ch.id);sv();m.textContent='✅ لقيته: '+(ch.first_name||ch.title||ch.id)}catch(e){m.textContent='⚠ '+e.message}};
+  $('tgFind').onclick=async()=>{sv();if(!t.value.trim()){m.textContent='الصق الـToken الأول';return}m.textContent='⏳ بدوّر…';try{const r=await tgApi('getUpdates'),ch=r.map(u=>(u.message||u.channel_post||{}).chat).filter(Boolean).pop();if(!ch){m.textContent='مفيش رسايل للبوت. ابعتله أي رسالة من تيليجرام وجرّب تاني';return}c.value=String(ch.id);sv();m.textContent='✅ لقيته: '+(ch.first_name||ch.title||ch.id)}catch(e){m.textContent='⚠ '+e.message}};
   $('tgTest').onclick=async()=>{sv();if(!tgCfg().t||!tgCfg().c){m.textContent='اكتب الـToken والـChat ID';return}m.textContent='⏳ بيتبعت…';try{const fd=new FormData();fd.append('chat_id',tgCfg().c);fd.append('text','✅ فواتير: الربط شغّال، والنسخ الاحتياطية هتوصلك هنا');await tgApi('sendMessage',fd);m.textContent='✅ اتبعتت رسالة تجربة على تيليجرام'}catch(e){m.textContent='⚠ '+e.message}};
   $('tgOff').onclick=()=>{t.value='';c.value='';sv();m.textContent='اتوقف. المشاركة رجعت عادية'}})();
 /* v348: تذكير النسخة اليومية: شريط فوق بزرار واحد يبعت ملف النسخة (واتساب/جيميل/درايف من قايمة المشاركة)، وتيليجرام لوحده لو مفعّل */
